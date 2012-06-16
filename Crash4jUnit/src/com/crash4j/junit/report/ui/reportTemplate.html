@@ -1,0 +1,384 @@
+<html>
+<head>
+ <script type="text/javascript" src="js/dygraph-combined.js"></script>
+ <script type="text/javascript" src="js/jquery.js"></script>
+ 
+  
+  
+  <link href="js/jquery-ui.css" rel="stylesheet" type="text/css"/>
+  <link rel="stylesheet" type="text/css" href="js/jquery.jqplot.css" />  
+  
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jquery-ui.min.js"></script>  
+  <script type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+  <script type="text/javascript" src="js/jqplot.pieRenderer.min.js"></script>
+
+  <script type="text/javascript" src="${reportData}"></script>
+
+
+<style>
+	#general { width: 100%; height: 200px; padding: 0.1em; }
+	#general h3 { text-align: left; margin: 0; background-color: #CCCC99; }
+</style>
+  
+  <script type="text/javascript">
+  
+  /**
+   * ---------------------------------------------------------------------------
+   */
+     
+  
+  var selectedResource = null;
+  var selectedAction = null;
+  var selectedBehavior = null;
+  var chartLineColors = {'time':'#5FAB78', 'actualtime':'#0033FF', 'throughput':'#FF99FF', 'error':'#FF0000'}
+  function normalizeId(sid)
+  {
+	  sid = sid.replace(":", "_");
+	  sid = sid.replace(".", "_");
+	  return sid;
+  }
+  
+  /**
+   * Creates multilined text
+   */
+  function createMultiLineText(t, w)
+  {
+	  var result = "";
+	  var peaces = Math.ceil(t.length/w);
+	  
+	  for (var i = 0; i < peaces; i++)
+	  {
+		  var ext = w;
+		  if ((t.length - (i*w)) < w)
+		  {
+			  ext = t.length - (i*w);
+		  }		  
+		  result += t.substr(i*w, ext);
+		  if ((i+1) < peaces)
+		  {
+			  result += "</br>";
+		  }
+	  }
+	  
+	  return result;
+  }
+  
+  
+  
+  function redrawTheRest()
+  {
+	  var tid = selectedResource.split("@")[0];
+	  var divId = normalizeId(tid+'_chart');
+	  var dataId = normalizeId(tid+'_data');
+	  
+	  var resource =  reportData.rindex[selectedResource];
+	  var stats = resource.stat[selectedAction];
+	  
+	  var dataTable = '<table width="100%" class="ui-widget-header ui-corner-all" ><tr height="30px"><td>'+createMultiLineText(resource.name, 60)+'</td></tr></table>';
+	  dataTable += '<table width="100%"><tr class="ui-widget-header ui-corner-all" height="30px"><td>Stat</td><td>min</td><td>max</td><td>last</td><td>count</td><td>avg</td></tr>';
+	  
+	  var ci = 0;
+	  for (var stat in stats)
+	  {
+		  var sdata = stats[stat];
+		  dataTable += '<tr class="ui-widget-content" height="30px"><td style="background:'+chartLineColors[stat]+'">'+stat+'</td><td>'+sdata.min+'</td><td>'+sdata.max+'</td><td>'+sdata.last+'</td><td>'+sdata.count+'</td><td>'+sdata.avg+'</td></tr>';		  
+	  	  ci++;
+	  }
+	  
+	  dataTable += '</table>';
+	  
+	  //alert(dataTable);
+	  
+	  $('#'+dataId).empty();
+	  $('#'+dataId).append(dataTable);
+	  try
+	  {
+		  var cdata = reportData.chartData[selectedResource][selectedAction].data;
+		  $('#'+divId).empty();
+	  	  var plot = $.jqplot(divId, cdata,
+	  	  { 
+	  	      title:'Resource Performance Chart', 
+	  	      // Series options are specified as an array of objects, one object
+	  	      // for each series.
+			  axes: {
+	        			// options for each axis are specified in seperate option objects.
+	        		xaxis: {
+	          			label: "Time (milliseconds)",
+			            pad: 0
+	        		},
+	        		yaxis: {
+			            pad: 1,
+	          			label: "Execution time (microseconds)"
+	        		}
+      			},	  	      
+	  	        series:[ 
+	  	          {
+	  	            // Change our line width and use a diamond shaped marker.
+	  	            lineWidth:1, 
+	  	            color: chartLineColors.time,
+	  	            markerOptions: { style:'dimaond' }
+	  	          }, 
+	  	          {
+	  	            // Don't show a line, just show markers.
+	  	            // Make the markers 7 pixels with an 'x' style
+	  	            color: chartLineColors.actualtime,
+	  	            markerOptions: { size: 5, style:"x" }
+	  	          },
+	  	          { 
+	  	            // Use (open) circlular markers.
+	  	            lineWidth:1, 
+	  	            color: chartLineColors.throughput,
+	  	            markerOptions: { style:"circle" }
+	  	          }, 
+	  	          {
+	  	            // Use a thicker, 5 pixel line and 10 pixel
+	  	            // filled square markers.
+	  	            lineWidth:1, 
+	  	            color: chartLineColors.error,
+	  	            markerOptions: { style:"filledSquare", size:10 }
+	  	          }
+	  	      ]
+	  	    }		  
+	  	  );		
+	  }
+	  catch (err)
+	  {
+		  alert(err);
+	  }
+  }
+  
+  /**
+   * Redraw the view
+   */
+  function redrawView()
+  {
+	  var tid = selectedResource.split("@")[0];
+
+	  //Remove all actions and repopulate them
+	  var actionListId = tid+'ActionList';
+	  $('#'+actionListId+' > option').remove();	  
+	  //Remove all charts and redraw new once.
+	  //$('#'+tid+' div').remove(":contains('chart')");	  	  
+	  
+	  for (var act in reportData.chartData[selectedResource])
+	  {
+		  if (act == "id" || act == "toff")
+		  {
+				continue;  
+		  }
+		  $('#'+actionListId).append('<option style="font-size:11px;" value="'+act+'">'+act+'</option>'); 
+	  }
+	  
+	  selectedAction = $('#'+actionListId).val();
+	  redrawTheRest();
+	  
+  }
+  
+  function redrawBehavior()
+  {
+	  
+  }
+
+  
+  /**
+   * Load test informtion for this test
+   */
+  function prepareMainView()
+  {
+	   var view = '<table border="1" class="ui-widget-header" width="100%">';
+	   view += '<tr height="30px"><td style="font-size:10px;width:150px">Total Time By Type</td>';
+	   view += '<td style="font-size:10px;width:150px">Total Count By Type</td>';
+	   view += '</tr>';
+	   view += '<tr height="200px">';
+	   view += '<td style="font-size:10px;width:150px"><div id="ttimePie"/></td>';
+	   view += '<td style="font-size:10px;width:150px"><div id="tCountPie"/></td>';
+	   view += '</tr>';
+	   view += '</table>';
+	   $( '#main' ).append(view);
+	   
+	   var plot1 = $.jqplot('ttimePie', [reportData.aggregatedChartData.totalTimeChartData], 
+			    { 
+			      seriesDefaults: {
+			        // Make this a pie chart.
+			        renderer: jQuery.jqplot.PieRenderer, 
+			        rendererOptions: {
+			          showDataLabels: true
+			        }
+			      }, 
+			      legend: { show:true, location: 'e' }
+			    }
+		);
+	   var plot1 = $.jqplot('tCountPie', [reportData.aggregatedChartData.totalCountChartData], 
+			    { 
+			      seriesDefaults: {
+			        // Make this a pie chart.
+			        renderer: jQuery.jqplot.PieRenderer, 
+			        rendererOptions: {
+			          showDataLabels: true
+			        }
+			      }, 
+			      legend: { show:true, location: 'e' }
+			    }
+		);
+  }
+  
+  
+  /**
+   * Load test informtion for this test
+   */
+  function prepareView(rtype, viewId)
+  {
+	   var view = '<table class="ui-widget-header" width="100%"><tr height="30px"><td style="font-size:10px;width:150px">Resources :</td><td><select style="width:500px" id="'+rtype+'List">';
+	   for (var item in reportData.rindex) 
+	   {
+			var resource =  reportData.rindex[item];
+			var t = resource.name.split(":");
+			if (t[0] == rtype)
+			{
+				view += '<option style="font-size:11px;" value="'+item+'">'+resource.name+'</option>';
+			}
+       }
+	   view += '</select></td>';
+	   
+	   view += '<td></td><td style="font-size:10px;width:150px">Actions :</td><td><select id="'+rtype+'ActionList">';
+	   view += '<option style="font-size:11px;" value="0"></option>';
+	   view += '</select></td></tr></table>';
+
+	   var divId = normalizeId(rtype+'_chart');
+	   var dataId = normalizeId(rtype+'_data');
+	   view += '<table class="ui-widget-content" width="100%" height="400px"><tr>';
+	   view += '<td><div id="'+divId+'" style="font-size:6px; margin-top:0.5px; width:640px; height: 480px;"></div></td>';
+	   view += '<td><div id="'+dataId+'" style="font-size:6px; margin-top:0.5px; width:640px; height: 480px;"></div></td>';
+	   view += '</tr>';
+	   view += '</table>';
+	   
+	   $( viewId ).append(view);
+	   
+	   $("#"+rtype+"List").change(function() {
+		   selectedResource = $(this).val();
+		   redrawView();
+	    });	   
+	   
+	   $("#"+rtype+'ActionList').change(function() {
+		   selectedAction = $(this).val();
+		   redrawTheRest();
+	   });	   
+  }
+  
+  $(document).ready(function() 
+  {
+	  try
+	  {
+		  
+		  var simRows = '<table>';
+		  simRows += '<tr style="font-size:13px; margin-right:1px; margin-top:0.5px;" class="ui-widget-header" height="30px"><td>Id</td><td>Name</td><td>Description</td><td>Frequency</td><td>Mappings</td><td>Behaviors</td></tr>';
+		  
+		  for (var si in reportData.sims) {
+			  var sim = reportData.sims[si];
+			  simRows += '<tr style="font-size:13px; margin-right:1px; margin-top:0.5px;" height="30px">';
+			  simRows += '<td>'+sim.id+'</td>';
+			  simRows += '<td>'+createMultiLineText(sim.name, 20)+'</td>';
+			  simRows += '<td>'+createMultiLineText(sim.description, 30)+'</td>';
+			  simRows += '<td>'+sim.frequency+'</td>';
+			  simRows += '<td>'+createMultiLineText(sim.mappings[0], 30)+'</td>';
+			  var bhId = sim.id;
+			  simRows += '<td>';
+			  simRows += '<select id="behaviorsList">';
+			  			  
+			  for (var bh in sim.behaviors) {
+				  if (selectedBehavior == null) {
+					  selectedBehavior = sim.behaviors[bh];
+				  }
+				  simRows += '<option style="font-size:11px;" value="'+bh+'">'+sim.behaviors[bh].name+'</option>';
+			  }
+			  
+			  simRows += '</select>';
+			  simRows += '</td>';			  
+			  simRows += '</tr>';
+		  }
+		  simRows += '</table>';
+		  
+		  $('#st').append(simRows);
+		  
+		  //!!!
+		  redrawBehavior();
+
+		  $("#behaviorsList").change(function() {
+			   var bi = $(this).val();
+			   selectedBehavior = sim.behaviors[bi];
+			   redrawBehavior();
+		  });	   
+		  
+		  var tabs = $( "#tabs" ).tabs();
+		  tabs.width("100%");
+		  tabs.height("100%");
+		  tabs.tabs('add', '#main' , 'Main', 0); 
+		  //$( '#main' ).append('<div id="mainview" class="ui-widget ui-widget-content ui-corner-all" style="font-size:11px; margin-top:1px; width:100%; height: 400px;"></div>');
+		  
+		  
+		  prepareMainView();
+		  
+		  var i = 1;
+		  for (var rtype in reportData.rtypes)
+		  {
+			  var tid = '#' + rtype;
+			  tabs.tabs('add', tid, rtype, i); 
+			  prepareView(rtype, tid);
+		  }
+
+		  /**
+		   * Attach selection event.
+		   */
+		   
+		   $('#tabs').bind('tabsshow', function(event, ui) 
+			{
+			   if (ui.panel.id != 'mainview')
+			   {
+				   selectedResource = $('#'+ui.panel.id+"List").val();
+				   redrawView();
+			   }
+			});		   
+	  }
+	  catch (err)
+	  {
+		alert(err);		  
+	  }
+  });
+  </script>
+</head>
+<body>
+<div style="background-color: #CCCC99; border-bottom-style: groove; border-left-style: groove;">
+ <br/>
+  &nbsp; &nbsp;<b>Crash4j JUNIT Test Report</b>
+ <p/>
+</div>
+</p>
+<div id="general" class="ui-widget-content">
+	<h3 class="ui-widget-header">General Information</h3>
+	<table border="1">
+	<tr>
+	<td><div id="st"/></td>
+	<td><div id="bt"/></td>
+	<tr>
+	</table>
+	<table id="gt" class="ui-widget-header ui-corner-all">
+		<tr>
+		<td  width="50px" height="20px" style="font-size:13px; margin-right:1px; margin-top:0.5px;">Concurrency</td>
+		<td  width="50px" height="20px" style="font-size:13px; margin-right:1px; margin-top:0.5px;text-align: center;"><script>document.write(reportData.concurrency);</script></td>
+		<td  width="50px" height="20px" style="font-size:13px; margin-right:1px; margin-top:0.5px;">Iterations</td>
+		<td  width="50px" height="20px" style="font-size:13px; margin-right:1px; margin-top:0.5px;text-align: center;"><script>document.write(reportData.iterations);</script></td>
+		<td  width="50px" height="20px" style="font-size:13px; margin-right:1px; margin-top:0.5px;">Timeout</td>
+		<td  width="50px" height="20px" style="font-size:13px; margin-right:1px; margin-top:0.5px;text-align: center;"><script>document.write(reportData.timeout);</script></td>
+		<td  width="50px" height="20px" style="font-size:13px; margin-right:1px; margin-top:0.5px;">Simulations</td>
+		<td  width="50px" height="20px" style="font-size:13px; margin-right:1px; margin-top:0.5px;text-align: center;"><script>document.write(reportData.sims.length);</script></td>
+		</tr>
+	</table>
+</div>
+<div id="tabs">
+	<ul>
+	</ul>
+</div>
+
+</body>
+</html>

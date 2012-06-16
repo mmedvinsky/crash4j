@@ -1,0 +1,281 @@
+{
+  "runtimeVersion": "J2SE 6",
+  "runtime": "java",
+  "entities": {
+    "java.sql.Connection": {
+       "instrumentSubclasses": "true",
+       "accept" : ["net", "db", "gen"],    
+       "rollback()V": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "ROLLBACK",        
+        "rtype": "db",
+        "method": "rollback",
+        "signature": "rollback()V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_rollback__V"
+      },
+      "prepareStatement(Ljava/lang/String;III)Ljava/sql/PreparedStatement;": {
+        "native": "false",
+        "aclass": "NOACTION",
+        "rtype": "db",
+        "method": "prepareStatement",
+        "signature": "prepareStatement(Ljava/lang/String;III)Ljava/sql/PreparedStatement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_prepareStatement_Ljava_lang_String_III_Ljava_sql_PreparedStatement_"
+      },
+      "prepareCall(Ljava/lang/String;)Ljava/sql/CallableStatement;": {
+        "native": "false",
+        "aclass": "NOACTION",        
+        "rtype": "db",
+        "method": "prepareCall",
+        "signature": "prepareCall(Ljava/lang/String;)Ljava/sql/CallableStatement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_prepareCall_Ljava_lang_String__Ljava_sql_CallableStatement_"
+      },
+      "close()V": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "CLOSE",        
+        "rtype": "db",
+        "method": "close",
+        "signature": "close()V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_close__V"
+      },
+      "createStatement(III)Ljava/sql/Statement;": {
+        "native": "false",
+        "aclass": "NOACTION",        
+        "rtype": "db",
+        "method": "createStatement",
+        "signature": "createStatement(III)Ljava/sql/Statement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_createStatement_III_Ljava_sql_Statement_"
+      },
+      "prepareCall(Ljava/lang/String;III)Ljava/sql/CallableStatement;": {
+        "native": "false",
+        "aclass": "NOACTION",        
+        "rtype": "db",
+        "method": "prepareCall",
+        "signature": "prepareCall(Ljava/lang/String;III)Ljava/sql/CallableStatement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_prepareCall_Ljava_lang_String_III_Ljava_sql_CallableStatement_"
+      },
+      "prepareCall(Ljava/lang/String;II)Ljava/sql/CallableStatement;": {
+        "native": "false",
+        "aclass": "NOACTION",        
+        "rtype": "db",
+        "method": "prepareCall",
+        "signature": "prepareCall(Ljava/lang/String;II)Ljava/sql/CallableStatement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_prepareCall_Ljava_lang_String_II_Ljava_sql_CallableStatement_"
+      },
+      "prepareStatement(Ljava/lang/String;I)Ljava/sql/PreparedStatement;": {
+        "native": "false",
+        "aclass": "NOACTION",        
+        "rtype": "db",
+        "method": "prepareStatement",
+        "signature": "prepareStatement(Ljava/lang/String;I)Ljava/sql/PreparedStatement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_prepareStatement_Ljava_lang_String_I_Ljava_sql_PreparedStatement_"
+      },
+      "prepareStatement(Ljava/lang/String;)Ljava/sql/PreparedStatement;": {
+        "native": "false",
+        "aclass": "NOACTION",        
+        "rtype": "db",
+        "method": "prepareStatement",
+        "signature": "prepareStatement(Ljava/lang/String;)Ljava/sql/PreparedStatement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_prepareStatement_Ljava_lang_String__Ljava_sql_PreparedStatement_"
+      },
+      "prepareStatement(Ljava/lang/String;[I)Ljava/sql/PreparedStatement;": {
+        "native": "false",
+        "aclass": "NOACTION",        
+        "rtype": "db",
+        "method": "prepareStatement",
+        "signature": "prepareStatement(Ljava/lang/String;[I)Ljava/sql/PreparedStatement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_prepareStatement_Ljava_lang_String__I_Ljava_sql_PreparedStatement_"
+      },
+      "prepareStatement(Ljava/lang/String;[Ljava/lang/String;)Ljava/sql/PreparedStatement;": {
+        "native": "false",
+        "aclass": "NOACTION",        
+        "rtype": "db",
+        "method": "prepareStatement",
+        "signature": "prepareStatement(Ljava/lang/String;[Ljava/lang/String;)Ljava/sql/PreparedStatement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_prepareStatement_Ljava_lang_String__Ljava_lang_String__Ljava_sql_PreparedStatement_"
+      },
+      "commit()V": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "COMMIT",        
+        "rtype": "db",
+        "method": "commit",
+        "signature": "commit()V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_commit__V"
+      },
+      "createStatement()Ljava/sql/Statement;": {
+        "native": "false",
+         "aclass": "NOACTION",        
+         "rtype": "db",
+        "method": "createStatement",
+        "signature": "createStatement()Ljava/sql/Statement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_createStatement__Ljava_sql_Statement_"
+      },
+      "createStatement(II)Ljava/sql/Statement;": {
+        "native": "false",
+         "aclass": "NOACTION",        
+        "rtype": "db",
+        "method": "createStatement",
+        "signature": "createStatement(II)Ljava/sql/Statement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_createStatement_II_Ljava_sql_Statement_"
+      },
+      "prepareStatement(Ljava/lang/String;II)Ljava/sql/PreparedStatement;": {
+        "native": "false",
+         "aclass": "NOACTION",        
+        "rtype": "db",
+        "method": "prepareStatement",
+        "signature": "prepareStatement(Ljava/lang/String;II)Ljava/sql/PreparedStatement;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_prepareStatement_Ljava_lang_String_II_Ljava_sql_PreparedStatement_"
+      },
+      "rollback(Ljava/sql/Savepoint;)V": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "ROLLBACK",        
+        "rtype": "db",
+        "method": "rollback",
+        "signature": "rollback(Ljava/sql/Savepoint;)V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_rollback_Ljava_sql_Savepoint__V"
+      }
+    },    
+    "java.sql.Driver": {
+       "accept" : ["net", "db", "gen"],    
+      "instrumentSubclasses": "true",
+      "connect(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;": {
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "native": "false",
+        "atype": "o",
+        "rtype": "db",
+        "method": "connect",
+        "signature": "connect(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Driver_connect_Ljava_lang_String_Ljava_util_Properties__Ljava_sql_Connection_"
+      }
+    },    
+    "java.sql.PreparedStatement": {
+       "instrumentSubclasses": "true",    
+       "accept" : ["net", "db", "gen"],    
+      "executeUpdate()I": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "executeUpdate",
+        "signature": "executeUpdate()I",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_PreparedStatement_executeUpdate__I"
+      },
+      "executeQuery()Ljava/sql/ResultSet;": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "executeQuery",
+        "signature": "executeQuery()Ljava/sql/ResultSet;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_PreparedStatement_executeQuery__Ljava_sql_ResultSet_"
+      },
+      "execute()Z": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "execute",
+        "signature": "execute()Z",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_PreparedStatement_execute__Z"
+      }
+    },
+    "java.sql.Statement": {
+       "instrumentSubclasses": "true",    
+       "accept" : ["net", "db", "gen"],    
+      "executeUpdate(Ljava/lang/String;I)I": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "executeUpdate",
+        "signature": "executeUpdate(Ljava/lang/String;I)I",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Statement_executeUpdate_Ljava_lang_String_I_I"
+      },
+      "execute(Ljava/lang/String;[Ljava/lang/String;)Z": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "execute",
+        "signature": "execute(Ljava/lang/String;[Ljava/lang/String;)Z",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Statement_execute_Ljava_lang_String__Ljava_lang_String__Z"
+      },
+      "executeQuery(Ljava/lang/String;)Ljava/sql/ResultSet;": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "executeQuery",
+        "signature": "executeQuery(Ljava/lang/String;)Ljava/sql/ResultSet;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Statement_executeQuery_Ljava_lang_String__Ljava_sql_ResultSet_"
+      },
+      "execute(Ljava/lang/String;[I)Z": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "execute",
+        "signature": "execute(Ljava/lang/String;[I)Z",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Statement_execute_Ljava_lang_String__I_Z"
+      },
+      "executeUpdate(Ljava/lang/String;[Ljava/lang/String;)I": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "executeUpdate",
+        "signature": "executeUpdate(Ljava/lang/String;[Ljava/lang/String;)I",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Statement_executeUpdate_Ljava_lang_String__Ljava_lang_String__I"
+      },
+      "close()V": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "CLOSE",        
+        "rtype": "db",
+        "method": "close",
+        "signature": "close()V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Statement_close__V"
+      },
+      "executeUpdate(Ljava/lang/String;)I": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "executeUpdate",
+        "signature": "executeUpdate(Ljava/lang/String;)I",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Statement_executeUpdate_Ljava_lang_String__I"
+      },
+      "execute(Ljava/lang/String;I)Z": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "execute",
+        "signature": "execute(Ljava/lang/String;I)Z",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Statement_execute_Ljava_lang_String_I_Z"
+      },
+      "executeUpdate(Ljava/lang/String;[I)I": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "executeUpdate",
+        "signature": "executeUpdate(Ljava/lang/String;[I)I",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Statement_executeUpdate_Ljava_lang_String__I_I"
+      },
+      "execute(Ljava/lang/String;)Z": {
+        "native": "false",
+        "aclass": "SQL",
+        "aclasstype": "EXECUTE",        
+        "rtype": "db",
+        "method": "execute",
+        "signature": "execute(Ljava/lang/String;)Z",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Statement_execute_Ljava_lang_String__Z"
+      },
+    }
+  }
+}

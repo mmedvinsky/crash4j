@@ -1,0 +1,1902 @@
+{
+  "runtimeVersion": "J2SE 6",
+  "runtime": "java",
+  "entities": {
+    "java.util.jar.JarFile": {
+      "rtype": "fsys",
+      "<init>(Ljava/io/File;Z)V": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/io/File;Z)V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile__init__Ljava_io_File_Z_V"
+      },
+      "getInputStream(Ljava/util/zip/ZipEntry;)Ljava/io/InputStream;": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "getInputStream",
+        "signature": "getInputStream(Ljava/util/zip/ZipEntry;)Ljava/io/InputStream;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_getInputStream_Ljava_util_zip_ZipEntry__Ljava_io_InputStream_"
+      },
+      "<init>(Ljava/io/File;)V": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/io/File;)V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile__init__Ljava_io_File__V"
+      },
+      "<init>(Ljava/lang/String;Z)V": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+         "method": "<init>",
+        "signature": "<init>(Ljava/lang/String;Z)V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile__init__Ljava_lang_String_Z_V"
+      },
+      "<init>(Ljava/lang/String;)V": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/lang/String;)V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile__init__Ljava_lang_String__V"
+      },
+      "<init>(Ljava/io/File;ZI)V": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/io/File;ZI)V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile__init__Ljava_io_File_ZI_V"
+      }
+    },
+    "java.util.jar.JarFile!java.io.InputStream": {
+      "rtype": "fsys",
+      "close()V": {
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "method": "close",
+        "signature": "close()V;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_java_io_InputStream_close__V"
+      },
+      "read([B)I": {
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([B)I;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_java_io_InputStream_read__B_I"
+      },
+      "read()I": {
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read()I;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_java_io_InputStream_read__I"
+      },
+      "read([BII)I": {
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([BII)I;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_java_io_InputStream_read__BII_I"
+      }
+    },
+    "java.util.zip.ZipFile": {
+      "rtype": "fsys",
+      "<init>(Ljava/io/File;I)V": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/io/File;I)V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile__init__Ljava_io_File_I_V"
+      },
+      "close()V": {
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "method": "close",
+        "signature": "close()V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_close__V"
+      },
+      "getInputStream(Ljava/util/zip/ZipEntry;)Ljava/io/InputStream;": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "getInputStream",
+        "signature": "getInputStream(Ljava/util/zip/ZipEntry;)Ljava/io/InputStream;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_getInputStream_Ljava_util_zip_ZipEntry__Ljava_io_InputStream_"
+      },
+      "<init>(Ljava/io/File;)V": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/io/File;)V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile__init__Ljava_io_File__V"
+      },
+      "<init>(Ljava/lang/String;)V": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/lang/String;)V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile__init__Ljava_lang_String__V"
+      }
+    },
+    "java.util.zip.ZipFile!java.io.InputStream": {
+      "rtype": "fsys",
+      "close()V;": {
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "method": "close",
+        "signature": "close()V;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_close__V"
+      },
+      "read([B)I;": {
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([B)I;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_read__B_I"
+      },
+      "read()I;": {
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read()I;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_read__I"
+      },
+      "read([BII)I;": {
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([BII)I;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_read__BII_I"
+      }
+    },
+    "java.net.Socket!java.io.OutputStream": {
+      "write(I)V;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write(I)V;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_io_OutputStream_write_I_V_",
+        "errors": [
+          "java.io.IOException"
+        ]
+      },
+      "write([B)V;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write([B)V;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_io_OutputStream_write__B_V_",
+        "errors": [
+          "java.io.IOException"
+        ]
+      },
+      "write([BII)V;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write([BII)V;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_io_OutputStream_write__BII_V_",
+        "errors": [
+          "java.io.IOException"
+        ]
+      },
+      "close()V;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "method": "close",
+        "signature": "close()V;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_io_OutputStream_close__V_",
+        "errors": [
+          "java.io.IOException"
+        ]
+      }
+    },
+    "java.io.FileOutputStream": {
+      "<init>(Ljava/io/File;)V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/io/File;)V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream__init__Ljava_io_File__V"
+      },
+      "write(I)V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write(I)V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_write_I_V"
+      },
+      "getChannel()Ljava/nio/channels/FileChannel;": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "rtype": "fsys",
+        "method": "getChannel",
+        "signature": "getChannel()Ljava/nio/channels/FileChannel;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_getChannel__Ljava_nio_channels_FileChannel_"
+      },
+      "close()V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "method": "close",
+        "signature": "close()V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_close__V"
+      },
+      "<init>(Ljava/lang/String;Z)V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/lang/String;Z)V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream__init__Ljava_lang_String_Z_V"
+      },
+      "<init>(Ljava/lang/String;)V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/lang/String;)V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream__init__Ljava_lang_String__V"
+      },
+      "write([BII)V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write([BII)V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_write__BII_V"
+      },
+      "<init>(Ljava/io/FileDescriptor;)V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/io/FileDescriptor;)V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream__init__Ljava_io_FileDescriptor__V"
+      },
+      "write([B)V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write([B)V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_write__B_V"
+      },
+      "<init>(Ljava/io/File;Z)V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/io/File;Z)V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream__init__Ljava_io_File_Z_V"
+      }
+    },
+    "java.io.FileInputStream!java.nio.channels.FileChannel": {
+      "write(Ljava/nio/ByteBuffer;J)I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+         "method": "write",
+        "signature": "write(Ljava/nio/ByteBuffer;J)I",
+        "errors": [
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.AsynchronousCloseException",
+          "java.nio.channels.ClosedByInterruptException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_java_nio_channels_FileChannel_write_Ljava_nio_ByteBuffer_J_I_write_Ljava_nio_ByteBuffer_J_I"
+      },
+      "read(Ljava/nio/ByteBuffer;J)I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "read",
+        "signature": "read(Ljava/nio/ByteBuffer;J)I",
+        "errors": [
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.AsynchronousCloseException",
+          "java.nio.channels.ClosedByInterruptException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_java_nio_channels_FileChannel_read_Ljava_nio_ByteBuffer_J_I_read_Ljava_nio_ByteBuffer_J_I"
+      },
+      "map(Ljava/nio/channels/FileChannel$MapMode;JJ)Ljava/nio/MappedByteBuffer;": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "map",
+        "signature": "map(Ljava/nio/channels/FileChannel$MapMode;JJ)Ljava/nio/MappedByteBuffer;",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_java_nio_channels_FileChannel_map_Ljava_nio_channels_FileChannel$MapMode_JJ_Ljava_nio_MappedByteBuffer__map_Ljava_nio_channels_FileChannel$MapMode_JJ_Ljava_nio_MappedByteBuffer_"
+      },
+      "read([Ljava/nio/ByteBuffer;II)J": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([Ljava/nio/ByteBuffer;II)J",
+        "errors": [
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.AsynchronousCloseException",
+          "java.nio.channels.ClosedByInterruptException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_java_nio_channels_FileChannel_read__Ljava_nio_ByteBuffer_II_J_read__Ljava_nio_ByteBuffer_II_J"
+      },
+      "read(Ljava/nio/ByteBuffer;)I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read(Ljava/nio/ByteBuffer;)I",
+        "errors": [
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.AsynchronousCloseException",
+          "java.nio.channels.ClosedByInterruptException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_java_nio_channels_FileChannel_read_Ljava_nio_ByteBuffer__I_read_Ljava_nio_ByteBuffer__I"
+      },
+      "write([Ljava/nio/ByteBuffer;II)J": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write([Ljava/nio/ByteBuffer;II)J",
+        "errors": [
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.AsynchronousCloseException",
+          "java.nio.channels.ClosedByInterruptException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_java_nio_channels_FileChannel_write__Ljava_nio_ByteBuffer_II_J_write__Ljava_nio_ByteBuffer_II_J"
+      },
+      "truncate(J)Ljava/nio/channels/FileChannel;": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "truncate",
+        "signature": "truncate(J)Ljava/nio/channels/FileChannel;",
+        "errors": [
+          "java.nio.channels.ClosedChannelException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_java_nio_channels_FileChannel_truncate_J_Ljava_nio_channels_FileChannel__truncate_J_Ljava_nio_channels_FileChannel_"
+      },
+      "read([Ljava/nio/ByteBuffer;)J": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([Ljava/nio/ByteBuffer;)J",
+        "errors": [
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.AsynchronousCloseException",
+          "java.nio.channels.ClosedByInterruptException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_java_nio_channels_FileChannel_read__Ljava_nio_ByteBuffer__J_read__Ljava_nio_ByteBuffer__J"
+      },
+      "write([Ljava/nio/ByteBuffer;)J": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write([Ljava/nio/ByteBuffer;)J",
+        "errors": [
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.AsynchronousCloseException",
+          "java.nio.channels.ClosedByInterruptException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_java_nio_channels_FileChannel_write__Ljava_nio_ByteBuffer__J_write__Ljava_nio_ByteBuffer__J"
+      },
+      "write(Ljava/nio/ByteBuffer;)I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write(Ljava/nio/ByteBuffer;)I",
+        "errors": [
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.AsynchronousCloseException",
+          "java.nio.channels.ClosedByInterruptException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_java_nio_channels_FileChannel_write_Ljava_nio_ByteBuffer__I_write_Ljava_nio_ByteBuffer__I"
+      }
+    },
+    "java.net.ServerSocket": {
+      "<init>(I)V": {
+        "attrs": {
+          "mode": "server",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(I)V",
+        "errors": [
+          "java.lang.SecurityException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_ServerSocket__init__I_V"
+      },
+      "accept()Ljava/net/Socket;": {
+        "attrs": {
+          "mode": "server",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "method": "accept",
+        "signature": "accept()Ljava/net/Socket;",
+        "errors": [
+          "java.lang.SecurityException",
+          "java.net.SocketTimeoutException",
+          "java.nio.channels.IllegalBlockingModeException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_ServerSocket_accept__Ljava_net_Socket_"
+      },
+      "bind(Ljava/net/SocketAddress;)V": {
+        "attrs": {
+          "mode": "server",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "BIND",        
+        "method": "bind",
+        "signature": "bind(Ljava/net/SocketAddress;)V",
+        "errors": [
+          "java.lang.SecurityException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_ServerSocket_bind_Ljava_net_SocketAddress__V"
+      },
+      "<init>(II)V": {
+        "attrs": {
+          "mode": "server",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(II)V",
+        "errors": [
+          "java.lang.SecurityException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_ServerSocket__init__II_V"
+      },
+      "bind(Ljava/net/SocketAddress;I)V": {
+        "attrs": {
+          "mode": "server",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "BIND",        
+        "method": "bind",
+        "signature": "bind(Ljava/net/SocketAddress;I)V",
+       "errors": [
+          "java.lang.SecurityException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_ServerSocket_bind_Ljava_net_SocketAddress_I_V"
+      },
+      "close()V": {
+        "attrs": {
+          "mode": "server",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "method": "close",
+        "signature": "close()V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_ServerSocket_close__V"
+      },
+      "<init>(IILjava/net/InetAddress;)V": {
+        "attrs": {
+          "mode": "server",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(IILjava/net/InetAddress;)V",
+        "errors": [
+          "java.lang.SecurityException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_ServerSocket__init__IILjava_net_InetAddress__V"
+      }
+    },
+    "java.net.Socket!java.io.InputStream": {
+      "read([B)I;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([B)I;",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_io_InputStream_read__B_I_"
+      },
+      "read([BII)I;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([BII)I;",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_io_InputStream_read__BII_I_"
+      },
+      "read()I;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read()I;",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_io_InputStream_read__I_"
+      },
+      "close()V;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "method": "close",
+        "signature": "close()V;",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_io_InputStream_close__V_"
+      }
+    },
+    "java.net.Socket": {
+      "<init>(Ljava/net/InetAddress;ILjava/net/InetAddress;I)V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/net/InetAddress;ILjava/net/InetAddress;I)V",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket__init__Ljava_net_InetAddress_ILjava_net_InetAddress_I_V"
+      },
+      "connect(Ljava/net/SocketAddress;I)V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "method": "connect",
+        "signature": "connect(Ljava/net/SocketAddress;I)V",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_connect_Ljava_net_SocketAddress_I_V"
+      },
+      "<init>(Ljava/net/InetAddress;IZ)V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/net/InetAddress;IZ)V",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket__init__Ljava_net_InetAddress_IZ_V"
+      },
+      "<init>(Ljava/net/Proxy;)V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/net/SocketImpl;)V",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket__init__Ljava_net_Proxy__V"
+      },      
+      "<init>(Ljava/net/SocketImpl;)V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/net/SocketImpl;)V",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket__init__Ljava_net_SocketImpl__V"
+      },
+      "close()V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "method": "close",
+        "signature": "close()V",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_close__V"
+      },
+      "getOutputStream()Ljava/io/OutputStream;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "rtype": "net",
+        "method": "getOutputStream",
+        "signature": "getOutputStream()Ljava/io/OutputStream;",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_getOutputStream__Ljava_io_OutputStream_"
+      },
+      "getInputStream()Ljava/io/InputStream;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "rtype": "net",
+        "method": "getInputStream",
+        "signature": "getInputStream()Ljava/io/InputStream;",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_getInputStream__Ljava_io_InputStream_"
+      },
+      "connect(Ljava/net/SocketAddress;)V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "method": "connect",
+        "signature": "connect(Ljava/net/SocketAddress;)V",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_connect_Ljava_net_SocketAddress__V"
+      },
+      "<init>(Ljava/net/InetAddress;I)V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/net/InetAddress;I)V",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket__init__Ljava_net_InetAddress_I_V"
+      },
+      "<init>(Ljava/lang/String;IZ)V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/lang/String;IZ)V",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket__init__Ljava_lang_String_IZ_V"
+      },
+      "<init>(Ljava/lang/String;ILjava/net/InetAddress;I)V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/lang/String;ILjava/net/InetAddress;I)V",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket__init__Ljava_lang_String_ILjava_net_InetAddress_I_V"
+      },
+      "<init>(Ljava/lang/String;I)V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/lang/String;I)V",
+        "errors": [
+          "java.io.IOException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket__init__Ljava_lang_String_I_V"
+      },
+      "getChannel()Ljava/nio/channels/SocketChannel;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "rtype": "net",
+        "method": "getChannel",
+        "signature": "getChannel()Ljava/nio/channels/SocketChannel;",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_getChannel__Ljava_nio_channels_SocketChannel_"
+      }
+    },
+    "java.net.DatagramSocket": {
+      "<init>(I)V": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "rtype": "net",
+        "method": "<init>",
+        "signature": "<init>(I)V",
+        "errors": [
+          "java.net.SocketException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket__init__I_V"
+      },
+      "<init>(ILjava/net/InetAddress;)V": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "rtype": "net",
+        "method": "<init>",
+        "signature": "<init>(ILjava/net/InetAddress;)V",
+        "errors": [
+          "java.net.SocketException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket__init__ILjava_net_InetAddress__V"
+      },
+      "send(Ljava/net/DatagramPacket;)V": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "rtype": "net",
+        "method": "send",
+        "signature": "send(Ljava/net/DatagramPacket;)V",
+        "errors": [
+          "java.io.IOException",
+          "java.net.PortUnreachableException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_send_Ljava_net_DatagramPacket__V"
+      },
+      "close()V": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "rtype": "net",
+        "method": "close",
+        "signature": "close()V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_close__V"
+      },
+      "connect(Ljava/net/InetAddress;I)V": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "rtype": "net",
+        "method": "connect",
+        "signature": "connect(Ljava/net/InetAddress;I)V",
+        "errors": [
+          "java.net.SocketException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_connect_Ljava_net_InetAddress_I_V"
+      },
+      "receive(Ljava/net/DatagramPacket;)V": {
+        "facade": "false",
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "rtype": "net",
+        "method": "receive",
+        "signature": "receive(Ljava/net/DatagramPacket;)V",
+        "errors": [
+          "java.net.SocketTimeoutException",
+          "java.net.PortUnreachableException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_receive_Ljava_net_DatagramPacket__V"
+      },
+      "disconnect()V": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "rtype": "net",
+        "method": "disconnect",
+        "signature": "disconnect()V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_disconnect__V"
+      },
+      "<init>(Ljava/net/SocketAddress;)V": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "rtype": "net",
+        "method": "<init>",
+        "signature": "<init>(Ljava/net/SocketAddress;)V",
+        "errors": [
+          "java.net.SocketException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket__init__Ljava_net_SocketAddress__V"
+      },
+      "connect(Ljava/net/SocketAddress;)V": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "rtype": "net",
+        "method": "connect",
+        "signature": "connect(Ljava/net/SocketAddress;)V",
+        "errors": [
+          "java.net.SocketException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_connect_Ljava_net_SocketAddress__V"
+      },
+      "<init>(Ljava/net/DatagramSocketImpl;)V": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "rtype": "net",
+        "method": "<init>",
+        "signature": "<init>(Ljava/net/DatagramSocketImpl;)V",
+        "errors": [
+          "java.net.SocketException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket__init__Ljava_net_DatagramSocketImpl__V"
+      },
+    },
+    "java.nio.channels.DatagramChannel": {
+      "open()Ljava/nio/channels/DatagramChannel;": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "rtype": "net",
+        "method": "open",
+        "signature": "open()Ljava/nio/channels/DatagramChannel;",
+        "errors": [
+          "java.io.IOException",
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_nio_channels_DatagramChannel_open__Ljava_nio_channels_DatagramChannel_"
+      }
+    },
+    "java.net.DatagramSocket!java.nio.channels.DatagramChannel": {
+      "send(Ljava/nio/ByteBuffer;Ljava/net/SocketAddress;)I": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "rtype": "net",
+        "method": "send",
+        "signature": "send(Ljava/nio/ByteBuffer;Ljava/net/SocketAddress;)I",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_java_nio_channels_DatagramChannel_send_Ljava_nio_ByteBuffer_Ljava_net_SocketAddress__I"
+      },
+      "read([Ljava/nio/ByteBuffer;II)J": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "rtype": "net",
+        "method": "read",
+        "signature": "read([Ljava/nio/ByteBuffer;II)J",
+        "errors": [
+          "java.io.IOException",
+          "java.nio.channels.NotYetConnectedException",
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.ClosedByInterruptException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_java_nio_channels_DatagramChannel_read__Ljava_nio_ByteBuffer_II_J"
+      },
+      "write([Ljava/nio/ByteBuffer;II)J": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "rtype": "net",
+        "method": "write",
+        "signature": "write([Ljava/nio/ByteBuffer;II)J",
+        "errors": [
+          "java.io.IOException",
+          "java.nio.channels.NotYetConnectedException",
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.ClosedByInterruptException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_java_nio_channels_DatagramChannel_write__Ljava_nio_ByteBuffer_II_J"
+      },
+      "socket()Ljava/net/DatagramSocket;": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "rtype": "net",
+        "method": "socket",
+        "signature": "socket()Ljava/net/DatagramSocket;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_java_nio_channels_DatagramChannel_socket__Ljava_net_DatagramSocket_"
+      },
+      "read([Ljava/nio/ByteBuffer;)J": {
+        "facade": "false",
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "rtype": "net",
+        "method": "read",
+        "signature": "read([Ljava/nio/ByteBuffer;)J",
+        "errors": [
+          "java.io.IOException",
+          "java.nio.channels.NotYetConnectedException",
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.ClosedByInterruptException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_java_nio_channels_DatagramChannel_read__Ljava_nio_ByteBuffer__J"
+      },
+      "write(Ljava/nio/ByteBuffer;)I": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "rtype": "net",
+        "method": "write",
+        "signature": "write(Ljava/nio/ByteBuffer;)I",
+        "errors": [
+          "java.io.IOException",
+          "java.nio.channels.NotYetConnectedException",
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.ClosedByInterruptException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_java_nio_channels_DatagramChannel_write_Ljava_nio_ByteBuffer__I"
+      },
+      "read(Ljava/nio/ByteBuffer;)I": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "rtype": "net",
+        "method": "read",
+        "signature": "read(Ljava/nio/ByteBuffer;)I",
+        "errors": [
+          "java.io.IOException",
+          "java.nio.channels.NotYetConnectedException",
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.ClosedByInterruptException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_java_nio_channels_DatagramChannel_read_Ljava_nio_ByteBuffer__I"
+      },
+      "receive(Ljava/nio/ByteBuffer;)Ljava/net/SocketAddress;": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "rtype": "net",
+        "method": "receive",
+        "signature": "receive(Ljava/nio/ByteBuffer;)Ljava/net/SocketAddress;",
+        "errors": [
+          "java.io.IOException",
+          "java.nio.channels.NotYetConnectedException",
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.ClosedByInterruptException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_java_nio_channels_DatagramChannel_receive_Ljava_nio_ByteBuffer__Ljava_net_SocketAddress_"
+      },
+      "write([Ljava/nio/ByteBuffer;)J": {
+        "attrs": {
+          "protocol": "udp"
+        },
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "rtype": "net",
+        "method": "write",
+        "signature": "write([Ljava/nio/ByteBuffer;)J",
+        "errors": [
+          "java.io.IOException",
+          "java.nio.channels.NotYetConnectedException",
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.ClosedByInterruptException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_DatagramSocket_java_nio_channels_DatagramChannel_write__Ljava_nio_ByteBuffer__J"
+      }
+    },       
+    "java.nio.channels.ServerSocketChannel": {
+      "open()Ljava/nio/channels/ServerSocketChannel;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "rtype": "net",
+        "method": "open",
+        "signature": "open()Ljava/nio/channels/ServerSocketChannel;",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_nio_channels_ServerSocketChannel_open__Ljava_nio_channels_ServerSocketChannel_"
+      }
+    },
+    "java.net.ServerSocket!java.nio.channels.ServerSocketChannel": {
+      "accept()Ljava/nio/channels/SocketChannel;": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "aclass": "IO",
+        "aclasstype": "BIND",        
+        "rtype": "net",
+        "method": "accept",
+        "signature": "accept()Ljava/nio/channels/SocketChannel;",
+        "errors": [
+          "java.io.IOException",
+          "java.nio.channels.NotYetConnectedException",
+          "java.nio.channels.ClosedChannelException",
+          "java.nio.channels.ClosedByInterruptException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_ServerSocket_java_nio_channels_ServerSocketChannel_accept__Ljava_nio_channels_SocketChannel_"
+      }
+    },
+    "java.net.Socket!java.nio.channels.SocketChannel": {
+      "read([Ljava/nio/ByteBuffer;II)J": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([Ljava/nio/ByteBuffer;II)J",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_nio_channels_SocketChannel_read__Ljava_nio_ByteBuffer_II_J"
+      },
+      "implCloseSelectableChannel()V": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "method": "implCloseSelectableChannel",
+        "signature": "implCloseSelectableChannel()V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_nio_channels_SocketChannel_implCloseSelectableChannel__V"
+      },
+      "read(Ljava/nio/ByteBuffer;)I": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read(Ljava/nio/ByteBuffer;)I",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_nio_channels_SocketChannel_read_Ljava_nio_ByteBuffer__I"
+      },
+      "write([Ljava/nio/ByteBuffer;II)J": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write([Ljava/nio/ByteBuffer;II)J",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_nio_channels_SocketChannel_write__Ljava_nio_ByteBuffer_II_J"
+      },
+      "connect(Ljava/net/SocketAddress;)Z": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "method": "connect",
+        "signature": "connect(Ljava/net/SocketAddress;)Z",
+        "errors": [
+          "java.io.IOException",
+          "java.nio.channels.UnresolvedAddressException",
+          "java.nio.channels.UnsupportedAddressTypeException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_nio_channels_SocketChannel_connect_Ljava_net_SocketAddress__Z"
+      },
+      "write(Ljava/nio/ByteBuffer;)I": {
+        "attrs": {
+          "mode": "client",
+          "protocol": "tcp"
+        },
+        "rtype": "net",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write(Ljava/nio/ByteBuffer;)I",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_net_Socket_java_nio_channels_SocketChannel_write_Ljava_nio_ByteBuffer__I"
+      }
+    },
+    "java.nio.channels.SocketChannel": {
+      "open()Ljava/nio/channels/SocketChannel;": {
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "rtype": "net",
+        "method": "open",
+        "signature": "open()Ljava/nio/channels/SocketChannel;",
+        "errors": [
+          "java.io.IOException",
+          "java.nio.channels.UnresolvedAddressException",
+          "java.nio.channels.UnsupportedAddressTypeException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_nio_channels_SocketChannel_open__Ljava_nio_channels_SocketChannel_"
+      },
+      "open(Ljava/net/SocketAddress;)Ljava/nio/channels/SocketChannel;": {
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "rtype": "net",
+        "method": "open",
+        "signature": "open(Ljava/net/SocketAddress;)Ljava/nio/channels/SocketChannel;",
+        "errors": [
+          "java.io.IOException",
+          "java.nio.channels.UnresolvedAddressException",
+          "java.nio.channels.UnsupportedAddressTypeException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_nio_channels_SocketChannel_open_Ljava_net_SocketAddress__Ljava_nio_channels_SocketChannel_"
+      }
+    },
+    "java.io.File": {
+      "setExecutable(ZZ)Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CHANGESTATE",        
+        "method": "setExecutable",
+        "signature": "setExecutable(ZZ)Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_setExecutable_ZZ_Z"
+      },
+      "createTempFile(Ljava/lang/String;Ljava/lang/String;)Ljava/io/File;": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CREATE",        
+        "method": "createTempFile",
+        "signature": "createTempFile(Ljava/lang/String;Ljava/lang/String;)Ljava/io/File;",
+        "errors": [
+          "java.lang.SecurityException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_createTempFile_Ljava_lang_String_Ljava_lang_String__Ljava_io_File_"
+      },
+      "length()J": {
+        "facade": false,
+        "needsDelegation": false,
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "length",
+        "signature": "length()J",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_length__J"
+      },
+      "listFiles()[Ljava/io/File;": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "listFiles",
+        "signature": "listFiles()[Ljava/io/File;",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_listFiles___Ljava_io_File_"
+      },
+      "mkdirs()Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CREATE",        
+        "method": "mkdirs",
+        "signature": "mkdirs()Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_mkdirs__Z"
+      },
+      "setExecutable(Z)Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CHANGESTATE",        
+        "method": "setExecutable",
+        "signature": "setExecutable(Z)Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_setExecutable_Z_Z"
+      },
+      "<init>(Ljava/net/URI;)V": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/net/URI;)V",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File__init__Ljava_net_URI__V"
+      },
+      "setWritable(ZZ)Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CHANGESTATE",        
+        "method": "setWritable",
+        "signature": "setWritable(ZZ)Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_setWritable_ZZ_Z"
+      },
+      "isHidden()Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "isHidden",
+        "signature": "isHidden()Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_isHidden__Z"
+      },
+      "canExecute()Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "canExecute",
+        "signature": "canExecute()Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_canExecute__Z"
+      },
+      "mkdir()Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CREATE",        
+        "method": "mkdir",
+        "signature": "mkdir()Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_mkdir__Z"
+      },
+      "isFile()Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "isFile",
+        "signature": "isFile()Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_isFile__Z"
+      },
+      "setReadOnly()Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CHANGESTATE",        
+        "method": "setReadOnly",
+        "signature": "setReadOnly()Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_setReadOnly__Z"
+      },
+      "delete()Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "DELETE",        
+        "method": "delete",
+        "signature": "delete()Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_delete__Z"
+      },
+      "createTempFile(Ljava/lang/String;Ljava/lang/String;Ljava/io/File;)Ljava/io/File;": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CREATE",        
+        "method": "createTempFile",
+        "signature": "createTempFile(Ljava/lang/String;Ljava/lang/String;Ljava/io/File;)Ljava/io/File;",
+        "errors": [
+          "java.lang.SecurityException",
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_createTempFile_Ljava_lang_String_Ljava_lang_String_Ljava_io_File__Ljava_io_File_"
+      },
+      "<init>(Ljava/lang/String;Ljava/lang/String;)V": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/lang/String;Ljava/lang/String;)V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File__init__Ljava_lang_String_Ljava_lang_String__V"
+      },
+      "exists()Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "exists",
+        "signature": "exists()Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_exists__Z"
+      },
+      "renameTo(Ljava/io/File;)Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "RENAME",        
+        "method": "renameTo",
+        "signature": "renameTo(Ljava/io/File;)Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_renameTo_Ljava_io_File__Z"
+      },
+      "<init>(Ljava/io/File;Ljava/lang/String;)V": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/io/File;Ljava/lang/String;)V",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File__init__Ljava_io_File_Ljava_lang_String__V"
+      },
+      "setWritable(Z)Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CHANGESTATE",        
+        "method": "setWritable",
+        "signature": "setWritable(Z)Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_setWritable_Z_Z"
+      },
+      "listFiles(Ljava/io/FileFilter;)[Ljava/io/File;": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "listFiles",
+        "signature": "listFiles(Ljava/io/FileFilter;)[Ljava/io/File;",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_listFiles_Ljava_io_FileFilter___Ljava_io_File_"
+      },
+      "setReadable(ZZ)Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CHANGESTATE",        
+        "method": "setReadable",
+        "signature": "setReadable(ZZ)Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_setReadable_ZZ_Z"
+      },
+      "createNewFile()Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CREATE",        
+        "method": "createNewFile",
+        "signature": "createNewFile()Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_createNewFile__Z"
+      },
+      "isDirectory()Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "isDirectory",
+        "signature": "isDirectory()Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_isDirectory__Z"
+      },
+      "list(Ljava/io/FilenameFilter;)[Ljava/lang/String;": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "list",
+        "signature": "list(Ljava/io/FilenameFilter;)[Ljava/lang/String;",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_list_Ljava_io_FilenameFilter___Ljava_lang_String_"
+      },
+      "setReadable(Z)Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CHANGESTATE",        
+        "method": "setReadable",
+        "signature": "setReadable(Z)Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_setReadable_Z_Z"
+      },
+      "list()[Ljava/lang/String;": {
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "list",
+        "signature": "list()[Ljava/lang/String;",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_list___Ljava_lang_String_"
+      },
+      "setLastModified(J)Z": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "CHANGESTATE",        
+        "method": "setLastModified",
+        "signature": "setLastModified(J)Z",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_setLastModified_J_Z"
+      },
+      "listRoots()[Ljava/io/File;": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "listRoots",
+        "signature": "listRoots()[Ljava/io/File;",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_listRoots___Ljava_io_File_"
+      },
+      "listFiles(Ljava/io/FilenameFilter;)[Ljava/io/File;": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "listFiles",
+        "signature": "listFiles(Ljava/io/FilenameFilter;)[Ljava/io/File;",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_listFiles_Ljava_io_FilenameFilter___Ljava_io_File_"
+      },
+      "<init>(Ljava/lang/String;)V": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/lang/String;)V",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File__init__Ljava_lang_String__V"
+      },
+      "lastModified()J": {
+        "rtype": "fsys",
+        "aclass": "FILESYSTEM",
+        "aclasstype": "GETINFO",        
+        "method": "lastModified",
+        "signature": "lastModified()J",
+        "errors": [
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_File_lastModified__J"
+      }
+    },
+    "java.io.FileOutputStream!java.nio.channels.FileChannel": {
+      "write(Ljava/nio/ByteBuffer;J)I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write(Ljava/nio/ByteBuffer;J)I",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_java_nio_channels_FileChannel_write_Ljava_nio_ByteBuffer_J_I_write_Ljava_nio_ByteBuffer_J_I"
+      },
+      "read(Ljava/nio/ByteBuffer;J)I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read(Ljava/nio/ByteBuffer;J)I",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_java_nio_channels_FileChannel_read_Ljava_nio_ByteBuffer_J_I_read_Ljava_nio_ByteBuffer_J_I"
+      },
+      "map(Ljava/nio/channels/FileChannel$MapMode;JJ)Ljava/nio/MappedByteBuffer;": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "map",
+        "signature": "map(Ljava/nio/channels/FileChannel$MapMode;JJ)Ljava/nio/MappedByteBuffer;",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_java_nio_channels_FileChannel_map_Ljava_nio_channels_FileChannel$MapMode_JJ_Ljava_nio_MappedByteBuffer__map_Ljava_nio_channels_FileChannel$MapMode_JJ_Ljava_nio_MappedByteBuffer_"
+      },
+      "read([Ljava/nio/ByteBuffer;II)J": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([Ljava/nio/ByteBuffer;II)J",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_java_nio_channels_FileChannel_read__Ljava_nio_ByteBuffer_II_J_read__Ljava_nio_ByteBuffer_II_J"
+      },
+      "read(Ljava/nio/ByteBuffer;)I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read(Ljava/nio/ByteBuffer;)I",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_java_nio_channels_FileChannel_read_Ljava_nio_ByteBuffer__I_read_Ljava_nio_ByteBuffer__I"
+      },
+      "write([Ljava/nio/ByteBuffer;II)J": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write([Ljava/nio/ByteBuffer;II)J",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_java_nio_channels_FileChannel_write__Ljava_nio_ByteBuffer_II_J_write__Ljava_nio_ByteBuffer_II_J"
+      },
+      "truncate(J)Ljava/nio/channels/FileChannel;": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "truncate",
+        "signature": "truncate(J)Ljava/nio/channels/FileChannel;",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_java_nio_channels_FileChannel_truncate_J_Ljava_nio_channels_FileChannel__truncate_J_Ljava_nio_channels_FileChannel_"
+      },
+      "read([Ljava/nio/ByteBuffer;)J": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([Ljava/nio/ByteBuffer;)J",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_java_nio_channels_FileChannel_read__Ljava_nio_ByteBuffer__J_read__Ljava_nio_ByteBuffer__J"
+      },
+      "write([Ljava/nio/ByteBuffer;)J": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write([Ljava/nio/ByteBuffer;)J",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_java_nio_channels_FileChannel_write__Ljava_nio_ByteBuffer__J_write__Ljava_nio_ByteBuffer__J"
+      },
+      "write(Ljava/nio/ByteBuffer;)I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "WRITE",        
+        "method": "write",
+        "signature": "write(Ljava/nio/ByteBuffer;)I",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileOutputStream_java_nio_channels_FileChannel_write_Ljava_nio_ByteBuffer__I_write_Ljava_nio_ByteBuffer__I"
+      }
+    },
+    "java.io.FileInputStream": {
+      "<init>(Ljava/io/File;)V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/io/File;)V",
+        "errors": [
+          "java.io.FileNotFoundException",
+          "java.lang.SecurityException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream__init__Ljava_io_File__V"
+      },
+      "getChannel()Ljava/nio/channels/FileChannel;": {
+        "aclass": "IO",
+        "aclasstype": "INIT",        
+        "rtype": "fsys",
+        "method": "getChannel",
+        "signature": "getChannel()Ljava/nio/channels/FileChannel;",
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_getChannel__Ljava_nio_channels_FileChannel_"
+      },
+      "read([B)I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([B)I",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_read__B_I"
+      },
+      "close()V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "CLOSE",        
+        "method": "close",
+        "signature": "close()V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_close__V"
+      },
+      "available()I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "CHECK",        
+        "method": "available",
+        "signature": "available()I",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_available__I"
+      },
+      "<init>(Ljava/lang/String;)V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/lang/String;)V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream__init__Ljava_lang_String__V"
+      },
+      "read()I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read()I",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_read__I"
+      },
+      "<init>(Ljava/io/FileDescriptor;)V": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "OPEN",        
+        "method": "<init>",
+        "signature": "<init>(Ljava/io/FileDescriptor;)V",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream__init__Ljava_io_FileDescriptor__V"
+      },
+      "read([BII)I": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "read",
+        "signature": "read([BII)I",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_read__BII_I"
+      },
+      "skip(J)J": {
+        "rtype": "fsys",
+        "aclass": "IO",
+        "aclasstype": "READ",        
+        "method": "skip",
+        "signature": "skip(J)J",
+        "errors": [
+          "java.io.IOException"
+        ],
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_io_FileInputStream_skip_J_J"
+      }
+    }
+  }
+}
