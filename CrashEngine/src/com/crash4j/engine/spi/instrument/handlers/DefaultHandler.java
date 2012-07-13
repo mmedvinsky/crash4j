@@ -24,6 +24,7 @@ import com.crash4j.engine.spi.log.Log;
 import com.crash4j.engine.spi.log.LogFactory;
 import com.crash4j.engine.spi.resources.ResourceSpi;
 import com.crash4j.engine.spi.stats.StatsManager;
+import com.crash4j.engine.spi.traits.Closeable;
 import com.crash4j.engine.spi.traits.FacadeBuilder;
 import com.crash4j.engine.spi.traits.LifecycleHandler;
 import com.crash4j.engine.spi.traits.ResourceBuilder;
@@ -41,7 +42,7 @@ import com.crash4j.engine.types.UnitTypes;
  * are message specific but can share a common implementation.
  * 
  */
-public abstract class DefaultHandler implements LifecycleHandler, ResourceBuilder
+public abstract class DefaultHandler implements LifecycleHandler, ResourceBuilder, Closeable
 {
     
     protected Log log = LogFactory.getLog(DefaultHandler.class);
@@ -248,6 +249,10 @@ public abstract class DefaultHandler implements LifecycleHandler, ResourceBuilde
             {
                 ((ServerSocketChannel)instance).close();              
             }
+            else
+            {
+            	this.close(o, res);
+            }
         }
         catch (Exception e)
         {
@@ -411,4 +416,13 @@ public abstract class DefaultHandler implements LifecycleHandler, ResourceBuilde
         applyDefaultSimulationOnExit(o, res, dt, c);
         return rv;
     }
+    
+    /**
+     * No-op stub. Subclasses will overwrite as nessesary
+     * @see Closeable#close(EventData, ResourceSpi)
+     */
+	@Override
+	public void close(EventData o, ResourceSpi res) 
+	{
+	}
 }

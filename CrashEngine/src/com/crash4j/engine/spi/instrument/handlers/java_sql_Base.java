@@ -9,6 +9,7 @@ import com.crash4j.engine.Action;
 import com.crash4j.engine.UnknownResourceException;
 import com.crash4j.engine.spi.ResourceSpec;
 import com.crash4j.engine.spi.actions.sql.SQLActionImpl;
+import com.crash4j.engine.spi.instrument.EventData;
 import com.crash4j.engine.spi.resources.ResourceSpi;
 import com.crash4j.engine.spi.resources.impl.JDBCResourceSpiImpl;
 import com.crash4j.engine.spi.traits.ResourceBuilder;

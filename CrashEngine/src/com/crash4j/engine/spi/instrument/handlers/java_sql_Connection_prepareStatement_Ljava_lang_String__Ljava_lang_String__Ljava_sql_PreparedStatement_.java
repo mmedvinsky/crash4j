@@ -4,10 +4,12 @@
 
 package com.crash4j.engine.spi.instrument.handlers;
 import java.net.URISyntaxException;
+import java.sql.Connection;
 
 import com.crash4j.engine.UnknownResourceException;
 import com.crash4j.engine.spi.ResourceSpec;
 import com.crash4j.engine.spi.actions.sql.SQLActionImpl;
+import com.crash4j.engine.spi.instrument.EventData;
 import com.crash4j.engine.spi.resources.ResourceSpi;
 import com.crash4j.engine.spi.resources.impl.JDBCResourceSpiImpl;
 import com.crash4j.engine.spi.traits.FacadeBuilder;
@@ -23,6 +25,19 @@ import com.crash4j.engine.types.ActionClasses;
 public class java_sql_Connection_prepareStatement_Ljava_lang_String__Ljava_lang_String__Ljava_sql_PreparedStatement_ 
 extends java_sql_Base implements ResourceBuilder
 {
+	@Override
+	public void close(EventData o, ResourceSpi res) 
+	{
+		Connection c = (Connection)o.getInstance();
+		try
+		{
+			c.close();
+		}
+		catch (Exception e)
+		{
+		}
+	}
+	
 	/**
 	 * @see com.crash4j.engine.spi.instrument.handlers.DefaultHandler#exit(com.crash4j.engine.spi.resources.ResourceSpi, com.crash4j.engine.spi.ResourceSpec, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, long, long, long)
 	 */

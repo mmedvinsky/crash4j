@@ -4,15 +4,17 @@
 package com.crash4j.engine.types;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 
 import com.crash4j.engine.Action;
+import com.crash4j.engine.types.classtypes.DBTypes;
 import com.crash4j.engine.types.classtypes.FileSystemTypes;
 import com.crash4j.engine.types.classtypes.HTTPTypes;
 import com.crash4j.engine.types.classtypes.IOTypes;
 import com.crash4j.engine.types.classtypes.NetworkTypes;
 import com.crash4j.engine.types.classtypes.ProcedureTypes;
-import com.crash4j.engine.types.classtypes.DBTypes;
 
 
 /**
@@ -29,7 +31,7 @@ public enum ActionClasses
     IO,  
     PROCEDURE, 
     NETWORK, 
-    FILESYSTEM,
+    FILESYSTEM(),
     HTTP,
     SMTP,
     SQL,

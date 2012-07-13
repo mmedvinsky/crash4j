@@ -9,28 +9,40 @@
         "aclasstype": "INIT",        
         "method": "<init>",
         "signature": "<init>(Ljava/io/File;Z)V",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile__init__Ljava_io_File_Z_V"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile__init__Ljava_io_File_Z_V",
+        "errors": [
+          "java.io.IOException"
+        ]
       },
       "getInputStream(Ljava/util/zip/ZipEntry;)Ljava/io/InputStream;": {
         "aclass": "IO",
         "aclasstype": "INIT",        
         "method": "getInputStream",
         "signature": "getInputStream(Ljava/util/zip/ZipEntry;)Ljava/io/InputStream;",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_getInputStream_Ljava_util_zip_ZipEntry__Ljava_io_InputStream_"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_getInputStream_Ljava_util_zip_ZipEntry__Ljava_io_InputStream_",
+        "errors": [
+          "java.io.IOException"
+        ]
       },
       "<init>(Ljava/io/File;)V": {
         "aclass": "IO",
         "aclasstype": "INIT",        
         "method": "<init>",
         "signature": "<init>(Ljava/io/File;)V",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile__init__Ljava_io_File__V"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile__init__Ljava_io_File__V",
+        "errors": [
+          "java.io.IOException"
+        ]
       },
       "<init>(Ljava/lang/String;Z)V": {
         "aclass": "IO",
         "aclasstype": "INIT",        
          "method": "<init>",
         "signature": "<init>(Ljava/lang/String;Z)V",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile__init__Ljava_lang_String_Z_V"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile__init__Ljava_lang_String_Z_V",
+        "errors": [
+          "java.io.IOException"
+        ]
       },
       "<init>(Ljava/lang/String;)V": {
         "aclass": "IO",
