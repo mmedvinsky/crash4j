@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Premain-Class: com.crash4j.agent.FaultAgent
-Can-Set-Native-Method-Prefix: true
-Can-Retransform-Classes:  true
-

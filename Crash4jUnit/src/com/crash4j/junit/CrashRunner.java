@@ -56,7 +56,7 @@ public class CrashRunner extends BlockJUnit4ClassRunner
             resolver = new AnnotationResolver(klass);
             
             String outdir = resolver.getOutputDir();
-            
+            System.out.println(outdir);
             if (resolver.isCollectStats())
             {            
 	            File reportloc = new File(outdir);

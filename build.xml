@@ -1,0 +1,144 @@
+<project name="crash4j" default="dist" basedir=".">
+    <description>
+       Crash4j build file
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="bin"/>
+    <mkdir dir="bin/CrashEngine"/>
+    <mkdir dir="bin/CrashClient"/>
+    <mkdir dir="bin/CrashUnit"/>
+    <mkdir dir="bin/FaultEngineTests"/>
+    <mkdir dir="release"/>
+    <mkdir dir="release/api"/>
+    <mkdir dir="release/tests"/>
+  </target>
+
+  <target name="compile-lexer" depends="init">
+    <exec executable="CrashEngine/tools/jflex/bin/jflex">
+      <arg value="-d CrashEngine/src/com/crash4j/engine/spi/protocol/impl --skel CrashEngine/tools/jflex/skeleton.nested CrashEngine/src/com/crash4j/engine/spi/protocol/impl/protocols.lex"/>
+    </exec>
+  </target>
+
+  <target name="compile-engine" depends="compile-lexer"
+        description="compile the source">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac destdir="bin/CrashEngine">
+      <src path="CrashEngine/src"/>
+      <src path="CrashAgent/src"/>
+    </javac>
+    <copy todir="bin/CrashEngine">
+      <fileset dir="CrashEngine/src">
+	<exclude name="**/*.java"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="compile-client" depends="init"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac destdir="bin/CrashClient" classpath="lib/junit-4.8.2.jar">
+      <src path="CrashClient/src"/>
+      <src path="Crash4jUnit/src"/>
+    </javac>
+    <copy todir="bin/CrashClient">
+      <fileset dir="Crash4jUnit/src">
+	<exclude name="**/*.java"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="dist-engine" depends="compile-engine"
+        description="generate the distribution" >
+    <!-- Create the distribution directory -->
+   <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="release/crash4je.jar" basedir="bin/CrashEngine">
+     <manifest>
+       <attribute name="Premain-Class" value="com.crash4j.agent.CrashAgent"/>
+       <attribute name="Can-Set-Native-Method-Prefix" value="true"/>
+       <attribute name="Can-Retransform-Classes" value="true"/>
+     </manifest>
+    </jar>
+  </target>
+
+  <target name="dist-client" depends="compile-client"
+        description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="release/crash4jcli.jar" basedir="bin/CrashClient">
+    </jar>
+  </target>
+
+  <target name="dist" depends="dist-engine, dist-client"
+        description="compile the source " >
+    <javadoc packagenames="com.crash4j.*"
+	     sourcepath="CrashEngine/src:CrashClient/src"
+	     defaultexcludes="yes"
+	     destdir="release/api"
+	     author="true"
+	     version="true"
+	     use="true"
+	     windowtitle="CRASH4J API">
+      <doctitle><![CDATA[<h1>Test</h1>]]></doctitle>
+      <bottom><![CDATA[<i>Copyright &#169; 2000 Dummy Corp. All Rights Reserved.</i>]]></bottom>
+      <tag name="todo" scope="all" description="To do:"/>
+      <group title="Group 1 Packages" packages="com.dummy.test.a*"/>
+      <group title="Group 2 Packages" packages="com.dummy.test.b*:com.dummy.test.c*"/>
+      <link offline="true" href="http://download.oracle.com/javase/6/docs/api/" packagelistLoc="C:\tmp"/>
+      <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+    </javadoc>
+
+    <zip destfile="crash4j-a.1.1.zip" basedir="release"/>
+
+  </target>
+
+
+  <target name="compile-unit" depends="dist"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac destdir="bin/FaultEngineTests" classpath="lib/junit-4.8.2.jar:release/crash4jcli.jar:release/crash4je.jar:FaultEngineTests/lib/mysql-connector-java-5.0.3-bin.jar:FaultEngineTests/lib/persistence.jar">
+      <src path="FaultEngineTests/src"/>
+    </javac>
+    
+    <copy todir="bin/FaultEngineTests">
+      <fileset dir="FaultEngineTests/src">
+	<include name="**/*.json"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="test"  depends="compile-unit"
+        description="Run tests">
+    <property name="bootcp" value="${sun.boot.class.path}:release/crash4je.jar"/>
+    <junit printsummary="yes" outputtoformatters="false" showoutput="true" 
+           fork="yes" haltonfailure="no">
+      <jvmarg value="-Xbootclasspath:${bootcp}"/>
+      <jvmarg value="-javaagent:release/crash4je.jar"/>
+      <jvmarg value="-Dcom.crash4j.outptut.dir=release/tests"/>
+
+      <classpath>
+	<pathelement location="bin/FaultEngineTests"/>
+	<pathelement path="lib/junit-4.8.2.jar"/>
+	<pathelement path="release/crash4je.jar"/>
+	<pathelement path="release/crash4jcli.jar"/>
+	<pathelement path="FaultEngineTests/lib/mysql-connector-java-5.0.3-bin.jar"/>
+	<pathelement path="FaultEngineTests/lib/persistence.jar"/>
+      </classpath>
+      <formatter type="plain"/>
+         <test name="com.c4j.engine.tests.client.TestClient"/>
+    </junit>
+  </target>
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="bin"/>
+    <delete dir="release"/>
+  </target>
+</project>

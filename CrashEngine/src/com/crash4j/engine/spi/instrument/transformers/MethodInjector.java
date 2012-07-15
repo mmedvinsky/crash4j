@@ -3,7 +3,10 @@
  */
 package com.crash4j.engine.spi.instrument.transformers;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
@@ -42,6 +45,7 @@ public class MethodInjector implements ClassFileTransformer
 			Class<?> classBeingRedefined, ProtectionDomain pd, byte[] bytes)
 			throws IllegalClassFormatException 
 	{
+		log.logError("Processing "+className);
         if (className.contains("crash4j"))
         {
             return bytes;
@@ -138,7 +142,11 @@ public class MethodInjector implements ClassFileTransformer
 		} 
 		catch (Throwable e) 
 		{
-		    log.logError("Transformation error", e);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(bos);
+			e.printStackTrace(ps);
+		    log.logError(new String(bos.toByteArray()));
+		    log.logError("Transformation error", e+" "+e.getMessage());
 			throw new IllegalClassFormatException("Unable to instrument");
 		}
 		finally

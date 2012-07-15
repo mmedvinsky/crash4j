@@ -152,7 +152,7 @@ public class TestClient
     )
     public void simpleSocketTest() throws UnknownHostException, IOException
     {
-    	//System.out.println("NextSocketTest enter");
+        System.out.println("NextSocketTest enter");
     	try {
 			Thread.sleep(1000);
 	        Socket s = new Socket("localhost", 6553);
@@ -191,6 +191,7 @@ public class TestClient
     )
     public void testFileInputStream() throws Exception
     {
+    	System.out.println("testFileInputStream");
         File mf = null;
         mf = File.createTempFile("clienttest_", ".txt");
         File f = new File(mf.getParent(), "testfile.txt");
@@ -227,6 +228,7 @@ public class TestClient
     )
     public void testFileChannel() throws Exception
     {
+    	System.out.println("testFileChannel");
         File mf = null;
         mf = File.createTempFile("channel_", ".txt");
         File f = new File(mf.getParent(), "testChannelFile.txt");
@@ -260,6 +262,7 @@ public class TestClient
     )
     public void simpleURLTest() throws UnknownHostException, IOException
     {
+    	System.out.println("simpleURLTest");
         HttpURLConnection c = (HttpURLConnection) new URL("http://www.google.com").openConnection();
         c.setRequestMethod("GET");
         InputStream iis = c.getInputStream();

@@ -8,14 +8,14 @@ import java.text.SimpleDateFormat;
 
 import javax.management.ObjectName;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.runner.RunWith;
 
 import com.crash4j.engine.Action;
 import com.crash4j.engine.Resource;
 import com.crash4j.engine.StatsCollector;
+import com.crash4j.engine.client.json.JSONArray;
+import com.crash4j.engine.client.json.JSONException;
+import com.crash4j.engine.client.json.JSONObject;
 import com.crash4j.engine.types.StatTypes;
 import com.crash4j.engine.types.UnitTypes;
 import com.crash4j.junit.CrashRunner;
