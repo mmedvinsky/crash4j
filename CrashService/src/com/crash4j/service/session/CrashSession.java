@@ -9,13 +9,10 @@ import java.util.NavigableSet;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.TimeUnit;
 
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -26,12 +23,11 @@ import org.codehaus.jettison.json.JSONObject;
  * @author team
  *
  */
-@XmlRootElement(name="crash4j")
 public class CrashSession
 {
     protected String etag = null;
-    protected ConcurrentHashMap<String, Resource> resources = new ConcurrentHashMap<String, Resource>();
-    
+    protected ConcurrentHashMap<String, JSONObject> resources = new ConcurrentHashMap<String, JSONObject>();
+    protected ConcurrentHashMap<String, _sim_tracker> simulations = new ConcurrentHashMap<String, _sim_tracker>();
     /**
      * @return the etag
      */
@@ -41,6 +37,17 @@ public class CrashSession
         return etag;
     }
 
+    /**
+     * Simple wrapper object that will track stages of simulation 
+     * download and runtime
+     */
+    class _sim_tracker
+    {
+    	public JSONObject sim;
+    	public boolean distributed = false;
+    	public boolean started = false;
+    }
+    
     /**
      * Utility class for {@link Stat} ordering.
      * @author team
@@ -112,6 +119,48 @@ public class CrashSession
     public void release()
     {
     }
+    /**
+     * @return list of update commands
+     */
+    public JSONArray updateCommands()
+    {
+    	JSONArray cmds = new JSONArray();
+    	for (_sim_tracker t : this.simulations.values()) 
+    	{
+    		if (!t.distributed)
+    		{
+    			cmds.put("sim");
+    		}
+		}
+    	return cmds;
+     }
+    
+    /**
+     * Adds simulation to session.
+     * @param obj
+     */
+    public void addSimulation(JSONObject obj)
+    {
+    	_sim_tracker t = new _sim_tracker();
+    	t.sim = obj;
+    	this.simulations.put(obj.optString("name"), t);
+    }
+    
+    /**
+     * Adds simulation to session.
+     * @param obj
+     */
+    public void getSimulationForDistribution(JSONArray cont)
+    {
+    	for (_sim_tracker t : this.simulations.values()) 
+    	{
+    		if (!t.distributed)
+    		{
+    			t.distributed = true;
+    			cont.put(t.sim);
+    		}
+		}
+    }
     
     /**
      * Process the data through in memory queue
@@ -130,39 +179,28 @@ public class CrashSession
             ObjectName o = new ObjectName(rr.getString("name"));
             String id = rr.getString("id");
 
-            _resource_ res = (_resource_)this.resources.get(id);
+            JSONObject res = (JSONObject)this.resources.get(id);
             if (res == null)
             {
-                res = new _resource_(o, id);
-                this.resources.put(res.getId(), res);
+                res = new JSONObject();
+                res.put("id", id);
+                res.put("name", o.toString());                
+                res.put("stat", new JSONArray());                
+                this.resources.put(id, res);
             }
-            
-            JSONArray js = rr.optJSONArray("stat");
+            else
+            {
+            	System.out.println("Duplicate");
+            }
+            JSONObject js = rr.optJSONObject("stat");
             JSONObject siminfo = rr.optJSONObject("sim");
-            
+            JSONObject srec = new JSONObject();
+            srec.put("stat", js);
             if (siminfo != null)
             {
-                res.setSimulationId(siminfo.getString("simid"));
-                res.setCurrentTick(siminfo.getInt("ctick"));
+                srec.put("sim", siminfo);
             }
-            
-            
-            for (int k = 0; k < js.length(); k++)
-            {
-                JSONObject details = js.getJSONObject(k);
-                Stat s = new Stat();
-                s.setAction(details.getString("action"));
-                s.setType(details.getString("type"));
-                s.setTimeUnit(TimeUnit.MICROSECONDS);
-                s.setCount(details.getLong("count"));
-                s.setAverage(details.getDouble("avg"));
-                s.setMax(details.getDouble("max"));
-                s.setMin(details.getDouble("min"));
-                s.setLastUpdateTime(details.getLong("timestamp"));
-                s.setLastUpdateValue(details.getDouble("last"));
-                res.addStat(s);
-            }
-            
+            res.getJSONArray("stat").put(srec);
         }
     }
     
@@ -193,8 +231,7 @@ public class CrashSession
      * @param id
      * @return
      */
-    @XmlElement(name="resources")
-    public  Collection<Resource> getResources()
+    public  Collection<JSONObject> getResources()
     {
         return this.resources.values();
     }
@@ -203,30 +240,11 @@ public class CrashSession
      * @param id
      * @return
      */
-    public NavigableSet<Stat> getAllStats(String id)
+    public JSONObject getResourceById(String id)
     {
-        _resource_ r = (_resource_)resources.get(id);
-        if (r != null)
-        {
-            return r.getAllStats();
-        }        
-        return null;
+        return (JSONObject)resources.get(id);
     }
-    
-    /**
-     * @param id
-     * @return
-     */
-    public NavigableSet<Stat> getStatAsOf(String id, long tm)
-    {
-        _resource_ r = (_resource_)resources.get(id);
-        if (r != null)
-        {
-            return r.getStatAsOf(tm);
-        }        
-        return null;
-    }
-    
+        
     /**
      * Check to see if resource exists
      * @param id
@@ -235,19 +253,5 @@ public class CrashSession
     public boolean hasResource(String id)
     {
         return this.resources.containsKey(id);
-    }
-    /**
-     * get resource....
-     * @param id
-     * @return
-     */
-    public Resource getResource(String id)
-    {
-        _resource_ r = (_resource_)resources.get(id);
-        if (r != null)
-        {
-            return r;
-        }        
-        return null;
     }
 }

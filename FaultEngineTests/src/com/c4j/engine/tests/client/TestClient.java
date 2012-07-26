@@ -178,7 +178,7 @@ public class TestClient
     }
 
     
-    @Test
+    //@Test
     @CrashPlan
     (
         iterations=20, 
@@ -215,7 +215,7 @@ public class TestClient
         f.delete();
     }
     
-    @Test
+    //@Test
     @CrashPlan
     (
         iterations=10, 
@@ -254,7 +254,7 @@ public class TestClient
         f.delete();
     }
     
-    @Test
+    //@Test
     @CrashPlan
     (
         iterations=5, 

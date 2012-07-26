@@ -14,6 +14,8 @@ import com.crash4j.engine.sim.Behavior;
 import com.crash4j.engine.sim.Instruction;
 import com.crash4j.engine.sim.Simulation;
 import com.crash4j.engine.spi.ResourceManagerSpi;
+import com.crash4j.engine.spi.log.Log;
+import com.crash4j.engine.spi.log.LogFactory;
 import com.crash4j.engine.spi.resources.ResourceSpi;
 import com.crash4j.engine.spi.sim.impl.BehaviorImpl;
 import com.crash4j.engine.spi.sim.impl.SimulationImpl;
@@ -33,7 +35,7 @@ import com.crash4j.engine.types.InstructionTypes;
  */
 public class ResourceJSONTranslator
 {
-
+	protected static Log log = LogFactory.getLog(ResourceJSONTranslator.class);
     /**
      * @return resources that are currently managed by the runtime as JSON
      *         String, for exanple [ {"resource" :
@@ -110,6 +112,7 @@ public class ResourceJSONTranslator
         String id = jSim.getString("id");
         if (id == null)
         {
+        	log.logError("Null simulation id");
             throw new NullPointerException("Missing simulation id.");
         }
         s.setId(id);
@@ -133,7 +136,7 @@ public class ResourceJSONTranslator
                     s.addBehavior(b);
                 }
             }
-            JSONArray mappings = jSim.getJSONArray("mapping");
+            JSONArray mappings = jSim.getJSONArray("mappings");
             if (mappings != null)
             {
                 for (int k = 0; k < mappings.length(); k++)
@@ -144,7 +147,7 @@ public class ResourceJSONTranslator
         } catch (Exception e)
         {
             // no behaviors are included in original submission
-        	System.out.println(e);
+        	log.logError("No behaviors added", e);
         }
         return s;
     }
@@ -284,7 +287,7 @@ public class ResourceJSONTranslator
         {
             mappings.put(p);
         }
-        jSim.put("mapping", mappings);
+        jSim.put("mappings", mappings);
         return jSim;
     }
 }

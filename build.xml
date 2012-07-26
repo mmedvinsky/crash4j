@@ -94,9 +94,12 @@
       <link offline="true" href="http://download.oracle.com/javase/6/docs/api/" packagelistLoc="C:\tmp"/>
       <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
     </javadoc>
-
+    <copy todir="release/tests">
+      <fileset dir="FaultEngineTests">
+	<exclude name="**/*.class"/>
+      </fileset>
+    </copy>
     <zip destfile="crash4j-a.1.1.zip" basedir="release"/>
-
   </target>
 
 

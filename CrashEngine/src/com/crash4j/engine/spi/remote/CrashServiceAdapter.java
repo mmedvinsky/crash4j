@@ -8,7 +8,12 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+import com.crash4j.engine.ResourceService;
+import com.crash4j.engine.spi.ResourceManagerSpi;
 import com.crash4j.engine.spi.context.ThreadContext;
 import com.crash4j.engine.spi.json.JSONArray;
 import com.crash4j.engine.spi.json.JSONBufferedStatsCollector;
@@ -29,14 +34,15 @@ import com.crash4j.engine.spi.log.LogFactory;
  * @author team
  *
  */
-public class CrashServiceAdapter extends JSONBufferedStatsCollector
+public class CrashServiceAdapter extends JSONBufferedStatsCollector implements Runnable
 {
     protected Log log = LogFactory.getLog(CrashServiceAdapter.class);
     protected String host = null;
     protected int port;
     protected String apikey;
     protected String cs = null;
-    
+    protected ScheduledExecutorService refresher = Executors.newScheduledThreadPool(1);
+    protected ResourceService engineService = new ResourceService();
     
     /**
      * Initialization constructor
@@ -122,6 +128,10 @@ public class CrashServiceAdapter extends JSONBufferedStatsCollector
         try
         {
             String payload = arr.toString();
+            if (arr.length() == 0)
+            {
+            	return;
+            }
             URL u = new URL("http", this.host, this.port, "/crash4j/core/services/events");
             HttpURLConnection conn = (HttpURLConnection) u.openConnection();
             conn.addRequestProperty("If-Match", cs);
@@ -185,6 +195,7 @@ public class CrashServiceAdapter extends JSONBufferedStatsCollector
             {
                 JSONObject response = new JSONObject(new JSONTokener(iis));
                 cs = response.getString("sessionid");
+                this.refresher.scheduleAtFixedRate(this, 0, 5000, TimeUnit.MILLISECONDS);
             } 
             catch (JSONException e)
             {
@@ -196,4 +207,79 @@ public class CrashServiceAdapter extends JSONBufferedStatsCollector
             ThreadContext.endIgnore();
         }
     }
+
+    
+    /**
+     * Connect to remote server and establish a session.
+     * @throws IOException
+     */
+    public void getAssignedSimulations() throws IOException
+    {
+        ThreadContext.beginIgnore();
+        try
+        {
+            StringBuilder b = new StringBuilder("/crash4j/core/services/simulation/update");
+            URL u = new URL("http", this.host, this.port, b.toString());
+            HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+            conn.addRequestProperty("If-Match", cs);
+            InputStream iis = conn.getInputStream();
+            JSONArray sims = new JSONArray(new JSONTokener(iis));
+            iis.close();
+            for (int i = 0; i < sims.length(); i++) 
+            {
+            	JSONObject sim = sims.getJSONObject(i);
+                engineService.addSimulation(sim.toString());
+                engineService.startSimulation(sim.getString("id"));
+			}
+        }
+        catch (Exception e)
+        {
+        	throw new IOException(e);
+        }
+        finally
+        {
+            ThreadContext.endIgnore();
+        }
+    }
+    
+    
+	@Override
+	public void run() 
+	{
+		try
+		{
+			JSONArray response = null;
+	        ThreadContext.beginIgnore();
+	        try
+	        {
+	            StringBuilder b = new StringBuilder("/crash4j/core/services/commands");
+	            URL u = new URL("http", this.host, this.port, b.toString());
+	            HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+	            conn.addRequestProperty("If-Match", cs);
+	            InputStream iis = conn.getInputStream();
+                response = new JSONArray(new JSONTokener(iis));
+	            iis.close();
+	        }
+	        finally
+	        {
+	            ThreadContext.endIgnore();
+	        }
+	        
+	        if (response != null)
+	        {
+		        for (int i = 0; i < response.length(); i++)
+		        {
+		        	if (response.getString(i).equalsIgnoreCase("sim"))
+		        	{
+		        		//Update simulations
+		        		getAssignedSimulations();
+		        	}
+		        }
+	        }
+		}
+		catch (Exception e)
+		{
+			log.logError("Failed to get server commands", e);
+		}
+	}
  }

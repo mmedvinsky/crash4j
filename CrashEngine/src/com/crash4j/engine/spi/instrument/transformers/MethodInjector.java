@@ -45,7 +45,7 @@ public class MethodInjector implements ClassFileTransformer
 			Class<?> classBeingRedefined, ProtectionDomain pd, byte[] bytes)
 			throws IllegalClassFormatException 
 	{
-		log.logError("Processing "+className);
+		//log.logError("Processing "+className);
         if (className.contains("crash4j"))
         {
             return bytes;

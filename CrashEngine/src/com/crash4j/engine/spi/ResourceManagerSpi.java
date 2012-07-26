@@ -81,17 +81,6 @@ import com.crash4j.engine.types.ResourceTypes;
  * and based on the state the recommendations are produced.  
  * At the time of instrumentation each JVM goes through a registration process, where a unique {@link UUID} os generated for this session and then 
  * used to track communications between {@link ResourceManagerSpi} and the specific JVM.
- * <pre>
- *  [Instrumented JVM] -> http://[server]:[port]/faultengie/register/jvm?uri=[STRING]
- *                     <- id=UUID
- *  
- *  [Instrumented JVM] -> [http://[server]:[port]/faultengie/profile?id=[uuid]&profile=[STRING]
- *                     <- instrumentation specification for a specific profile.  
- * 						   
- *  [Instrumented JVM] -> [http://[server]:[port]/faultengie/register/resource/network/address?v=www.google.com
- *                     <- execution plan
- *                     
- *  </pre>
  *  
  */
 public class ResourceManagerSpi 
@@ -475,32 +464,8 @@ public class ResourceManagerSpi
         System.setOut(new PrintStream(outio));
         System.setErr(new PrintStream(errio));
         System.setIn(inio);
+
         
-        
-        //If remote server information is included, initiate connection 
-        String host = args.get("crash4j.service.host");
-        String port = args.get("crash4j.service.port");
-        String apikey = args.get("crash4j.service.apikey");
-        
-        if (host != null && port != null && apikey != null)
-        {
-            csa = new CrashServiceAdapter(host, Integer.parseInt(port), apikey);
-            if (csa != null)
-            {
-                csa.connect();
-                String stime = config.getProperty("crash4j.service.collector.sweepperiod");
-                int st = 200;
-                if (stime != null)
-                {
-                	st = Integer.parseInt(stime);
-                }
-                registerCollector(csa, st, TimeUnit.MILLISECONDS);
-            }
-        }
-        else
-        {
-            log.logInfo("Incomplete service specification.  This VM will not connect to the external management services");
-        }
         
         statsManager = new StatsManager();
         
@@ -516,6 +481,39 @@ public class ResourceManagerSpi
         {
         	protocolDetectionOn = Boolean.parseBoolean(detectionOn);
         }
+        
+        //If remote server information is included, initiate connection 
+        String host = args.get("crash4j.service.host");
+        String port = args.get("crash4j.service.port");
+        String apikey = args.get("crash4j.service.apikey");
+        
+        if (host != null && port != null && apikey != null)
+        {
+            csa = new CrashServiceAdapter(host, Integer.parseInt(port), apikey);
+            if (csa != null)
+            {
+            	try
+            	{
+            		csa.connect();
+                    String stime = config.getProperty("crash4j.service.collector.sweepperiod");
+                    int st = 200;
+                    if (stime != null)
+                    {
+                    	st = Integer.parseInt(stime);
+                    }
+                    registerCollector(csa, st, TimeUnit.MILLISECONDS);
+            	}
+            	catch (Exception e)
+            	{
+            		log.logError("Failed to connect to remote sevice with "+host+":"+port, e);
+            	}
+            }
+        }
+        else
+        {
+            log.logInfo("Incomplete service specification.  This VM will not connect to the external management services");
+        }
+        
         //Shutdown hook to facilitate exit
         Runtime.getRuntime().addShutdownHook(new Thread() { public void run() { ResourceManagerSpi.stop(); }});
         

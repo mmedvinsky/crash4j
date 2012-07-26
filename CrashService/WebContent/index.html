@@ -3,8 +3,92 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+
+ <script type="text/javascript" src="js/dygraph-combined.js"></script>
+ <script type="text/javascript" src="js/jquery.js"></script>
+ 
+  <link href="js/jquery-ui.css" rel="stylesheet" type="text/css"/>
+  <link rel="stylesheet" type="text/css" href="js/jquery.jqplot.css" />  
+  
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jquery-ui.min.js"></script>  
+  <script type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+  <script type="text/javascript" src="js/jqplot.pieRenderer.min.js"></script>
+
+ <script type="text/javascript" src="js/jquery.jstree.js"></script>
+ 
+  <script type="text/javascript" src="crash4j.js"></script>
+  
+<style>
+	#general { width: 100%; height: 200px; padding: 0.1em; }
+	#general h3 { text-align: left; margin: 0; background-color: #CCCC99; }
+</style>
+
+<script type="text/javascript">
+var selectedSession;
+
+function proccessResources(msg)
+{
+	$('#resources').empty();
+	alert(msg.length);
+
+   for (var i in msg)
+   {
+      $('#resources').append('<option style="font-size:11px;" value="'+msg[i].id+'">'+msg[i].name+'</option>');
+   }
+}
+
+function setSessionList(msg)
+{
+	$('#sessions').empty();
+   for (var i in msg) 
+   {
+	   $('#sessions').append('<option style="font-size:11px;" value="'+msg[i]+'">'+msg[i]+'</option>');
+   }
+   
+   selectedSession = $('#sessions').val();
+   $('#etag').val(selectedSession);
+   getResources(selectedSession, proccessResources);   
+}
+
+</script>
+
 </head>
 <body>
+
+<div style="background-color: #CCCC99; border-bottom-style: groove; border-left-style: groove;">
+ <br/>
+  &nbsp; &nbsp;<b>Crash4j Administration Service</b>
+ <p/>
+</div>
+</p>
+<table class="ui-widget ui-widget-header ui-corner-all">
+<tr><td>API KEY</td><td>Sessions</td></tr>
+<tr>
+<td><input name="apikey" value="" id="apikey" width="200"/></td>
+<td id="sid" style="width:200px"><select id="sessions"/></td>
+<td><input type="button"  onclick="refreshSessions($('#apikey').val(), setSessionList);" value="Lookup"></button></td>
+</tr>
+</table>
+
+</p>
+<table width="90%" class="ui-widget ui-widget-header ui-corner-all">
+<tr><td><select id="resources"/></td></tr>
+</table>
+
+</p>
+<form method="POST" action="/crash4j/core/services/simulation/upload">
+<table width="90%" class="ui-widget ui-widget-header ui-corner-all">
+<tr>
+<td><textarea id="simulation" name="simulation" cols="20" rows="10"></textarea></td>
+<td><input id="etag" name="etag" type="hidden"></input></td>
+<td><input id="uploadbutton" type="submit" value="Upload"/></td>
+</tr>
+</table>
+
+</form>
+
+
 
 </body>
 </html>

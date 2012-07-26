@@ -92,7 +92,10 @@ public abstract class JSONBufferedStatsCollector extends JSONStatsCollector
         JSONArray arr = this.messages.getAndSet(new JSONArray());
         try
         {
-            sendMessages(arr);
+        	if (arr.length() > 0)
+        	{
+        		sendMessages(arr);
+        	}
         } 
         catch (IOException e)
         {
