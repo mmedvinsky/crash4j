@@ -16,5 +16,5 @@ public interface Instruction
     /**
      * @return the weight that is applied in different ways for different things.
      */
-    public double getWeight();
+    public Object getParameter();
 }

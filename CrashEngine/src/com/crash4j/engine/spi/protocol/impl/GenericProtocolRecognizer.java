@@ -238,7 +238,7 @@ public class GenericProtocolRecognizer implements ProtocolRecognizer, Callable<P
 		} 
 		catch (TimeoutException e) 
 		{
-			log.logError("Error running protocol recognition", e);
+			//log.logError("Error running protocol recognition", e);
 		}
 		return null;
 	}
@@ -279,7 +279,7 @@ public class GenericProtocolRecognizer implements ProtocolRecognizer, Callable<P
 		} 
 		catch (TimeoutException e) 
 		{
-			log.logError("Error running protocol recognition", e);
+			//log.logError("Error running protocol recognition", e);
 		}
 		return null;
 	}
@@ -308,7 +308,7 @@ public class GenericProtocolRecognizer implements ProtocolRecognizer, Callable<P
 		} 
 		catch (TimeoutException e) 
 		{
-			log.logError("Error running protocol recognition", e);
+			//log.logError("Error running protocol recognition", e);
 		}
 		return null;
 	}
@@ -338,7 +338,7 @@ public class GenericProtocolRecognizer implements ProtocolRecognizer, Callable<P
 		} 
 		catch (TimeoutException e) 
 		{
-			log.logError("Error running protocol recognition", e);
+			//log.logError("Error running protocol recognition", e);
 		}
 		return null;
 	}

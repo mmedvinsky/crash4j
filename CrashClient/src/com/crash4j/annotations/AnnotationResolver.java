@@ -16,11 +16,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-
 import com.crash4j.EngineAdapter;
+import com.crash4j.EngineAdapterFactory;
 import com.crash4j.EngineException;
+import com.crash4j.adapters.LocalEngineAdapter;
 
 /**
  * Resolves annotations and builds {@link Behaviors}s and {@link Simulation}s 
@@ -29,7 +28,7 @@ import com.crash4j.EngineException;
  */
 public class AnnotationResolver
 {
-    protected EngineAdapter adapter = new EngineAdapter();
+    protected EngineAdapter adapter = null;
     
     protected HashMap<String, com.crash4j.Simulation> simulations = new HashMap<String, com.crash4j.Simulation>();
     protected HashMap<String, com.crash4j.Behavior> behaviors = new HashMap<String, com.crash4j.Behavior>();
@@ -45,7 +44,7 @@ public class AnnotationResolver
     {
         try
         {
-            adapter.bind();        
+            adapter =  EngineAdapterFactory.getLocalAdapter();       
             Behaviors cwith = klass.getAnnotation(Behaviors.class);
             //Load and resolve all behaviors
             if (cwith == null)

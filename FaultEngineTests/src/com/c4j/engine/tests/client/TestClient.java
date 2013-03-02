@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.crash4j.EngineAdapter;
+import com.crash4j.EngineAdapterFactory;
 import com.crash4j.annotations.Behavior;
 import com.crash4j.annotations.Behaviors;
 import com.crash4j.annotations.CrashOutput;
@@ -113,7 +114,7 @@ public class TestClient
     protected static _test_server server = new _test_server(6553, 5);
     protected static Thread serverThread = new Thread(server);
 	    
-    static EngineAdapter rs = new EngineAdapter();
+    static EngineAdapter rs = null;
 
     
     @BeforeClass
@@ -126,7 +127,7 @@ public class TestClient
     @Before
     public void setUp() throws Exception
     {
-        rs.bind();
+        rs = EngineAdapterFactory.getLocalAdapter();
     }
 
     @After
@@ -139,20 +140,19 @@ public class TestClient
     @Test
     @CrashPlan
     (
-        iterations=10, 
-        concurrency=1,
+        iterations=200, 
+        concurrency=5,
         simulations= 
         { 
             @Simulation (id="3", name="netsim1", mappings={"net:host=*,port=6553,server=false"}, 
                     behaviors = { 
-            		@Behavior ( id="com.crash4j.behaviors.test1" ), 
-            		@Behavior ( id="com.crash4j.behaviors.errors" ) 
+            		@Behavior ( id="com.crash4j.behaviors.test1" )
+            		//@Behavior ( id="com.crash4j.behaviors.errors" ) 
                     } )
         }
     )
     public void simpleSocketTest() throws UnknownHostException, IOException
     {
-        System.out.println("NextSocketTest enter");
     	try {
 			Thread.sleep(1000);
 	        Socket s = new Socket("localhost", 6553);
@@ -161,6 +161,7 @@ public class TestClient
 	        for (int i = 0; i < 100; i++)
 	        {
 	            long nnt = System.nanoTime();
+	            //System.out.println(i);
 	            oss.write(100);
 	            nnt = System.nanoTime();
 	            int c = iis.read();
@@ -178,11 +179,11 @@ public class TestClient
     }
 
     
-    //@Test
+    @Test
     @CrashPlan
     (
-        iterations=20, 
-        concurrency=1,
+        iterations=100, 
+        concurrency=3,
         simulations= 
         { 
             @Simulation (id="1", name="sim1", mappings={"fsys:mt=*,resource={.*[.][t][x][t]}"}, 
@@ -191,7 +192,6 @@ public class TestClient
     )
     public void testFileInputStream() throws Exception
     {
-    	System.out.println("testFileInputStream");
         File mf = null;
         mf = File.createTempFile("clienttest_", ".txt");
         File f = new File(mf.getParent(), "testfile.txt");
@@ -215,7 +215,7 @@ public class TestClient
         f.delete();
     }
     
-    //@Test
+    @Test
     @CrashPlan
     (
         iterations=10, 
@@ -228,7 +228,6 @@ public class TestClient
     )
     public void testFileChannel() throws Exception
     {
-    	System.out.println("testFileChannel");
         File mf = null;
         mf = File.createTempFile("channel_", ".txt");
         File f = new File(mf.getParent(), "testChannelFile.txt");
@@ -254,7 +253,7 @@ public class TestClient
         f.delete();
     }
     
-    //@Test
+    @Test
     @CrashPlan
     (
         iterations=5, 
@@ -262,7 +261,6 @@ public class TestClient
     )
     public void simpleURLTest() throws UnknownHostException, IOException
     {
-    	System.out.println("simpleURLTest");
         HttpURLConnection c = (HttpURLConnection) new URL("http://www.google.com").openConnection();
         c.setRequestMethod("GET");
         InputStream iis = c.getInputStream();
@@ -281,15 +279,5 @@ public class TestClient
 			e.printStackTrace();
 		}	
 			
-    }
-
-    //@Test
-    @CrashPlan
-    (
-        iterations=1, 
-        concurrency=1
-    )
-    public void simpleMailTest() throws UnknownHostException, IOException
-    {
     }
 }

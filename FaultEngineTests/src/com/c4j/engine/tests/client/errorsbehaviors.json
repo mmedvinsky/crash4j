@@ -1,13 +1,13 @@
 {
 	"name"  : "ErrorsBehavior",
 	"id"    : "com.crash4j.behaviors.errors",
-	"itype" : "e", 
+	"itype" : "e",
 	"btype" : "wa", 
 	"actions" : ["io:write", "io:read"],
 	"mode"    : "rotate",
 	"instructions" : [
-		[0, 0.4, 0],
-		[1, 0.2, 0],
-		[2, 0.6, 0]
+		[0, 1, "java.io.IOException"],
+		[1, 0.9, "java.io.IOException"],
+		[2, 0.8, "java.io.IOException"]
 	]
 }

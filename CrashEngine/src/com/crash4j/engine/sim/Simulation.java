@@ -23,8 +23,6 @@ import com.crash4j.engine.spi.sim.impl.SimulationImpl;
  *       A(2) tp (bytes/us) = requested_bytes - (requested_bytes*w)  
  *       A(3) w is ignored.
  * 
- * @author team
- *
  */
 public interface Simulation
 {

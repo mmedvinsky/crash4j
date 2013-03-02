@@ -35,4 +35,10 @@ public class SMTPResourceSpiImpl extends EndpointBasedResourceSpiImpl
 	{
 		super(spec, host, port);
 	}
+
+	@Override
+	public ResourceTypes getResourceType() {
+		// TODO Auto-generated method stub
+		return ResourceTypes.SMTP;
+	}
 }

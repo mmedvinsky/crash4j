@@ -219,12 +219,12 @@ public class ResourceJSONTranslator
             JSONArray inst1 = jInsts.getJSONArray(k);
             int tn = inst1.getInt(0);
             double prob = inst1.getDouble(1);
-            double weight = 0;
+            Object param = 0;
             if (inst1.length() > 2)
             {
-                weight = inst1.getDouble(2);
+                param = inst1.get(2);
             }
-            b.addInstruction(tn, prob, weight);
+            b.addInstruction(tn, prob, param);
         }
         return b;
     }
@@ -272,7 +272,7 @@ public class ResourceJSONTranslator
                 JSONArray singleI = new JSONArray();
                 singleI.put(instruction.getTick());
                 singleI.put(instruction.getP());
-                singleI.put(instruction.getWeight());
+                singleI.put(instruction.getParameter());
                 ji.put(singleI);
             }
             bh.put("instructions", ji);

@@ -31,7 +31,7 @@ public enum ActionClasses
     IO,  
     PROCEDURE, 
     NETWORK, 
-    FILESYSTEM(),
+    FILESYSTEM,
     HTTP,
     SMTP,
     SQL,

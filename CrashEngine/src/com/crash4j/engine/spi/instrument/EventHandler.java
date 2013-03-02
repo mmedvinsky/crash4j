@@ -255,6 +255,7 @@ public class EventHandler
             if (res != null)
             {
                 ResourceManagerSpi.completeResource(o, rv);
+                res = o.getResource();
             }
             else
             {

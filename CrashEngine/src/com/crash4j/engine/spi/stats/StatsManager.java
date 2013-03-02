@@ -271,7 +271,7 @@ public class StatsManager implements Runnable
 		//	}
 		//}
 		
-		log.logTrace(st.action, st.spi.getETag(), st.value);
+		//log.logTrace(st.action, st.spi.getETag(), st.value);
 		
 		this.squeue.offerLast(st);
 	}

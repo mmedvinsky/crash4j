@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -164,7 +166,8 @@ public abstract class DefaultHandler implements LifecycleHandler, ResourceBuilde
     protected void doDelay(EventData o, ResourceSpi res, long dt, Command c)
     {
         BehaviorTypes bt = c.getBehavior().getBehaviorType();
-        double rt = c.getInstruction().getWeight();
+        Double rtd = (Double)c.getInstruction().getParameter();
+        double rt = rtd.doubleValue();
         if (bt.equals(BehaviorTypes.STATIC_RELATIVE))
         {
             rt = dt >= rt ? 0 : rt - dt;
@@ -217,7 +220,15 @@ public abstract class DefaultHandler implements LifecycleHandler, ResourceBuilde
         }
         try
         {
-            if (instance instanceof InputStream)
+        	if (instance instanceof Connection)
+        	{
+        		((Connection)instance).close();
+        	}
+        	else if (instance instanceof Statement)
+        	{
+        		((Statement)instance).getConnection().close();
+        	}
+        	else if (instance instanceof InputStream)
             {
                 ((InputStream)instance).close();
             }
@@ -271,36 +282,21 @@ public abstract class DefaultHandler implements LifecycleHandler, ResourceBuilde
     {
         try
         {
-            Set<Class<?>> excs = o.getSpec().getExceptions();
-            // in this case we will use a nano time as a random number if there are more then one exception
-            //and will flip a coint and raise the one the get selected
-            if (excs == null || excs.isEmpty())
-            {
-                return;  //no errors means that we will not raise any
-            }
-            
-            Iterator<Class<?>> it = excs.iterator();
-            int sz = excs.size();
-            Class selc = null;
-            if (sz == 1)
-            {
-                selc = it.next();
-            }
-            else
-            {
-                long ord = System.nanoTime() % sz;
-                for (int i = 0; i < ord; i++)
+        	Class<Throwable> t = (Class<Throwable>)c.getInstruction().getParameter();
+        	if (t == null)
+        	{
+                Set<Class<?>> excs = o.getSpec().getExceptions();
+                // in this case we will use a nano time as a random number if there are more then one exception
+                //and will flip a coint and raise the one the get selected
+                if (excs == null || excs.isEmpty())
                 {
-                    selc = it.next();
+                    return;  //no errors means that we will not raise any
                 }
-                if (selc == null)
-                {
-                    selc = it.next();
-                }
-            }
-            Throwable t = (Throwable)selc.newInstance();
-            t.initCause(new SimulationException(o, res));
-            o.setOutgoingException(t);
+                t = (Class<Throwable>)excs.iterator().next();
+        	}
+            Throwable tx = (Throwable)t.newInstance();
+            tx.initCause(new SimulationException(o, res));
+            o.setOutgoingException(tx);
         }
         catch (Exception e)
         {

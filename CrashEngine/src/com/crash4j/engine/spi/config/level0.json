@@ -73,21 +73,30 @@
         "aclasstype": "READ",        
         "method": "read",
         "signature": "read([B)I;",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_java_io_InputStream_read__B_I"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_java_io_InputStream_read__B_I",
+        "errors": [
+          "java.io.IOException"
+        ]
       },
       "read()I": {
         "aclass": "IO",
         "aclasstype": "READ",        
         "method": "read",
         "signature": "read()I;",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_java_io_InputStream_read__I"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_java_io_InputStream_read__I",
+        "errors": [
+          "java.io.IOException"
+        ]
       },
       "read([BII)I": {
         "aclass": "IO",
         "aclasstype": "READ",        
         "method": "read",
         "signature": "read([BII)I;",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_java_io_InputStream_read__BII_I"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_jar_JarFile_java_io_InputStream_read__BII_I",
+        "errors": [
+          "java.io.IOException"
+        ]
       }
     },
     "java.util.zip.ZipFile": {
@@ -97,14 +106,20 @@
         "aclasstype": "INIT",        
         "method": "<init>",
         "signature": "<init>(Ljava/io/File;I)V",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile__init__Ljava_io_File_I_V"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile__init__Ljava_io_File_I_V",
+        "errors": [
+          "java.io.IOException"
+        ]
       },
       "close()V": {
         "aclass": "IO",
         "aclasstype": "CLOSE",        
         "method": "close",
         "signature": "close()V",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_close__V"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_close__V",
+        "errors": [
+          "java.io.IOException"
+        ]
       },
       "getInputStream(Ljava/util/zip/ZipEntry;)Ljava/io/InputStream;": {
         "aclass": "IO",
@@ -118,14 +133,19 @@
         "aclasstype": "INIT",        
         "method": "<init>",
         "signature": "<init>(Ljava/io/File;)V",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile__init__Ljava_io_File__V"
-      },
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile__init__Ljava_io_File__V",
+        "errors": [
+          "java.io.IOException"
+        ]      },
       "<init>(Ljava/lang/String;)V": {
         "aclass": "IO",
         "aclasstype": "INIT",        
         "method": "<init>",
         "signature": "<init>(Ljava/lang/String;)V",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile__init__Ljava_lang_String__V"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile__init__Ljava_lang_String__V",
+        "errors": [
+          "java.io.IOException"
+        ]
       }
     },
     "java.util.zip.ZipFile!java.io.InputStream": {
@@ -135,28 +155,40 @@
         "aclasstype": "CLOSE",        
         "method": "close",
         "signature": "close()V;",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_close__V"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_close__V",
+        "errors": [
+          "java.io.IOException"
+        ]
       },
       "read([B)I;": {
         "aclass": "IO",
         "aclasstype": "READ",        
         "method": "read",
         "signature": "read([B)I;",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_read__B_I"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_read__B_I",
+        "errors": [
+          "java.io.IOException"
+        ]
       },
       "read()I;": {
         "aclass": "IO",
         "aclasstype": "READ",        
         "method": "read",
         "signature": "read()I;",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_read__I"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_read__I",
+        "errors": [
+          "java.io.IOException"
+        ]
       },
       "read([BII)I;": {
         "aclass": "IO",
         "aclasstype": "READ",        
         "method": "read",
         "signature": "read([BII)I;",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_read__BII_I"
+        "handler": "com.crash4j.engine.spi.instrument.handlers.java_util_zip_ZipFile_java_io_InputStream_read__BII_I",
+        "errors": [
+          "java.io.IOException"
+        ]
       }
     },
     "java.net.Socket!java.io.OutputStream": {

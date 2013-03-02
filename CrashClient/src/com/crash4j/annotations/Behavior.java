@@ -3,6 +3,8 @@
  */
 package com.crash4j.annotations;
 
+import com.crash4j.EngineAdapter;
+
 
 /**
  * {@link Behavior} annotation describes simulation behavior that is used to alter 

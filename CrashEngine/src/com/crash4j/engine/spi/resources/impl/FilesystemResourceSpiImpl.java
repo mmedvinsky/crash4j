@@ -20,6 +20,7 @@ import com.crash4j.engine.spi.ResourceSpec;
 import com.crash4j.engine.spi.inf.Filesystem;
 import com.crash4j.engine.spi.log.Log;
 import com.crash4j.engine.spi.log.LogFactory;
+import com.crash4j.engine.types.ResourceTypes;
 
 /**
  * @author <MM>
@@ -30,8 +31,15 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
     protected static final Log log = LogFactory.getLog(FilesystemResourceSpiImpl.class);
     
     protected File fspoint = null;
-    //protected Filesystem fsbase = null;
+    protected Filesystem fsbase = null;
     protected FileDescriptor fd = null;
+    protected int mask = ResourceManagerSpi.getResourceConfig(ResourceTypes.FSYS);
+    
+    protected static final int mode_mounts = 2;
+    protected static final int mode_dirs = 4;
+    protected static final int mode_files = 8;
+    protected static final int mode_streams = 16;
+    
     
     public FilesystemResourceSpiImpl(ResourceSpec spec)
     {
@@ -82,7 +90,7 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
     {
         super(spec);
         this.fspoint = new File(file.getAbsolutePath());
-        //this.fsbase = ResourceManagerSpi.getInfrastructure().selectFilesystem(this.fspoint.getAbsolutePath());
+        this.fsbase = ResourceManagerSpi.getInfrastructure().selectFilesystem(this.fspoint.getAbsolutePath());
     }
     
     
@@ -94,7 +102,7 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
     {
         super(spec);
         this.fspoint = new File(file);
-        //this.fsbase = ResourceManagerSpi.getInfrastructure().selectFilesystem(this.fspoint.getAbsolutePath());
+        this.fsbase = ResourceManagerSpi.getInfrastructure().selectFilesystem(this.fspoint.getAbsolutePath());
     }
 
     /**
@@ -115,7 +123,7 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
     {
         super(spec);
         this.fspoint = new File(parent, child);
-        //this.fsbase = ResourceManagerSpi.getInfrastructure().selectFilesystem(this.fspoint.getAbsolutePath());
+        this.fsbase = ResourceManagerSpi.getInfrastructure().selectFilesystem(this.fspoint.getAbsolutePath());
     }
 
     /**
@@ -126,7 +134,16 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
     {
         super(spec);
         this.fspoint = new File(parent, child);
-        //this.fsbase = ResourceManagerSpi.getInfrastructure().selectFilesystem(this.fspoint.getAbsolutePath());
+        this.fsbase = ResourceManagerSpi.getInfrastructure().selectFilesystem(this.fspoint.getAbsolutePath());
+    }
+    
+    protected String getDirectory(File f)
+    {
+    	if (f.isDirectory())
+    	{
+    		return f.getAbsolutePath();
+    	}
+    	return f.getAbsoluteFile().getParent();
     }
     
     /**
@@ -138,12 +155,12 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
     public void completeResource(ResourceSpec spec, Object args, File rv)
     {
         this.fspoint = new File(rv.getAbsolutePath());
-        //this.fsbase = ResourceManagerSpi.getInfrastructure().selectFilesystem(this.fspoint.getAbsolutePath());
+        this.fsbase = ResourceManagerSpi.getInfrastructure().selectFilesystem(this.fspoint.getAbsolutePath());
         this.setComplete(true);
     }
     private String getResourceName()
     {
-        String resource = null;
+        String resource = getMountPoint();
         if (this.fspoint == null)
         {
             if (this.fd != null)
@@ -168,13 +185,22 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
         }
         else
         {
-            resource = this.fspoint.getAbsolutePath();
+            if ((this.mask & mode_files) == mode_files)
+            {
+            	resource = this.fspoint.getAbsolutePath();
+            }
+            else if ((this.mask & mode_dirs) == mode_dirs)
+            {
+            	resource = getDirectory(this.fspoint);
+            }
         }
                 
         return resource; 
     }
-
-    /*
+    
+    /**
+     * @return mount point for this file system resource
+     */
     private String getMountPoint()
     {
         String mtpoint = null;
@@ -188,7 +214,6 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
         }
         return mtpoint;
     }
-    */
     
     /**
      * @return resource vector
@@ -198,12 +223,20 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
         try
         {
             Hashtable<String, String> hash = new Hashtable<String, String>();
-            //hash.put("mt", getMountPoint());
-            String res = getResourceName();
-            if (res != null)
+            if ((this.mask & mode_mounts) == mode_mounts)
             {
-            	hash.put("resource", res.replace(':', '@'));
+                hash.put("mt", getMountPoint());
             }
+            if ((this.mask & mode_files) == mode_files || 
+            		(this.mask & mode_dirs) == mode_dirs)
+            {
+                String res = getResourceName();
+                if (res != null)
+                {
+                	hash.put("resource", res.replace(':', '@'));
+                }
+            }
+            
             if (this.getParent() != null)
             {
                 hash.put("parent", this.getParent().getETag());
@@ -213,7 +246,6 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
         } 
         catch (Throwable e)
         {
-            e.printStackTrace();
             log.logError("Error creating resource moniker", e);
         }
         return null;
@@ -256,6 +288,7 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
         //This is the same instance.....
         if (in.etag == this.etag)
         {
+            //System.out.println("etag");
             return true;
         }
         
@@ -263,25 +296,63 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
         {
             if (in.fd != null)
             {
+                //System.out.println("fd");
                 return this.fd.equals(in.fd);
             }
         }
         
-        if (this.fspoint != null)
+        boolean eq = false;
+        if ((this.mask & mode_mounts) == mode_mounts)
         {
-            if (in.fspoint != null)
+        	if (this.fsbase != null)
+        	{
+        		eq = this.getMountPoint().equals(in.getMountPoint());
+        	}
+        }
+        
+        if ((this.mask & mode_files) == mode_files)
+        {
+            if (this.fspoint != null)
             {
-                return this.fspoint.equals(in.fspoint);
+                if (in.fspoint != null)
+                {
+                    eq = eq & this.fspoint.equals(in.fspoint);
+                }
             }
         }
-        return false;
+        if ((this.mask & mode_dirs) == mode_dirs)
+        {
+            if (this.fspoint != null)
+            {
+                if (in.fspoint != null)
+                {
+                    eq = eq & getDirectory(this.fspoint).equals(getDirectory(in.fspoint));
+                }
+            }
+        }
+        //System.out.println("fs:"+eq);
+        return eq;
     }
 
 
     @Override
     public int hashCode()
     {
-        int h = (this.fd != null ? this.fd.hashCode() : 0) + (this.fspoint != null ? this.fspoint.hashCode() : 0);
+    	int h = 0;
+        if ((this.mask & mode_files) == mode_files)
+        {
+        	h = (this.fd != null ? this.fd.hashCode() : 0) + (this.fspoint != null ? this.fspoint.hashCode() : 0);
+        }
+        
+        if ((this.mask & mode_dirs) == mode_dirs)
+        {
+        	h += (this.fd != null ? this.fd.hashCode() : 0) + (this.fspoint != null ? getDirectory(this.fspoint).hashCode() : 0);
+        }
+         
+        if ((this.mask & mode_mounts) == mode_mounts)
+        {
+        	h += getMountPoint().hashCode();
+        }
         return h;
     }
     
@@ -289,7 +360,7 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
     public boolean hasProperty(String name)
     {
         return (name.equalsIgnoreCase("type")
-                //|| name.equalsIgnoreCase("mt") 
+                || name.equalsIgnoreCase("mt") 
                 || name.equalsIgnoreCase("resource"));
     }
     
@@ -300,11 +371,15 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
         {
             return value.equalsIgnoreCase(getResourceType().toString());
         }
-//        else if (name.equalsIgnoreCase("mt"))
-//        {
-//            String mtpoint = getMountPoint();
-//            return value.equalsIgnoreCase( mtpoint);
-//        }
+        else if (name.equalsIgnoreCase("mt"))
+        {
+        	if ((this.mask & mode_mounts) == mode_mounts)
+        	{
+        		String mtpoint = getMountPoint();
+        		return value.equalsIgnoreCase(mtpoint);
+        	}
+        	return true;
+        }
         else if (name.equalsIgnoreCase("resource"))
         {
             String resource = getResourceName();
@@ -320,11 +395,15 @@ public class FilesystemResourceSpiImpl extends ResourceSpiImpl
         {
             return value.matcher(getResourceType().toString()).matches();
         }
-//        else if (name.equalsIgnoreCase("mt"))
-//        {
-//            String mtpoint = getMountPoint();            
-//            return value.matcher(mtpoint).matches();
-//        }
+        else if (name.equalsIgnoreCase("mt"))
+        {
+           	if ((this.mask & mode_mounts) == mode_mounts)
+        	{
+           		String mtpoint = getMountPoint();            
+           		return value.matcher(mtpoint).matches();
+        	}
+           	return true;
+        }
         else if (name.equalsIgnoreCase("resource"))
         {
             String resource = getResourceName();

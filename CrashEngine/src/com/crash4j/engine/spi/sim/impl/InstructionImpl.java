@@ -6,24 +6,28 @@ import com.crash4j.engine.sim.Instruction;
  * a record that holds a single tick information.
  * @author team
  */
-public class InstructionImpl implements Instruction
+public abstract class InstructionImpl implements Instruction
 {
     protected long tn = 0;
     protected double P = 0.0;
-    protected double weight = 0.0;
-
+    protected Object parameter = null;
     /**
      * @param tn
      * @param p
      * @param weight
      */
-    public InstructionImpl(long tn, double p, double weight)
+    public InstructionImpl(long tn, double p, Object pr)
     {
         this.tn = tn;
         this.P = p;
-        this.weight = weight;
+        this.parameter = pr;
     }
-    /**
+    	
+    public void setParamater(Object paramater) 
+    {
+		this.parameter = paramater;
+	}
+	/**
      * @see com.crash4j.engine.sim.Instruction#getTick()
      */
     @Override
@@ -53,19 +57,11 @@ public class InstructionImpl implements Instruction
     {
         P = p;
     }
-    /**
-     * @see com.crash4j.engine.sim.Instruction#getWeight()
-     */
-    @Override
-    public double getWeight()
-    {
-        return weight;
-    }
-    /**
-     * @param weight the weight to set
-     */
-    public void setWeight(double weight)
-    {
-        this.weight = weight;
-    }
+    
+	public abstract Object getParameter();
+
+	public void setParameter(Object parameter) {
+		this.parameter = parameter;
+	}
+
 }

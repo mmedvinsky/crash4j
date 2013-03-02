@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
@@ -44,7 +44,6 @@ import com.crash4j.engine.UnknownResourceException;
 import com.crash4j.engine.sim.Behavior;
 import com.crash4j.engine.sim.Command;
 import com.crash4j.engine.sim.Simulation;
-import com.crash4j.engine.spi.ResourceSpecLoader._spec;
 import com.crash4j.engine.spi.context.ThreadContext;
 import com.crash4j.engine.spi.inf.Infrastructure;
 import com.crash4j.engine.spi.instrument.EventData;
@@ -55,7 +54,6 @@ import com.crash4j.engine.spi.log.Log;
 import com.crash4j.engine.spi.log.LogFactory;
 import com.crash4j.engine.spi.protocol.ProtocolEvent;
 import com.crash4j.engine.spi.protocol.ProtocolRecognizer;
-import com.crash4j.engine.spi.protocol.http.HttpProtocolRecognizer;
 import com.crash4j.engine.spi.protocol.impl.DisabledProtocolRecognizer;
 import com.crash4j.engine.spi.protocol.impl.GenericProtocolRecognizer;
 import com.crash4j.engine.spi.remote.CrashServiceAdapter;
@@ -110,7 +108,7 @@ public class ResourceManagerSpi
     /**
      * {@link Infrastructure} manages system dependent items, such as mount points and network routes.
      */
-    //protected static Infrastructure infrastructure = null;
+    protected static Infrastructure infrastructure = null;
     
     protected static ByteArrayOutputStream dynaJar = new ByteArrayOutputStream();
     protected static JarOutputStream dynaJarStream = null;
@@ -130,6 +128,11 @@ public class ResourceManagerSpi
     protected static ConcurrentHashMap<String, _stats_collections> collectors = new ConcurrentHashMap<String, _stats_collections>();
     protected static File workingDirectory = null;
     protected static File generatedJarFile = null;
+    
+    /**
+     * Configuration for resource types.
+     */
+    protected static int[] resourceModes = new int[ResourceTypes.values().length];
     
     /**
      * {@link SimulationManagerSpi} instance manages all loaded simulations.
@@ -330,6 +333,15 @@ public class ResourceManagerSpi
             sim.addBehavior(b);
         }
     }
+    /**
+     * Gets resource mode configuration
+     * @param type
+     * @return
+     */
+    public static int getResourceConfig(ResourceTypes type)
+    {
+    	return resourceModes[type.ordinal()];
+    }
     
     /**
      * Start the the {@link ResourceManagerSpi}
@@ -345,9 +357,21 @@ public class ResourceManagerSpi
         {
             props = "classpath:///com/crash4j/engine/spi/config/crash4j.properties";
         }
-        
+        //TODO make properties overload....
         Properties config = new Properties();
         config.load(Utils.getResourceAsStream(ResourceManagerSpi.class, props));
+        
+        //Prepare resource modes.
+        for (ResourceTypes typ : ResourceTypes.values()) 
+        {
+			String value = config.getProperty(typ.name());
+			if (value != null)
+			{
+				int val = Integer.parseInt(value);
+				resourceModes[typ.ordinal()] = val;
+			}
+		}
+        
         
         //initialize action reaper executer threads.
         int tc = 3;
@@ -400,7 +424,7 @@ public class ResourceManagerSpi
         
         specLoader = new ResourceSpecLoader();
         //get infrastructure service going
-        //infrastructure = Infrastructure.getInstance();
+        infrastructure = Infrastructure.getInstance();
         //generate dynamic classes
         for (int i = 0; i < 3; i++)
         {
@@ -545,6 +569,11 @@ public class ResourceManagerSpi
         }
         if (spi instanceof PropertyOwner && spi instanceof SimulationConsumer)
         {
+        	//if (spi.getResourceType().equals(ResourceTypes.DB))
+        	//{
+        	//	int a = 0; 
+        	//	a++;
+        	//}
             Simulation s = simulationManager.selectSimulation((PropertyOwner)spi);
             if (s != null)
             {
@@ -655,11 +684,11 @@ public class ResourceManagerSpi
     
     /**
      * @return instance of the infrastructure.
+     */
     public static Infrastructure getInfrastructure()
     {
         return infrastructure;
     }
-     */
     
     /**
      * @return the restricted items that can not be modified because they are
@@ -743,7 +772,7 @@ public class ResourceManagerSpi
         {
            Command[] commands = sim.getCommands();
            if (commands != null)
-           {
+           {       	   
                for (Command c : commands)
                {
                    Behavior bh = c.getBehavior();
@@ -1136,7 +1165,10 @@ public class ResourceManagerSpi
         //reinsert resaource here as we are going to be changing its hashcode
         resourceBuilder.completeResource(spi, 
                 spec, o.getParams(), o.getInstance(), rv); 
-        putIfAbsent(spi);
+        //Put the resource again to store it.
+        spi = putIfAbsent(spi);
+        
+        o.setResource(spi);
         
         if (rv instanceof ResourceAware)
         {

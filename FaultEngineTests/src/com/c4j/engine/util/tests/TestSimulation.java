@@ -49,12 +49,12 @@ public class TestSimulation
                     {
                         if(ins[j].isEnabled())
                         {
-                            System.out.println(ins[j].getBehavior().getName()+" "+i+" "+ins[j].getInstruction().getTick()+" "+ins[j].getInstruction().getP()+" "+ins[j].getInstruction().getWeight()+" enabled");
+                            System.out.println(ins[j].getBehavior().getName()+" "+i+" "+ins[j].getInstruction().getTick()+" "+ins[j].getInstruction().getP()+" "+ins[j].getInstruction().getParameter()+" enabled");
                     
                         }
                         else
                         {
-                            System.out.println(ins[j].getBehavior().getName()+" "+i+" "+ins[j].getInstruction().getTick()+" "+ins[j].getInstruction().getP()+" "+ins[j].getInstruction().getWeight()+" disabled");
+                            System.out.println(ins[j].getBehavior().getName()+" "+i+" "+ins[j].getInstruction().getTick()+" "+ins[j].getInstruction().getP()+" "+ins[j].getInstruction().getParameter()+" disabled");
                         }
                     }
                 }

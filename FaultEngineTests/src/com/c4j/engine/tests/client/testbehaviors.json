@@ -3,7 +3,7 @@
 	"id"    : "com.crash4j.behaviors.test1",
 	"itype" : "d", 
 	"btype" : "wa", 
-	"actions" : ["IO:WRITE", "IO:READ"],
+	"actions" : ["io:write", "io:read"],
 	"mode"    : "rotate",
 	"instructions" : [
 		[0, 1, 2.0099998],

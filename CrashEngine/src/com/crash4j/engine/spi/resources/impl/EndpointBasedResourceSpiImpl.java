@@ -110,7 +110,7 @@ public class EndpointBasedResourceSpiImpl extends ResourceSpiImpl
 	@Override
 	public ResourceTypes getResourceType() 
 	{
-		return ResourceTypes.HTTP;
+		return ResourceTypes.SERVICE;
 	}
 
 	protected ObjectName buildVector()

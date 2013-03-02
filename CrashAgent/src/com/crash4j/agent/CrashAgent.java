@@ -4,8 +4,11 @@
 package com.crash4j.agent;
 
 import java.lang.instrument.Instrumentation;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.jar.JarFile;
 
 import com.crash4j.engine.spi.ResourceManagerSpi;
 import com.crash4j.engine.spi.instrument.transformers.MethodInjector;
@@ -37,6 +40,17 @@ public class CrashAgent
                     argT.put(kvp[0].trim(), kvp[1].trim());
                 }
             }
+
+            //prepare class loader
+            if (argT.containsKey("cp"))
+            {
+            	String cp = argT.get("cp");
+            	String pelems[] = cp.split(":");
+            	for (String pe : pelems) 
+            	{
+            		inst.appendToBootstrapClassLoaderSearch(new JarFile(pe));
+				}
+            }
             
             ResourceManagerSpi.start(argT, inst);
             
@@ -49,7 +63,7 @@ public class CrashAgent
             Class<?> []classes = inst.getAllLoadedClasses();
             ArrayList<Class<?>> reformatList = new ArrayList<Class<?>>();
             //ArrayList<ClassDefinition> redefList = new ArrayList<ClassDefinition>();
-    		for (Class cla : classes) 
+    		for (Class<?> cla : classes) 
     		{
     			if (ResourceManagerSpi.getByClassName(cla.getName()) != null)
     			{

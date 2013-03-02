@@ -245,25 +245,56 @@ public class BehaviorImpl implements Behavior
         tick++;
         return current;
     }
+    
+    protected InstructionImpl mkInstruction(long tn, double p, Object param)
+    {
+    	InstructionImpl in = null;
+    	switch (this.iType)
+    	{
+	    	case CLOSE:
+	    	{
+	    		in = new CloseInstructionImpl(tn, p, param);
+	    		break;
+	    	}
+	    	case DELAY:
+	    	{
+	    		in = new DelayInstructionImpl(tn, p, param);
+	    		break;
+	    	}
+	    	case ERROR:
+	    	{
+	    		try {in = new ErrorInstructionImpl(tn, p, param);} 
+	    		catch (ClassNotFoundException e) {}
+	    		break;
+	    	}
+	    	case THROUGHPUT:
+	    	{
+	    		return null; //not supported yet
+	    	}
+    	}
+    	return in;
+    }
+    
     /**
      * @see com.crash4j.engine.sim.Behavior#addInstruction(long, double, double)
      */
-    public void addInstruction(long tn, double p, double w)
+    public void addInstruction(long tn, double p, Object param)
     {
         if (this.simdata.isEmpty())
         {
-            this.simdata.add(new InstructionImpl(tn, p, w));
+            this.simdata.add(mkInstruction(tn, p, param));
             return;
         }
+        
         for (int i = 0; i < this.simdata.size(); i++)
         {
             if (this.simdata.get(i).getTick() > tn)
             {
-                this.simdata.add(i, new InstructionImpl(tn, p, w));
+                this.simdata.add(i, mkInstruction(tn, p, param));
                 return;
             }
         }
-        this.simdata.add(new InstructionImpl(tn, p, w));
+         this.simdata.add(mkInstruction(tn, p, param));
     }
     /**
      * @return {@link BehaviorTypes} that was selected for this behavior

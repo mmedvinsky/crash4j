@@ -7,7 +7,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.NetworkInterface;
 import java.net.Proxy;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,6 +17,8 @@ import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import javax.management.ObjectName;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
 
 import com.crash4j.engine.UnknownResourceException;
 import com.crash4j.engine.spi.ResourceManagerSpi;
@@ -41,7 +42,7 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
     protected boolean client = true;
     protected String protocol = null;
     protected Proxy proxy = Proxy.NO_PROXY;
-    
+    protected boolean secure = false;
     protected static final Log log = LogFactory.getLog(NetworkResourceSpiImpl.class);
 
     
@@ -53,6 +54,7 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
     {
         super(spec);
         setDataFromSocket(sock, true);
+        secure = sock instanceof SSLSocket;
         this.protocol = this.spec.getAttribute("protocol");
     }
 
@@ -182,7 +184,7 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
         try
         {            
             InetSocketAddress ra = (InetSocketAddress)sock.getRemoteSocketAddress();
-            
+           
             if (ra == null && send == true)
             {
                 if (packet != null)
@@ -220,6 +222,7 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
         super(spec);
         try
         {            
+            secure = sock instanceof SSLServerSocket;
             this.protocol = this.spec.getAttribute("protocol");
         }
         catch (Exception e)
@@ -237,6 +240,7 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
         super(spec);
         try
         {
+            secure = instance instanceof SSLSocket;
         	this.proxy = proxy;
         }
         catch (Exception e)
@@ -258,6 +262,7 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
             this.host = InetAddress.getByName(rHost);
             this.port = rPort;
             this.protocol = this.spec.getAttribute("protocol");
+            secure = instance instanceof SSLSocket;
         }
         catch (Exception e)
         {
@@ -278,6 +283,7 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
             this.host = InetAddress.getByName(host);
             this.port = port;
             this.protocol = this.spec.getAttribute("protocol");
+            secure = false;
         }
         catch (Exception e)
         {
@@ -295,6 +301,7 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
         super(spec);
         try
         {
+            secure = sock instanceof SSLServerSocket;
             this.protocol = this.spec.getAttribute("protocol");
         }
         catch (Exception e)
@@ -404,6 +411,7 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
         boolean c = ni.proxy.equals(this.proxy) &&
                 (ni.port == this.port) && 
                 (ni.client == this.client) && 
+                (ni.secure == this.secure) && 
                 (ni.host.equals(this.host));
         
         return c; 
@@ -465,6 +473,7 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
                 details.put("host", this.host.getCanonicalHostName());
                 details.put("port", new Integer(this.port).toString());
                 details.put("server", new Boolean(!this.client).toString());
+                details.put("secure", new Boolean(this.secure).toString());
             }
             if (!this.proxy.equals(Proxy.NO_PROXY))
             {
@@ -487,6 +496,7 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
                 || name.equalsIgnoreCase("host") 
                 || name.equalsIgnoreCase("port") 
                 || name.equalsIgnoreCase("server") 
+                || name.equalsIgnoreCase("secure") 
                 || name.equalsIgnoreCase("proxy"));
     }
 
@@ -514,6 +524,10 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
             else if (name.equalsIgnoreCase("server"))
             {
                 return Boolean.parseBoolean(value) == !this.client;
+            }
+            else if (name.equalsIgnoreCase("secure"))
+            {
+                return Boolean.parseBoolean(value) == this.secure;
             }
             else if (name.equalsIgnoreCase("proxy"))
             {
@@ -551,6 +565,10 @@ public class NetworkResourceSpiImpl extends ResourceSpiImpl
             else if (name.equalsIgnoreCase("server"))
             {
                 return value.matcher(String.valueOf(!this.client)).matches();
+            }
+            else if (name.equalsIgnoreCase("secure"))
+            {
+                return value.matcher(String.valueOf(this.secure)).matches();
             }
             else if (name.equalsIgnoreCase("proxy"))
             {

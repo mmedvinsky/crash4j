@@ -9,13 +9,13 @@ public class Instruction
 {
     protected long tick = 0;
     protected double P = 0.0;
-    protected double weight = 0.0;
+    protected Object parameter = null;
 
     
     /**
      * @param tick
      * @param p
-     * @param weight
+     * @param parameter
      */
     public Instruction()
     {
@@ -25,13 +25,13 @@ public class Instruction
     /**
      * @param tick
      * @param p
-     * @param weight
+     * @param parameter
      */
-    public Instruction(long tick, double p, double weight)
+    public Instruction(long tick, double p, Object param)
     {
         this.tick = tick;
         P = p;
-        this.weight = weight;
+        this.parameter = param;
     }
     /**
      * @return the tick
@@ -66,17 +66,17 @@ public class Instruction
     /**
      * @return the weight
      */
-    @XmlAttribute(name="weight")
-    public double getWeight()
+    @XmlAttribute(name="parameter")
+    public Object getParameter()
     {
-        return weight;
+        return this.parameter;
     }
     /**
      * @param weight the weight to set
      */
-    public void setWeight(double weight)
+    public void setParameter(Object p)
     {
-        this.weight = weight;
+        this.parameter = p;
     }
     
     

@@ -32,6 +32,7 @@
   var selectedAction = null;
   var selectedBehavior = null;
   var chartLineColors = {'time':'#5FAB78', 'actualtime':'#0033FF', 'throughput':'#FF99FF', 'error':'#FF0000'}
+  var statLabels = {'time':'Simulated(t)', 'actualtime':'Actual(t)', 'throughput':'Bytes/t', 'error':'Erros'}
   function normalizeId(sid)
   {
 	  sid = sid.replace(":", "_");
@@ -76,13 +77,16 @@
 	  var stats = resource.stat[selectedAction];
 	  
 	  var dataTable = '<table width="100%" class="ui-widget-header ui-corner-all" ><tr height="30px"><td>'+createMultiLineText(resource.name, 60)+'</td></tr></table>';
-	  dataTable += '<table width="100%"><tr class="ui-widget-header ui-corner-all" height="30px"><td>Stat</td><td>min</td><td>max</td><td>last</td><td>count</td><td>avg</td></tr>';
+	  dataTable += '<table width="100%"><tr class="ui-widget-header ui-corner-all" height="30px"><td>Metrics</td><td>MIN</td><td>MAX</td><td>LAST</td><td>COUNT</td><td>AVERAGE</td></tr>';
 	  
 	  var ci = 0;
 	  for (var stat in stats)
 	  {
 		  var sdata = stats[stat];
-		  dataTable += '<tr class="ui-widget-content" height="30px"><td style="background:'+chartLineColors[stat]+'">'+stat+'</td><td>'+sdata.min+'</td><td>'+sdata.max+'</td><td>'+sdata.last+'</td><td>'+sdata.count+'</td><td>'+sdata.avg+'</td></tr>';		  
+		  if (sdata.min < 0) {
+			  sdata.min = 0;
+		  }
+		  dataTable += '<tr class="ui-widget-content" height="30px"><td style="background:'+chartLineColors[stat]+'">'+statLabels[stat]+'</td><td>'+Math.abs(sdata.min)+'</td><td>'+Math.abs(sdata.max)+'</td><td>'+Math.abs(sdata.last)+'</td><td>'+Math.abs(sdata.count)+'</td><td>'+Math.abs(sdata.avg)+'</td></tr>';		  
 	  	  ci++;
 	  }
 	  
@@ -104,7 +108,7 @@
 			  axes: {
 	        			// options for each axis are specified in seperate option objects.
 	        		xaxis: {
-	          			label: "Time (milliseconds)",
+	          			label: "Samples",
 			            pad: 0
 	        		},
 	        		yaxis: {
