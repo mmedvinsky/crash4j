@@ -88,7 +88,11 @@ In addition to the resource identifiers, each resource types (com.crash4j.engine
 <tr><td>RDBMS</td><td>db</td><td>SQL</td></tr>
 <tr><td>HTTPk</td><td>http</td><td>IO, HTTP</td></tr>
 </table>
-
+ 
+ <h3>Resources</h3>
+ 
+ <h4>Network Resource</h4>
+ Network resource describes a network stream, opened through various means by java program in order to communicate with a remote server.  The current implementation is able to recognize an describe TCP, UDP connections, address resolution calls, operations performed on the open socket, such as setting of options, closing, etc.  Crash4j engine is also able to work with both blocking as well as non-blocking IO.  What that really means is that is your workload is using a java.net.Socket to talk to host1, port1 or is using java.nio.SocketChannel to talk to host1, port1 – it will be described as a single remote resource, identified by host1, port1 and can be effected as such.  In addition the crash4j engine is able to detected ssl and server sockets.  Here are all of the attributes that can be present in a Network Resource
       </section>
     </div>
     
