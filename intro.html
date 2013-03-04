@@ -18,8 +18,8 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/mmedvinsky/crash4j">View on GitHub</a>
 
-          <h1 id="project_title">Crash4j</h1>
-          <h2 id="project_tagline">Fault tolerance framework for JVM runtimes </h2>
+          <h1 id="project_title">CRASH4J</h1>
+          <h2 id="project_tagline">Fault tolerance testing framework for JVM runtimes </h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/mmedvinsky/crash4j/zipball/master">Download this project as a .zip file</a>
@@ -59,9 +59,24 @@ Crash4j system allows you to integrate fault tolerant testing very early in the 
 
 In order to integrate the fault tolerant testing into you development practices the crash4j engine provides integration with the JUnit 4 testing framework as well as providing a runtime agent to effect workloads during a more formal tests.
        
+       <h3>What elements are included?</h3>
+       The crash4j runtime is able to recognize the following elements of your workload environment.
+       <ol>
+         <li>NETWORK</li>
+         <li>FILE SYSTEM</li>
+         <li>DATABASES (RDBMS)</li>
+         <li>SERVICES (HTTP, FTP, SMTP)</li>         
+       </ol>
+       
+       These are currently implemented elements that are available from crash4j product today.  More will be coming in the future.
+       <h3>How is environment represented?</h3>
+       The environment is discovered from the operational behavior of you workload.  Once an environment resource is discovered it is represented in a form of a unique complex name.  For example a network resource, connecting from localhost to port 3306 over tcp will be represented as follows:
+       
+       <table><tr><td><b>net</b>:port=3306,parent=db@6b2dc21d@5e4c5524,host=localhost,secure=false,server=false,protocol=tcp</td></tr></tr></table>
+       
       </section>
     </div>
-
+    
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
