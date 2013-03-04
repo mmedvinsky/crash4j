@@ -26,6 +26,14 @@
               <a class="tar_download_link" href="https://github.com/mmedvinsky/crash4j/tarball/master">Download this project as a tar.gz file</a>
             </section>
         </header>
+    <table id="project_tagline">
+      <tr>
+      <td><a href="index.html">Home</a></td>        
+      <td><a href="intro.html">Introduction</a></td>        
+      <td><a href="starting.html">Getting Started</a></td>        
+      <td><a href="uguide.html">User Guide</a></td>        
+      </tr>
+    </table>
     </div>
 
     <!-- MAIN CONTENT -->
@@ -35,6 +43,15 @@
        The importance of fault-tolerance testing becomes more prominent as complexity of your production environment grows.  
        As we have seen almost exponential growth in system layers and their inter-dependencies the need to understand 
        the fault bearing capabilities of each individual system participant is very important. 
+       <p/>
+       All systems can be classified into 3 main categories, as they are measured for fault tolerance:
+       <table>
+         <tr><td>Unrecoverable</td><td>Recoverable</td><td>Fault Tolerant</td></tr>    
+         <tr><td>The system experiences a period of instability and is unable to recover from it. 
+Recover involves, restarting, reconfiguring or fixing the system
+</td><td>The system experiences a period of instability and is able to recover from it and continue operating with the same SLA as before the instability took place</td>
+<td>The system experiences instability but is able to carry on with operations in acceptable way, despite instability.</td></tr>
+       </table>
       </section>
     </div>
 
