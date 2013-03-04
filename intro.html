@@ -81,6 +81,13 @@ In order to integrate the fault tolerant testing into you development practices 
 Examining, the network resource we can see a number of attributes, for example “port” attribute, describes remote port of the identified stream, “parent”, if present, shows a parent resource, under whose context this resource is operating, “host” is an address of the network connection, “server” marks this to be a client/server socket and finally “protocol” attribute identifies the network protocol to be tcp.
 
 In addition to the resource identifiers, each resource types (com.crash4j.engine.types.ResourceTypes) can perform a number of actions, described by action classes.
+<table>
+<tr><td>Resource Types</td><td>Symbol</td><td>Resource Class</td></tr>
+<tr><td>Network</td><td>net</td><td>IO</td></tr>
+<tr><td>File System</td><td>fsys</td><td>IO,FILESYSTEM</td></tr>
+<tr><td>RDBMS</td><td>db</td><td>SQL</td></tr>
+<tr><td>HTTPk</td><td>http</td><td>IO, HTTP</td></tr>
+</table>
 
       </section>
     </div>
