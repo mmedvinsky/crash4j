@@ -72,8 +72,16 @@ In order to integrate the fault tolerant testing into you development practices 
        <h3>How is environment represented?</h3>
        The environment is discovered from the operational behavior of you workload.  Once an environment resource is discovered it is represented in a form of a unique complex name.  For example a network resource, connecting from localhost to port 3306 over tcp will be represented as follows:
        
-       <table><tr><td><b>net</b>:port=3306,parent=db@6b2dc21d@5e4c5524,host=localhost,secure=false,server=false,protocol=tcp</td></tr></tr></table>
-       
+       <table><tr><td><i>net</i>:port=3306,parent=db@6b2dc21d@5e4c5524,host=localhost,secure=false,server=false,protocol=tcp</td></tr></tr></table>
+       The general format chosen to encode the resources is similar to Java JMX ObjectName, chosen for its extensibility and simplicity:
+
+      <table><tr><td>[ResourceType][:]( [name]=[value] )([,] [name]=[value] )*</td></tr></tr></table>
+
+
+Examining, the network resource we can see a number of attributes, for example “port” attribute, describes remote port of the identified stream, “parent”, if present, shows a parent resource, under whose context this resource is operating, “host” is an address of the network connection, “server” marks this to be a client/server socket and finally “protocol” attribute identifies the network protocol to be tcp.
+
+In addition to the resource identifiers, each resource types (com.crash4j.engine.types.ResourceTypes) can perform a number of actions, described by action classes.
+
       </section>
     </div>
     
