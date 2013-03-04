@@ -52,6 +52,12 @@ Recover involves, restarting, reconfiguring or fixing the system
 </td><td>The system experiences a period of instability and is able to recover from it and continue operating with the same SLA as before the instability took place</td>
 <td>The system experiences instability but is able to carry on with operations in acceptable way, despite instability.</td></tr>
        </table>
+Most of the systems in the world are resident of the Recoverable category.  There are very few systems or applications for which it is ok to go under after a period of instability and require manual intervention in order to be operational again. Even fewer are the systems that are redundant enough or fault tolerant enough to leave through instabilities and remain unaffected by the event.   The very few examples of fully fault tolerant systems are limited to military, airplane and medical industries.
+
+Crash4j system allows you to integrate fault tolerant testing very early in the development cycle and continue with it all the way to pre-production testing.
+
+In order to integrate the fault tolerant testing into you development practices the crash4j engine provides integration with the JUnit 4 testing framework as well as providing a runtime agent to effect workloads during a more formal tests.
+       
       </section>
     </div>
 
