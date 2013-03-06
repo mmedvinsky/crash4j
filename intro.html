@@ -145,7 +145,7 @@ http:port=80,parent=net@2bb6fd5c@50,host=www.google.com,path=/
 
 <h5>IO Action Class</h5>
 <table>
-<tr><td>Action</td>  <td>Description</td></tr>
+<tr><td>Action</td>	<td>Description</td></tr>
 <tr><td>io:init</td>	<td>Initializes the resource but does not open it yet
 <tr><td>io:bind</td>	<td>Binds resource 
 <tr><td>io:open</td>	<td>Opens connection to a remote stream handler
@@ -154,26 +154,30 @@ http:port=80,parent=net@2bb6fd5c@50,host=www.google.com,path=/
 <tr><td>io:read</td>	<td>Performs a single read on the sream
 <tr><td>io:write</td>	<td>Performs a single write operation on the resource
 <tr><td>io:check</td>	<td>Check the state and semantics of the stream
-<table>
+</table>
 	
 
 <h5>NETWORK Action class</h5>
-Action	Description
-network:addressresolution	Calls to address resolution 
-network:queryinterface	Checking the local network interface
-network:getinfo	General informational actions.
+<table>
+<tr><td>Action</td><td>Description</td></tr>
+<tr><td>network:addressresolution</td><td>Calls to address resolution </td></tr>
+<tr><td>network:queryinterface</td><td>Checking the local network interface</td></tr>
+<tr><td>network:getinfo	General</td><td>Informational actions.</td></tr>
+</table>
 	
    
 
-File System Action class
-Action	Description
-filesystem:create	Creates a file 
-filesystem:rename	Rename the file
-filesystem:delete	General informational actions.
-filesystem:chagestate	Change the state of the underlying file
-filesystem:checkpermission	Check permission
-filesystem:getinfo	Get general information
-filesystem:exist	Check if the file exists
+<h5>File System Action class</h5>
+<table>
+<tr><td>Action</td><td>Description
+<tr><td>filesystem:create</td><td>	Creates a file </td></tr>
+<tr><td>filesystem:rename</td><td>	Rename the file</td></tr>
+<tr><td>filesystem:delete</td><td>	General informational actions.</td></tr>
+<tr><td>filesystem:chagestate</td><td>	Change the state of the underlying file</td></tr>
+<tr><td>filesystem:checkpermission</td><td>	Check permission</td></tr>
+<tr><td>filesystem:getinfo</td><td>	Get general information</td></tr>
+<tr><td>filesystem:exist</td><td>	Check if the file exists</td></tr>
+</table>
 
 SQL Action class
 sql:SELECT,sql:INSERT,sql:UPDATE,sql:DELETE,sql:USE,sql:GRANT,sql:CREATE,sql:ALTER,sql:DROP,sql:ANALYZE,sql:ASSOCIATE,sql:AUDIT,sql:COMMENT,sql:DISASSOCIATE,sql:FLASHBACK,sql:NOAUDIT,sql:PURGE,sql:RENAME,sql:REVOKE,sql:TRUNCATE,sql:UNDROP,sql:CALL,sql:EXPLAIN,sql:LOCK,sql:MERGE,sql:COMMIT,sql:ROLLBACK,sql:SAVEPOINT,sql:CLOSE,sql:EXECUTE,sql:SET,sql:SQLCOMMAND;
