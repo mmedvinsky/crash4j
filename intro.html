@@ -114,12 +114,34 @@ In addition to the resource identifiers, each resource types (com.crash4j.engine
  
 </table>
 
-
-
-
 As was described before, every resource can perform a set of actions.  As the network resource belongs to the IO action class and to NETWORK action class it can perform all of the IO actions. See Appendix A.
 
+  <h4>File System Resource</h4>
+
+File system resource describes streams that are accessing underlying file systems for a variety of reasons.  The structure of the file system resource can be of a few types, depending on configuration and/or circumstances.
+<ol>
+<ul>If configured, only mount points are watched and aggregated and in this case the resource data and simulation will be aggregated at mount points., no matter how many files have being accessed.  Ex, :fsys:resource=/var/folders</ul>
+<ul>By default the system aggregates at the directory level, since this is the most usful file system point of contention and function, for example: fsys:resource=/var/folders/a/b/cs</ul>
+<ul>If configured the engine can aggregate at file level as well fsys:resource=/var/folders/T/testChannelFile.txts</ul>
+<ul>The filesystem resource also encompasses standard stream handling. In this case the resource structure contains, stdin, stdout, stderr  identifiers.  For example: fsys:resource=stdout, fsys:resource=stderr, fsys:resource=stdins</ul>
+<ul>Lastly, there are rare occasions when crash4j engine is not able to recognize the original source of the stream of file system activity  and the only  item available is a raw file handle, as presented by java., i.e. fsys:resource=java.io.FileDescriptor@684ee543s</ul>
+</ol>
+
+File system resource belongs to 2 action class groups – IO and FILESYSTEM.  Details of these actions you can find in Appendix A.
+
+<h4>RDBMS Resource</h4>
+
+RDBMS resource describes access of the current runtime to the relational database system.  The RDBM resource recognizes the presence and communications of JDBC API to the underlying driver and allows you to inject behavior and capture monitoring information based on actions performed by the statement in flight.  In the current version the action classes are aggregated around the SQL commands and include the full spectrum of SQL 2.  We are working on a mode, where a resource is created for each set of tables that a query is executing.  This will allow for much deeper scenario simulation with standard RDBMS systems.
+As an example, here is a db resource detected from the use of MYSQL database.
+db:url=jdbc@mysql@//localhost/plastiq_trans,parent=db@415a9b89@5e4c5524,driver=MySQL-AB JDBC Driver,vendor=MySQL
  
+<h4>HTTP Resource<h4>
+A very important resource is an HTTP resource.   The need to recognize HTTP traffic, above the regular network streams allows us to include all of the HTTP bearing services into the understood and controllable environment.   In the recent years HTTP and HTTPS has become a standard protocol for most of the inter-machine communications, due to its wide adoption over the public world wide web.
+When detected, an HTTP resource is created and is unique based on host, port and URL used.  Since this action class is one of HTTP, its stands to reason that action classes are also of the same type and therefore are comprised of methods allowed by the protocol.  
+For example, here is a captured HTTP resource, that is communicating to google.com
+http:port=80,parent=net@2bb6fd5c@50,host=www.google.com,path=/
+ 
+
       </section>
     </div>
     
