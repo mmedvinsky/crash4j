@@ -135,7 +135,7 @@ RDBMS resource describes access of the current runtime to the relational databas
 As an example, here is a db resource detected from the use of MYSQL database.
 db:url=jdbc@mysql@//localhost/plastiq_trans,parent=db@415a9b89@5e4c5524,driver=MySQL-AB JDBC Driver,vendor=MySQL
  
-<h4>HTTP Resource<h4>
+<h4>HTTP Resource</h4>
 A very important resource is an HTTP resource.   The need to recognize HTTP traffic, above the regular network streams allows us to include all of the HTTP bearing services into the understood and controllable environment.   In the recent years HTTP and HTTPS has become a standard protocol for most of the inter-machine communications, due to its wide adoption over the public world wide web.
 When detected, an HTTP resource is created and is unique based on host, port and URL used.  Since this action class is one of HTTP, its stands to reason that action classes are also of the same type and therefore are comprised of methods allowed by the protocol.  
 For example, here is a captured HTTP resource, that is communicating to google.com
