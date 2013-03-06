@@ -103,11 +103,20 @@ In addition to the resource identifiers, each resource types (com.crash4j.engine
 <tr><td>Server</td><td>No</td><td>IO, HTTP</td></tr>
 <tr><td>Protocol</td><td>No</td><td>IO, HTTP</td></tr>
 </table>
- <i>For example:</i>
-net:port=6553,host=localhost,secure=false,server=false,protocol=tcp
-Describes a network resource in the environment of you runtime that is connected to remote port 6553 at localhost, its not secure and is communicating using tcp.
-net:port=6553,host=0.0.0.0,secure=false,server=true,protocol=tcp
-Describes a server socket that is connected to the remote port 6553 on local interface 0.0.0.0, its not secure and is using tcp.
+ <i>For example:</i><p/>
+
+ <table>
+ <tr><td>net:port=6553,host=localhost,secure=false,server=false,protocol=tcp</td></tr> 
+ <tr><td>Describes a network resource in the environment of you runtime that is connected to remote port 6553 at localhost, its not secure and is communicating using tcp.</td></tr>
+
+ <tr><td>net:port=6553,host=0.0.0.0,secure=false,server=true,protocol=tcp</td></tr> 
+ <tr><td>Describes a server socket that is connected to the remote port 6553 on local interface 0.0.0.0, its not secure and is using tcp.</td></tr>
+ 
+</table>
+
+
+
+
 As was described before, every resource can perform a set of actions.  As the network resource belongs to the IO action class and to NETWORK action class it can perform all of the IO actions. See Appendix A.
 
  
