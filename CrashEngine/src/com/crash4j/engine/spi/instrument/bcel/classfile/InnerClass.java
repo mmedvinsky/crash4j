@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,7 +17,7 @@
  */
 package com.crash4j.engine.spi.instrument.bcel.classfile;
 
-import java.io.DataInputStream;
+import java.io.DataInput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -28,12 +29,13 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * indices of the inner and outer classes, the name and the attributes
  * of the inner class.
  *
- * @version $Id: InnerClass.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: InnerClass.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see InnerClasses
  */
 public final class InnerClass implements Cloneable, Node, Serializable {
 
+    private static final long serialVersionUID = -7200195918166127614L;
     private int inner_class_index;
     private int outer_class_index;
     private int inner_name_index;
@@ -54,7 +56,7 @@ public final class InnerClass implements Cloneable, Node, Serializable {
      * @param file Input stream
      * @throws IOException
      */
-    InnerClass(DataInputStream file) throws IOException {
+    InnerClass(DataInput file) throws IOException {
         this(file.readUnsignedShort(), file.readUnsignedShort(), file.readUnsignedShort(), file
                 .readUnsignedShort());
     }
@@ -168,6 +170,7 @@ public final class InnerClass implements Cloneable, Node, Serializable {
     /**
      * @return String representation.
      */
+    @Override
     public final String toString() {
         return "InnerClass(" + inner_class_index + ", " + outer_class_index + ", "
                 + inner_name_index + ", " + inner_access_flags + ")";

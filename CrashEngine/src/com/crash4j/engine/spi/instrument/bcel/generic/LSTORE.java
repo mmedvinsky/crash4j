@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,14 +21,17 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  * LSTORE - Store long into local variable
  * <PRE>Stack: ..., value.word1, value.word2 -&gt; ... </PRE>
  *
- * @version $Id: LSTORE.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: LSTORE.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class LSTORE extends StoreInstruction {
 
+    private static final long serialVersionUID = 1309214714647416201L;
+
+
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     LSTORE() {
         super(com.crash4j.engine.spi.instrument.bcel.Constants.LSTORE, com.crash4j.engine.spi.instrument.bcel.Constants.LSTORE_0);
@@ -47,6 +51,7 @@ public class LSTORE extends StoreInstruction {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         super.accept(v);
         v.visitLSTORE(this);

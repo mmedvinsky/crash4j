@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -32,18 +33,19 @@ import com.crash4j.engine.spi.instrument.bcel.util.ByteSequence;
  * @see LDC
  * @see INVOKEVIRTUAL
  *
- * @version $Id: CPInstruction.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: CPInstruction.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public abstract class CPInstruction extends Instruction implements TypedInstruction,
         IndexedInstruction {
 
+    private static final long serialVersionUID = 2968547649792233082L;
     protected int index; // index to constant pool
 
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     CPInstruction() {
     }
@@ -62,6 +64,7 @@ public abstract class CPInstruction extends Instruction implements TypedInstruct
      * Dump instruction as byte code to stream out.
      * @param out Output stream
      */
+    @Override
     public void dump( DataOutputStream out ) throws IOException {
         out.writeByte(opcode);
         out.writeShort(index);
@@ -77,6 +80,7 @@ public abstract class CPInstruction extends Instruction implements TypedInstruct
      * @param verbose long/short format switch
      * @return mnemonic for instruction
      */
+    @Override
     public String toString( boolean verbose ) {
         return super.toString(verbose) + " " + index;
     }
@@ -85,6 +89,7 @@ public abstract class CPInstruction extends Instruction implements TypedInstruct
     /**
      * @return mnemonic for instruction with symbolic references resolved
      */
+    @Override
     public String toString( ConstantPool cp ) {
         Constant c = cp.getConstant(index);
         String str = cp.constantToString(c);
@@ -100,6 +105,7 @@ public abstract class CPInstruction extends Instruction implements TypedInstruct
      * @param bytes input stream
      * @param wide wide prefix?
      */
+    @Override
     protected void initFromFile( ByteSequence bytes, boolean wide ) throws IOException {
         setIndex(bytes.readUnsignedShort());
         length = 3;

@@ -32,12 +32,13 @@ public class TestJDBC
 	public static void setUpBeforeClass() throws Exception 
 	{
 		DriverManager.registerDriver(new Driver());
-	    conn = DriverManager.getConnection("jdbc:mysql://localhost/plastiq_trans", "puser", "PLTN123");
+	    conn = DriverManager.getConnection("jdbc:mysql://localhost/plastiq_trans", "puser", "OR4+0ry");
 	}
 
 	@Test
     @CrashPlan
     (
+    		/*
         iterations=40, 
         concurrency=1,
         simulations= 
@@ -48,6 +49,7 @@ public class TestJDBC
             		//@Behavior ( id="com.crash4j.behaviors.sql.close" )
                     } )
         }
+    */
     )
 	public void testSimpleStatement() 
 	{

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,10 +18,11 @@
 package com.crash4j.engine.spi.instrument.bcel.generic;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.crash4j.engine.spi.instrument.bcel.Constants;
+import com.crash4j.engine.spi.instrument.bcel.classfile.AnnotationEntry;
+import com.crash4j.engine.spi.instrument.bcel.classfile.Annotations;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Attribute;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Constant;
 import com.crash4j.engine.spi.instrument.bcel.classfile.ConstantObject;
@@ -35,12 +37,13 @@ import com.crash4j.engine.spi.instrument.bcel.util.BCELComparator;
  * one can do is to add a constant value attribute to a field (which must of
  * course be compatible with to the declared type).
  *
- * @version $Id: FieldGen.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: FieldGen.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see Field
  */
 public class FieldGen extends FieldGenOrMethodGen {
 
+    private static final long serialVersionUID = -6050448955000008261L;
     private Object value = null;
     private static BCELComparator _cmp = new BCELComparator() {
 
@@ -86,11 +89,17 @@ public class FieldGen extends FieldGenOrMethodGen {
     public FieldGen(Field field, ConstantPoolGen cp) {
         this(field.getAccessFlags(), Type.getType(field.getSignature()), field.getName(), cp);
         Attribute[] attrs = field.getAttributes();
-        for (int i = 0; i < attrs.length; i++) {
-            if (attrs[i] instanceof ConstantValue) {
-                setValue(((ConstantValue) attrs[i]).getConstantValueIndex());
+        for (Attribute attr : attrs) {
+            if (attr instanceof ConstantValue) {
+                setValue(((ConstantValue) attr).getConstantValueIndex());
+            } else if (attr instanceof Annotations) {
+            	Annotations runtimeAnnotations = (Annotations)attr;
+        		AnnotationEntry[] annotationEntries = runtimeAnnotations.getAnnotationEntries();
+        		for (AnnotationEntry element : annotationEntries) {
+        			addAnnotationEntry(new AnnotationEntryGen(element,cp,false));
+        		}
             } else {
-                addAttribute(attrs[i]);
+                addAttribute(attr);
             }
         }
     }
@@ -108,7 +117,7 @@ public class FieldGen extends FieldGenOrMethodGen {
      * by the JVM automatically.
      */
     public void setInitValue( String str ) {
-        checkType(new ObjectType("java.lang.String"));
+        checkType(  ObjectType.getInstance("java.lang.String"));
         if (str != null) {
             value = str;
         }
@@ -126,7 +135,7 @@ public class FieldGen extends FieldGenOrMethodGen {
     public void setInitValue( int i ) {
         checkType(Type.INT);
         if (i != 0) {
-            value = new Integer(i);
+            value = Integer.valueOf(i);
         }
     }
 
@@ -134,7 +143,7 @@ public class FieldGen extends FieldGenOrMethodGen {
     public void setInitValue( short s ) {
         checkType(Type.SHORT);
         if (s != 0) {
-            value = new Integer(s);
+            value = Integer.valueOf(s);
         }
     }
 
@@ -142,7 +151,7 @@ public class FieldGen extends FieldGenOrMethodGen {
     public void setInitValue( char c ) {
         checkType(Type.CHAR);
         if (c != 0) {
-            value = new Integer(c);
+            value = Integer.valueOf(c);
         }
     }
 
@@ -150,7 +159,7 @@ public class FieldGen extends FieldGenOrMethodGen {
     public void setInitValue( byte b ) {
         checkType(Type.BYTE);
         if (b != 0) {
-            value = new Integer(b);
+            value = Integer.valueOf(b);
         }
     }
 
@@ -158,7 +167,7 @@ public class FieldGen extends FieldGenOrMethodGen {
     public void setInitValue( boolean b ) {
         checkType(Type.BOOLEAN);
         if (b) {
-            value = new Integer(1);
+            value = Integer.valueOf(1);
         }
     }
 
@@ -212,9 +221,17 @@ public class FieldGen extends FieldGenOrMethodGen {
             addAttribute(new ConstantValue(cp.addUtf8("ConstantValue"), 2, index, cp
                     .getConstantPool()));
         }
+        addAnnotationsAsAttribute(cp);
         return new Field(access_flags, name_index, signature_index, getAttributes(), cp
                 .getConstantPool());
     }
+    
+    private void addAnnotationsAsAttribute(ConstantPoolGen cp) {
+      	Attribute[] attrs = Utility.getAnnotationAttributes(cp,annotation_vec);
+        for (Attribute attr : attrs) {
+    		addAttribute(attr);
+    	}
+      }
 
 
     private int addConstant() {
@@ -239,18 +256,19 @@ public class FieldGen extends FieldGenOrMethodGen {
     }
 
 
+    @Override
     public String getSignature() {
         return type.getSignature();
     }
 
-    private List observers;
+    private List<FieldObserver> observers;
 
 
     /** Add observer for this object.
      */
     public void addObserver( FieldObserver o ) {
         if (observers == null) {
-            observers = new ArrayList();
+            observers = new ArrayList<FieldObserver>();
         }
         observers.add(o);
     }
@@ -271,8 +289,8 @@ public class FieldGen extends FieldGenOrMethodGen {
      */
     public void update() {
         if (observers != null) {
-            for (Iterator e = observers.iterator(); e.hasNext();) {
-                ((FieldObserver) e.next()).notify(this);
+            for (FieldObserver observer : observers ) {
+                observer.notify(this);
             }
         }
     }
@@ -293,13 +311,14 @@ public class FieldGen extends FieldGenOrMethodGen {
      *
      * @return String representation of field
      */
+    @Override
     public final String toString() {
         String name, signature, access; // Short cuts to constant pool
         access = Utility.accessToString(access_flags);
         access = access.equals("") ? "" : (access + " ");
         signature = type.toString();
         name = getName();
-        StringBuffer buf = new StringBuffer(32);
+        StringBuilder buf = new StringBuilder(32);
         buf.append(access).append(signature).append(" ").append(name);
         String value = getInitValue();
         if (value != null) {
@@ -341,6 +360,7 @@ public class FieldGen extends FieldGenOrMethodGen {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals( Object obj ) {
         return _cmp.equals(this, obj);
     }
@@ -352,6 +372,7 @@ public class FieldGen extends FieldGenOrMethodGen {
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return _cmp.hashCode(this);
     }

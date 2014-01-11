@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -34,8 +35,8 @@ import com.crash4j.engine.spi.instrument.bcel.generic.*;
 import com.crash4j.engine.spi.instrument.bcel.verifier.VerificationResult;
 import com.crash4j.engine.spi.instrument.bcel.verifier.Verifier;
 import com.crash4j.engine.spi.instrument.bcel.verifier.VerifierFactory;
-import com.crash4j.engine.spi.instrument.bcel.verifier.exc.AssertionViolatedException;
-import com.crash4j.engine.spi.instrument.bcel.verifier.exc.StructuralCodeConstraintException;
+import com.crash4j.engine.spi.instrument.verifier.exc.AssertionViolatedException;
+import com.crash4j.engine.spi.instrument.verifier.exc.StructuralCodeConstraintException;
 
 
 /**
@@ -46,14 +47,14 @@ import com.crash4j.engine.spi.instrument.bcel.verifier.exc.StructuralCodeConstra
  * TODO: Currently, the JVM's behaviour concerning monitors (MONITORENTER,
  * MONITOREXIT) is not modeled in JustIce.
  *
- * @version $Id: InstConstraintVisitor.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: InstConstraintVisitor.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author Enver Haase
- * @see com.crash4j.engine.spi.instrument.bcel.verifier.exc.StructuralCodeConstraintException
- * @see com.crash4j.engine.spi.instrument.bcel.verifier.exc.LinkingConstraintException
+ * @see com.crash4j.engine.spi.instrument.verifier.exc.StructuralCodeConstraintException
+ * @see com.crash4j.engine.spi.instrument.verifier.exc.LinkingConstraintException
  */
-public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.engine.spi.instrument.bcel.generic.Visitor{
+public class InstConstraintVisitor extends EmptyVisitor{
 
-	private static ObjectType GENERIC_ARRAY = new ObjectType("com.crash4j.engine.spi.instrument.bcel.verifier.structurals.GenericArray");
+	private static final ObjectType GENERIC_ARRAY = ObjectType.getInstance("org.apache.bcel.verifier.structurals.GenericArray");
 
 	/**
 	 * The constructor. Constructs a new instance of this class.
@@ -105,11 +106,11 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
    * This method is called by the visitXXX() to notify the acceptor of this InstConstraintVisitor
    * that a constraint violation has occured. This is done by throwing an instance of a
    * StructuralCodeConstraintException.
-   * @throws com.crash4j.engine.spi.instrument.bcel.verifier.exc.StructuralCodeConstraintException always.
+   * @throws com.crash4j.engine.spi.instrument.verifier.exc.StructuralCodeConstraintException always.
    */
 	private void constraintViolated(Instruction violator, String description){
 		String fq_classname = violator.getClass().getName();
-		throw new StructuralCodeConstraintException("InstructionImpl "+ fq_classname.substring(fq_classname.lastIndexOf('.')+1) +" constraint violated: " + description);
+		throw new StructuralCodeConstraintException("Instruction "+ fq_classname.substring(fq_classname.lastIndexOf('.')+1) +" constraint violated: " + description);
 	}
 
 	/**
@@ -144,7 +145,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 
 	/**
 	 * Assures index is of type INT.
-	 * @throws com.crash4j.engine.spi.instrument.bcel.verifier.exc.StructuralCodeConstraintException if the above constraint is not satisfied.
+	 * @throws com.crash4j.engine.spi.instrument.verifier.exc.StructuralCodeConstraintException if the above constraint is not satisfied.
 	 */
 	private void indexOfInt(Instruction o, Type index){
 		if (! index.equals(Type.INT)) {
@@ -156,7 +157,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	 * Assures the ReferenceType r is initialized (or Type.NULL).
 	 * Formally, this means (!(r instanceof UninitializedObjectType)), because
 	 * there are no uninitialized array types.
-	 * @throws com.crash4j.engine.spi.instrument.bcel.verifier.exc.StructuralCodeConstraintException if the above constraint is not satisfied.
+	 * @throws com.crash4j.engine.spi.instrument.verifier.exc.StructuralCodeConstraintException if the above constraint is not satisfied.
 	 */
 	private void referenceTypeIsInitialized(Instruction o, ReferenceType r){
 		if (r instanceof UninitializedObjectType){
@@ -174,7 +175,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Assures arrayref is of ArrayType or NULL;
 	 * returns true if and only if arrayref is non-NULL.
-	 * @throws com.crash4j.engine.spi.instrument.bcel.verifier.exc.StructuralCodeConstraintException if the above constraint is violated.
+	 * @throws com.crash4j.engine.spi.instrument.verifier.exc.StructuralCodeConstraintException if the above constraint is violated.
  	 */
 	private boolean arrayrefOfArrayType(Instruction o, Type arrayref){
 		if (! ((arrayref instanceof ArrayType) || arrayref.equals(Type.NULL)) ) {
@@ -204,12 +205,12 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	private void _visitStackAccessor(Instruction o){
 		int consume = o.consumeStack(cpg); // Stack values are always consumed first; then produced.
 		if (consume > stack().slotsUsed()){
-			constraintViolated((Instruction) o, "Cannot consume "+consume+" stack slots: only "+stack().slotsUsed()+" slot(s) left on stack!\nStack:\n"+stack());
+			constraintViolated(o, "Cannot consume "+consume+" stack slots: only "+stack().slotsUsed()+" slot(s) left on stack!\nStack:\n"+stack());
 		}
 
-		int produce = o.produceStack(cpg) - ((Instruction) o).consumeStack(cpg); // Stack values are always consumed first; then produced.
+		int produce = o.produceStack(cpg) - o.consumeStack(cpg); // Stack values are always consumed first; then produced.
 		if ( produce + stack().slotsUsed() > stack().maxStack() ){
-			constraintViolated((Instruction) o, "Cannot produce "+produce+" stack slots: only "+(stack().maxStack()-stack().slotsUsed())+" free stack slot(s) left.\nStack:\n"+stack());
+			constraintViolated(o, "Cannot produce "+produce+" stack slots: only "+(stack().maxStack()-stack().slotsUsed())+" free stack slot(s) left.\nStack:\n"+stack());
 		}
 	}
 
@@ -223,7 +224,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	 * Assures the generic preconditions of a LoadClass instance.
 	 * The referenced class is loaded and pass2-verified.
 	 */
-	public void visitLoadClass(LoadClass o){
+	@Override
+    public void visitLoadClass(LoadClass o){
 		ObjectType t = o.getLoadClassType(cpg);
 		if (t != null){// null means "no class is loaded"
 			Verifier v = VerifierFactory.getVerifier(t.getClassName());
@@ -237,14 +239,16 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the general preconditions of a StackConsumer instance.
 	 */
-	public void visitStackConsumer(StackConsumer o){
+	@Override
+    public void visitStackConsumer(StackConsumer o){
 		_visitStackAccessor((Instruction) o);
 	}
 	
 	/**
 	 * Ensures the general preconditions of a StackProducer instance.
 	 */
-	public void visitStackProducer(StackProducer o){
+	@Override
+    public void visitStackProducer(StackProducer o){
 		_visitStackAccessor((Instruction) o);
 	}
 
@@ -257,7 +261,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the general preconditions of a CPInstruction instance.
 	 */
-	public void visitCPInstruction(CPInstruction o){
+	@Override
+    public void visitCPInstruction(CPInstruction o){
 		int idx = o.getIndex();
 		if ((idx < 0) || (idx >= cpg.getSize())){
 			throw new AssertionViolatedException("Huh?! Constant pool index of instruction '"+o+"' illegal? Pass 3a should have checked this!");
@@ -267,7 +272,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the general preconditions of a FieldInstruction instance.
 	 */
-	 public void visitFieldInstruction(FieldInstruction o){
+	 @Override
+    public void visitFieldInstruction(FieldInstruction o){
 	 	// visitLoadClass(o) has been called before: Every FieldOrMethod
 	 	// implements LoadClass.
 	 	// visitCPInstruction(o) has been called before.
@@ -283,7 +289,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 				Verifier v = VerifierFactory.getVerifier( name );
 				VerificationResult vr = v.doPass2();
 				if (vr.getStatus() != VerificationResult.VERIFIED_OK){
-					constraintViolated((Instruction) o, "Class '"+name+"' is referenced, but cannot be loaded and resolved: '"+vr+"'.");
+					constraintViolated(o, "Class '"+name+"' is referenced, but cannot be loaded and resolved: '"+vr+"'.");
 				}
 			}
 	 }
@@ -291,7 +297,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the general preconditions of an InvokeInstruction instance.
 	 */
-	 public void visitInvokeInstruction(InvokeInstruction o){
+	 @Override
+    public void visitInvokeInstruction(InvokeInstruction o){
 	 	// visitLoadClass(o) has been called before: Every FieldOrMethod
 	 	// implements LoadClass.
 	 	// visitCPInstruction(o) has been called before.
@@ -301,7 +308,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the general preconditions of a StackInstruction instance.
 	 */
-	public void visitStackInstruction(StackInstruction o){
+	@Override
+    public void visitStackInstruction(StackInstruction o){
 		_visitStackAccessor(o);
 	}
 
@@ -309,7 +317,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	 * Assures the generic preconditions of a LocalVariableInstruction instance.
 	 * That is, the index of the local variable must be valid.
 	 */
-	public void visitLocalVariableInstruction(LocalVariableInstruction o){
+	@Override
+    public void visitLocalVariableInstruction(LocalVariableInstruction o){
 		if (locals().maxLocals() <= (o.getType(cpg).getSize()==1? o.getIndex() : o.getIndex()+1) ){
 			constraintViolated(o, "The 'index' is not a valid index into the local variable array.");
 		}
@@ -318,7 +327,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Assures the generic preconditions of a LoadInstruction instance.
 	 */
-	public void visitLoadInstruction(LoadInstruction o){
+	@Override
+    public void visitLoadInstruction(LoadInstruction o){
 		//visitLocalVariableInstruction(o) is called before, because it is more generic.
 
 		// LOAD instructions must not read Type.UNKNOWN
@@ -338,12 +348,12 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 		// LOAD instructions must read the correct type.
 		if (!(o instanceof ALOAD)){
 			if (locals().get(o.getIndex()) != o.getType(cpg) ){
-				constraintViolated(o, "Local Variable type and LOADing InstructionImpl type mismatch: Local Variable: '"+locals().get(o.getIndex())+"'; InstructionImpl type: '"+o.getType(cpg)+"'.");
+				constraintViolated(o, "Local Variable type and LOADing Instruction type mismatch: Local Variable: '"+locals().get(o.getIndex())+"'; Instruction type: '"+o.getType(cpg)+"'.");
 			}
 		}
 		else{ // we deal with an ALOAD
 			if (!(locals().get(o.getIndex()) instanceof ReferenceType)){
-				constraintViolated(o, "Local Variable type and LOADing InstructionImpl type mismatch: Local Variable: '"+locals().get(o.getIndex())+"'; InstructionImpl expects a ReferenceType.");
+				constraintViolated(o, "Local Variable type and LOADing Instruction type mismatch: Local Variable: '"+locals().get(o.getIndex())+"'; Instruction expects a ReferenceType.");
 			}
 			// ALOAD __IS ALLOWED__ to put uninitialized objects onto the stack!
 			//referenceTypeIsInitialized(o, (ReferenceType) (locals().get(o.getIndex())));
@@ -358,7 +368,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Assures the generic preconditions of a StoreInstruction instance.
 	 */
-	public void visitStoreInstruction(StoreInstruction o){
+	@Override
+    public void visitStoreInstruction(StoreInstruction o){
 		//visitLocalVariableInstruction(o) is called before, because it is more generic.
 
 		if (stack().isEmpty()){ // Don't bother about 1 or 2 stack slots used. This check is implicitely done below while type checking.
@@ -367,13 +378,13 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 
 		if ( (!(o instanceof ASTORE)) ){
 			if (! (stack().peek() == o.getType(cpg)) ){// the other xSTORE types are singletons in BCEL.
-				constraintViolated(o, "Stack top type and STOREing InstructionImpl type mismatch: Stack top: '"+stack().peek()+"'; InstructionImpl type: '"+o.getType(cpg)+"'.");
+				constraintViolated(o, "Stack top type and STOREing Instruction type mismatch: Stack top: '"+stack().peek()+"'; Instruction type: '"+o.getType(cpg)+"'.");
 			}
 		}
 		else{ // we deal with ASTORE
 			Type stacktop = stack().peek();
 			if ( (!(stacktop instanceof ReferenceType)) && (!(stacktop instanceof ReturnaddressType)) ){
-				constraintViolated(o, "Stack top type and STOREing InstructionImpl type mismatch: Stack top: '"+stack().peek()+"'; InstructionImpl expects a ReferenceType or a ReturnadressType.");
+				constraintViolated(o, "Stack top type and STOREing Instruction type mismatch: Stack top: '"+stack().peek()+"'; Instruction expects a ReferenceType or a ReturnadressType.");
 			}
 			//if (stacktop instanceof ReferenceType){
 			//	referenceTypeIsInitialized(o, (ReferenceType) stacktop);
@@ -384,7 +395,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Assures the generic preconditions of a ReturnInstruction instance.
 	 */
-	public void visitReturnInstruction(ReturnInstruction o){
+	@Override
+    public void visitReturnInstruction(ReturnInstruction o){
 		Type method_type = mg.getType();
 		if (method_type == Type.BOOLEAN ||
 			method_type == Type.BYTE ||
@@ -432,7 +444,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitAALOAD(AALOAD o){
+	@Override
+    public void visitAALOAD(AALOAD o){
 		Type arrayref = stack().peek(1);
 		Type index    = stack().peek(0);
 		
@@ -448,7 +461,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitAASTORE(AASTORE o){
+	@Override
+    public void visitAASTORE(AASTORE o){
 	    try {
 		Type arrayref = stack().peek(2);
 		Type index    = stack().peek(1);
@@ -466,27 +480,29 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 			if (! (((ArrayType) arrayref).getElementType() instanceof ReferenceType)){
 				constraintViolated(o, "The 'arrayref' does not refer to an array with elements of a ReferenceType but to an array of "+((ArrayType) arrayref).getElementType()+".");
 			}
-			if (! ((ReferenceType)value).isAssignmentCompatibleWith((ReferenceType) ((ArrayType) arrayref).getElementType())){
+			if (! ((ReferenceType)value).isAssignmentCompatibleWith(((ArrayType) arrayref).getElementType())){
 				constraintViolated(o, "The type of 'value' ('"+value+"') is not assignment compatible to the components of the array 'arrayref' refers to. ('"+((ArrayType) arrayref).getElementType()+"')");
 			}
 		}
 	    } catch (ClassNotFoundException e) {
 		// FIXME: maybe not the best way to handle this
-		throw new AssertionViolatedException("Missing class: " + e.toString());
+		throw new AssertionViolatedException("Missing class: " + e, e);
 	    }
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitACONST_NULL(ACONST_NULL o){
+	@Override
+    public void visitACONST_NULL(ACONST_NULL o){
 		// Nothing needs to be done here.
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitALOAD(ALOAD o){
+	@Override
+    public void visitALOAD(ALOAD o){
 		//visitLoadInstruction(LoadInstruction) is called before.
 		
 		// Nothing else needs to be done here.
@@ -495,7 +511,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitANEWARRAY(ANEWARRAY o){
+	@Override
+    public void visitANEWARRAY(ANEWARRAY o){
 		if (!stack().peek().equals(Type.INT)) {
             constraintViolated(o, "The 'count' at the stack top is not of type '"+Type.INT+"' but of type '"+stack().peek()+"'.");
 		// The runtime constant pool item at that index must be a symbolic reference to a class,
@@ -506,7 +523,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitARETURN(ARETURN o){
+	@Override
+    public void visitARETURN(ARETURN o){
 		if (! (stack().peek() instanceof ReferenceType) ){
 			constraintViolated(o, "The 'objectref' at the stack top is not of a ReferenceType but of type '"+stack().peek()+"'.");
 		}
@@ -524,7 +542,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitARRAYLENGTH(ARRAYLENGTH o){
+	@Override
+    public void visitARRAYLENGTH(ARRAYLENGTH o){
 		Type arrayref = stack().peek(0);
 		arrayrefOfArrayType(o, arrayref);
 	}
@@ -532,7 +551,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitASTORE(ASTORE o){
+	@Override
+    public void visitASTORE(ASTORE o){
 		if (! ( (stack().peek() instanceof ReferenceType) || (stack().peek() instanceof ReturnaddressType) ) ){
 			constraintViolated(o, "The 'objectref' is not of a ReferenceType or of ReturnaddressType but of "+stack().peek()+".");
 		}
@@ -544,7 +564,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitATHROW(ATHROW o){
+	@Override
+    public void visitATHROW(ATHROW o){
 	    try {
 		// It's stated that 'objectref' must be of a ReferenceType --- but since Throwable is
 		// not derived from an ArrayType, it follows that 'objectref' must be of an ObjectType or Type.NULL.
@@ -564,14 +585,15 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 		}
 	    } catch (ClassNotFoundException e) {
 		// FIXME: maybe not the best way to handle this
-		throw new AssertionViolatedException("Missing class: " + e.toString());
+		throw new AssertionViolatedException("Missing class: " + e, e);
 	    }
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitBALOAD(BALOAD o){
+	@Override
+    public void visitBALOAD(BALOAD o){
 		Type arrayref = stack().peek(1);
 		Type index    = stack().peek(0);
 		indexOfInt(o, index);
@@ -586,7 +608,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitBASTORE(BASTORE o){
+	@Override
+    public void visitBASTORE(BASTORE o){
 		Type arrayref = stack().peek(2);
 		Type index    = stack().peek(1);
 		Type value    = stack().peek(0);
@@ -604,21 +627,24 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitBIPUSH(BIPUSH o){
+	@Override
+    public void visitBIPUSH(BIPUSH o){
 		// Nothing to do...
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitBREAKPOINT(BREAKPOINT o){
+	@Override
+    public void visitBREAKPOINT(BREAKPOINT o){
 		throw new AssertionViolatedException("In this JustIce verification pass there should not occur an illegal instruction such as BREAKPOINT.");
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitCALOAD(CALOAD o){
+	@Override
+    public void visitCALOAD(CALOAD o){
 		Type arrayref = stack().peek(1);
 		Type index = stack().peek(0);
 		
@@ -629,7 +655,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitCASTORE(CASTORE o){
+	@Override
+    public void visitCASTORE(CASTORE o){
 		Type arrayref = stack().peek(2);
 		Type index = stack().peek(1);
 		Type value = stack().peek(0);
@@ -646,7 +673,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitCHECKCAST(CHECKCAST o){
+	@Override
+    public void visitCHECKCAST(CHECKCAST o){
 		// The objectref must be of type reference.
 		Type objectref = stack().peek(0);
 		if (!(objectref instanceof ReferenceType)){
@@ -656,7 +684,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 		//	referenceTypeIsInitialized(o, (ReferenceType) objectref);
 		//}
 		// The unsigned indexbyte1 and indexbyte2 are used to construct an index into the runtime constant pool of the
-		// current class (§3.6), where the value of the index is (indexbyte1 << 8) | indexbyte2. The runtime constant
+		// current class (ï¿½3.6), where the value of the index is (indexbyte1 << 8) | indexbyte2. The runtime constant
 		// pool item at the index must be a symbolic reference to a class, array, or interface type.
 		Constant c = cpg.getConstant(o.getIndex());
 		if (! (c instanceof ConstantClass)){
@@ -667,7 +695,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitD2F(D2F o){
+	@Override
+    public void visitD2F(D2F o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -676,7 +705,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitD2I(D2I o){
+	@Override
+    public void visitD2I(D2I o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -685,7 +715,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitD2L(D2L o){
+	@Override
+    public void visitD2L(D2L o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -694,7 +725,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDADD(DADD o){
+	@Override
+    public void visitDADD(DADD o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -706,7 +738,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDALOAD(DALOAD o){
+	@Override
+    public void visitDALOAD(DALOAD o){
 		indexOfInt(o, stack().peek());
 		if (stack().peek(1) == Type.NULL){
 			return;
@@ -723,7 +756,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDASTORE(DASTORE o){
+	@Override
+    public void visitDASTORE(DASTORE o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -743,7 +777,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDCMPG(DCMPG o){
+	@Override
+    public void visitDCMPG(DCMPG o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -755,7 +790,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDCMPL(DCMPL o){
+	@Override
+    public void visitDCMPL(DCMPL o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -767,14 +803,16 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDCONST(DCONST o){
+	@Override
+    public void visitDCONST(DCONST o){
 		// There's nothing to be done here.
 	}
 	
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDDIV(DDIV o){
+	@Override
+    public void visitDDIV(DDIV o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -786,7 +824,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDLOAD(DLOAD o){
+	@Override
+    public void visitDLOAD(DLOAD o){
 		//visitLoadInstruction(LoadInstruction) is called before.
 		
 		// Nothing else needs to be done here.
@@ -795,7 +834,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDMUL(DMUL o){
+	@Override
+    public void visitDMUL(DMUL o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -807,7 +847,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDNEG(DNEG o){
+	@Override
+    public void visitDNEG(DNEG o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -816,7 +857,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDREM(DREM o){
+	@Override
+    public void visitDREM(DREM o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -828,7 +870,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDRETURN(DRETURN o){
+	@Override
+    public void visitDRETURN(DRETURN o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -837,7 +880,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDSTORE(DSTORE o){
+	@Override
+    public void visitDSTORE(DSTORE o){
 		//visitStoreInstruction(StoreInstruction) is called before.
 		
 		// Nothing else needs to be done here.
@@ -846,7 +890,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDSUB(DSUB o){
+	@Override
+    public void visitDSUB(DSUB o){
 		if (stack().peek() != Type.DOUBLE){
 			constraintViolated(o, "The value at the stack top is not of type 'double', but of type '"+stack().peek()+"'.");
 		}
@@ -858,7 +903,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDUP(DUP o){
+	@Override
+    public void visitDUP(DUP o){
 		if (stack().peek().getSize() != 1){
 			constraintViolated(o, "Won't DUP type on stack top '"+stack().peek()+"' because it must occupy exactly one slot, not '"+stack().peek().getSize()+"'.");
 		}
@@ -867,7 +913,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDUP_X1(DUP_X1 o){
+	@Override
+    public void visitDUP_X1(DUP_X1 o){
 		if (stack().peek().getSize() != 1){
 			constraintViolated(o, "Type on stack top '"+stack().peek()+"' should occupy exactly one slot, not '"+stack().peek().getSize()+"'.");
 		}
@@ -879,7 +926,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDUP_X2(DUP_X2 o){
+	@Override
+    public void visitDUP_X2(DUP_X2 o){
 		if (stack().peek().getSize() != 1){
 			constraintViolated(o, "Stack top type must be of size 1, but is '"+stack().peek()+"' of size '"+stack().peek().getSize()+"'.");
 		}
@@ -896,7 +944,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDUP2(DUP2 o){
+	@Override
+    public void visitDUP2(DUP2 o){
 		if (stack().peek().getSize() == 2){
 			return; // Form 2, okay.
 		}
@@ -910,7 +959,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDUP2_X1(DUP2_X1 o){
+	@Override
+    public void visitDUP2_X1(DUP2_X1 o){
 		if (stack().peek().getSize() == 2){
 			if (stack().peek(1).getSize() != 1){
 				constraintViolated(o, "If stack top's size is 2, then stack next-to-top's size must be 1. But it is '"+stack().peek(1)+"' of size '"+stack().peek(1).getSize()+"'.");
@@ -932,7 +982,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitDUP2_X2(DUP2_X2 o){
+	@Override
+    public void visitDUP2_X2(DUP2_X2 o){
 
 		if (stack().peek(0).getSize() == 2){
 		 	if (stack().peek(1).getSize() == 2){
@@ -965,7 +1016,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitF2D(F2D o){
+	@Override
+    public void visitF2D(F2D o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -974,7 +1026,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitF2I(F2I o){
+	@Override
+    public void visitF2I(F2I o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -983,7 +1036,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitF2L(F2L o){
+	@Override
+    public void visitF2L(F2L o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -992,7 +1046,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFADD(FADD o){
+	@Override
+    public void visitFADD(FADD o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -1004,7 +1059,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFALOAD(FALOAD o){
+	@Override
+    public void visitFALOAD(FALOAD o){
 		indexOfInt(o, stack().peek());
 		if (stack().peek(1) == Type.NULL){
 			return;
@@ -1021,7 +1077,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFASTORE(FASTORE o){
+	@Override
+    public void visitFASTORE(FASTORE o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -1041,7 +1098,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFCMPG(FCMPG o){
+	@Override
+    public void visitFCMPG(FCMPG o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -1053,7 +1111,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFCMPL(FCMPL o){
+	@Override
+    public void visitFCMPL(FCMPL o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -1065,14 +1124,16 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFCONST(FCONST o){
+	@Override
+    public void visitFCONST(FCONST o){
 		// nothing to do here.
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFDIV(FDIV o){
+	@Override
+    public void visitFDIV(FDIV o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -1084,7 +1145,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFLOAD(FLOAD o){
+	@Override
+    public void visitFLOAD(FLOAD o){
 		//visitLoadInstruction(LoadInstruction) is called before.
 		
 		// Nothing else needs to be done here.
@@ -1093,7 +1155,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFMUL(FMUL o){
+	@Override
+    public void visitFMUL(FMUL o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -1105,7 +1168,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFNEG(FNEG o){
+	@Override
+    public void visitFNEG(FNEG o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -1114,7 +1178,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFREM(FREM o){
+	@Override
+    public void visitFREM(FREM o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -1126,7 +1191,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFRETURN(FRETURN o){
+	@Override
+    public void visitFRETURN(FRETURN o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -1135,7 +1201,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFSTORE(FSTORE o){
+	@Override
+    public void visitFSTORE(FSTORE o){
 		//visitStoreInstruction(StoreInstruction) is called before.
 		
 		// Nothing else needs to be done here.
@@ -1144,7 +1211,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitFSUB(FSUB o){
+	@Override
+    public void visitFSUB(FSUB o){
 		if (stack().peek() != Type.FLOAT){
 			constraintViolated(o, "The value at the stack top is not of type 'float', but of type '"+stack().peek()+"'.");
 		}
@@ -1156,7 +1224,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitGETFIELD(GETFIELD o){
+	@Override
+    public void visitGETFIELD(GETFIELD o){
 	    try {
 		Type objectref = stack().peek();
 		if (! ( (objectref instanceof ObjectType) || (objectref == Type.NULL) ) ){
@@ -1168,15 +1237,15 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 		JavaClass jc = Repository.lookupClass(o.getClassType(cpg).getClassName());
 		Field[] fields = jc.getFields();
 		Field f = null;
-		for (int i=0; i<fields.length; i++){
-			if (fields[i].getName().equals(field_name)){
-				  Type f_type = Type.getType(fields[i].getSignature());
+		for (Field field : fields) {
+			if (field.getName().equals(field_name)){
+				  Type f_type = Type.getType(field.getSignature());
 				  Type o_type = o.getType(cpg);
 					/* TODO: Check if assignment compatibility is sufficient.
 				   * What does Sun do?
 				   */
 				  if (f_type.equals(o_type)){
-						f = fields[i];
+						f = field;
 						break;
 					}
 			}
@@ -1208,7 +1277,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 
 		if (f.isProtected()){
 			ObjectType classtype = o.getClassType(cpg);
-			ObjectType curr = new ObjectType(mg.getClassName());
+			ObjectType curr = ObjectType.getInstance(mg.getClassName());
 
 			if (	classtype.equals(curr) ||
 						curr.subclassOf(classtype)	){
@@ -1237,35 +1306,39 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 
 	    } catch (ClassNotFoundException e) {
 		// FIXME: maybe not the best way to handle this
-		throw new AssertionViolatedException("Missing class: " + e.toString());
+		throw new AssertionViolatedException("Missing class: " + e, e);
 	    }
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitGETSTATIC(GETSTATIC o){
+	@Override
+    public void visitGETSTATIC(GETSTATIC o){
 		// Field must be static: see Pass 3a.
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitGOTO(GOTO o){
+	@Override
+    public void visitGOTO(GOTO o){
 		// nothing to do here.
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitGOTO_W(GOTO_W o){
+	@Override
+    public void visitGOTO_W(GOTO_W o){
 		// nothing to do here.
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitI2B(I2B o){
+	@Override
+    public void visitI2B(I2B o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1274,7 +1347,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitI2C(I2C o){
+	@Override
+    public void visitI2C(I2C o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1283,7 +1357,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitI2D(I2D o){
+	@Override
+    public void visitI2D(I2D o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1292,7 +1367,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitI2F(I2F o){
+	@Override
+    public void visitI2F(I2F o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1301,7 +1377,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitI2L(I2L o){
+	@Override
+    public void visitI2L(I2L o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1310,7 +1387,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitI2S(I2S o){
+	@Override
+    public void visitI2S(I2S o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1319,7 +1397,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIADD(IADD o){
+	@Override
+    public void visitIADD(IADD o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1331,7 +1410,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIALOAD(IALOAD o){
+	@Override
+    public void visitIALOAD(IALOAD o){
 		indexOfInt(o, stack().peek());
 		if (stack().peek(1) == Type.NULL){
 			return;
@@ -1348,7 +1428,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIAND(IAND o){
+	@Override
+    public void visitIAND(IAND o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1360,7 +1441,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIASTORE(IASTORE o){
+	@Override
+    public void visitIASTORE(IASTORE o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1380,14 +1462,16 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitICONST(ICONST o){
+	@Override
+    public void visitICONST(ICONST o){
 		//nothing to do here.
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIDIV(IDIV o){
+	@Override
+    public void visitIDIV(IDIV o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1399,7 +1483,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIF_ACMPEQ(IF_ACMPEQ o){
+	@Override
+    public void visitIF_ACMPEQ(IF_ACMPEQ o){
 		if (!(stack().peek() instanceof ReferenceType)){
 			constraintViolated(o, "The value at the stack top is not of a ReferenceType, but of type '"+stack().peek()+"'.");
 		}
@@ -1415,7 +1500,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIF_ACMPNE(IF_ACMPNE o){
+	@Override
+    public void visitIF_ACMPNE(IF_ACMPNE o){
 		if (!(stack().peek() instanceof ReferenceType)){
 			constraintViolated(o, "The value at the stack top is not of a ReferenceType, but of type '"+stack().peek()+"'.");
 			//referenceTypeIsInitialized(o, (ReferenceType) (stack().peek()) );
@@ -1429,7 +1515,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIF_ICMPEQ(IF_ICMPEQ o){
+	@Override
+    public void visitIF_ICMPEQ(IF_ICMPEQ o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1441,7 +1528,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIF_ICMPGE(IF_ICMPGE o){
+	@Override
+    public void visitIF_ICMPGE(IF_ICMPGE o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1453,7 +1541,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIF_ICMPGT(IF_ICMPGT o){
+	@Override
+    public void visitIF_ICMPGT(IF_ICMPGT o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1465,7 +1554,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIF_ICMPLE(IF_ICMPLE o){
+	@Override
+    public void visitIF_ICMPLE(IF_ICMPLE o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1477,7 +1567,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIF_ICMPLT(IF_ICMPLT o){
+	@Override
+    public void visitIF_ICMPLT(IF_ICMPLT o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1489,7 +1580,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIF_ICMPNE(IF_ICMPNE o){
+	@Override
+    public void visitIF_ICMPNE(IF_ICMPNE o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1501,7 +1593,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIFEQ(IFEQ o){
+	@Override
+    public void visitIFEQ(IFEQ o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1510,7 +1603,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIFGE(IFGE o){
+	@Override
+    public void visitIFGE(IFGE o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1519,7 +1613,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIFGT(IFGT o){
+	@Override
+    public void visitIFGT(IFGT o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1528,7 +1623,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIFLE(IFLE o){
+	@Override
+    public void visitIFLE(IFLE o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1537,7 +1633,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIFLT(IFLT o){
+	@Override
+    public void visitIFLT(IFLT o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1546,7 +1643,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIFNE(IFNE o){
+	@Override
+    public void visitIFNE(IFNE o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1555,7 +1653,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIFNONNULL(IFNONNULL o){
+	@Override
+    public void visitIFNONNULL(IFNONNULL o){
 		if (!(stack().peek() instanceof ReferenceType)){
 			constraintViolated(o, "The value at the stack top is not of a ReferenceType, but of type '"+stack().peek()+"'.");
 		}
@@ -1565,7 +1664,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIFNULL(IFNULL o){
+	@Override
+    public void visitIFNULL(IFNULL o){
 		if (!(stack().peek() instanceof ReferenceType)){
 			constraintViolated(o, "The value at the stack top is not of a ReferenceType, but of type '"+stack().peek()+"'.");
 		}
@@ -1575,7 +1675,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIINC(IINC o){
+	@Override
+    public void visitIINC(IINC o){
 		// Mhhh. In BCEL, at this time "IINC" is not a LocalVariableInstruction.
 		if (locals().maxLocals() <= (o.getType(cpg).getSize()==1? o.getIndex() : o.getIndex()+1) ){
 			constraintViolated(o, "The 'index' is not a valid index into the local variable array.");
@@ -1587,28 +1688,32 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitILOAD(ILOAD o){
+	@Override
+    public void visitILOAD(ILOAD o){
 		// All done by visitLocalVariableInstruction(), visitLoadInstruction()
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIMPDEP1(IMPDEP1 o){
+	@Override
+    public void visitIMPDEP1(IMPDEP1 o){
 		throw new AssertionViolatedException("In this JustIce verification pass there should not occur an illegal instruction such as IMPDEP1.");
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIMPDEP2(IMPDEP2 o){
+	@Override
+    public void visitIMPDEP2(IMPDEP2 o){
 		throw new AssertionViolatedException("In this JustIce verification pass there should not occur an illegal instruction such as IMPDEP2.");
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIMUL(IMUL o){
+	@Override
+    public void visitIMUL(IMUL o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1620,7 +1725,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitINEG(INEG o){
+	@Override
+    public void visitINEG(INEG o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1629,7 +1735,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitINSTANCEOF(INSTANCEOF o){
+	@Override
+    public void visitINSTANCEOF(INSTANCEOF o){
 		// The objectref must be of type reference.
 		Type objectref = stack().peek(0);
 		if (!(objectref instanceof ReferenceType)){
@@ -1639,7 +1746,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 		//	referenceTypeIsInitialized(o, (ReferenceType) objectref);
 		//}
 		// The unsigned indexbyte1 and indexbyte2 are used to construct an index into the runtime constant pool of the
-		// current class (§3.6), where the value of the index is (indexbyte1 << 8) | indexbyte2. The runtime constant
+		// current class (ï¿½3.6), where the value of the index is (indexbyte1 << 8) | indexbyte2. The runtime constant
 		// pool item at the index must be a symbolic reference to a class, array, or interface type.
 		Constant c = cpg.getConstant(o.getIndex());
 		if (! (c instanceof ConstantClass)){
@@ -1650,7 +1757,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitINVOKEINTERFACE(INVOKEINTERFACE o){
+	@Override
+    public void visitINVOKEINTERFACE(INVOKEINTERFACE o){
 		// Method is not native, otherwise pass 3 would not happen.
 		
 		int count = o.getCount();
@@ -1669,7 +1777,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 			Verifier v = VerifierFactory.getVerifier( name );
 			VerificationResult vr = v.doPass2();
 			if (vr.getStatus() != VerificationResult.VERIFIED_OK){
-				constraintViolated((Instruction) o, "Class '"+name+"' is referenced, but cannot be loaded and resolved: '"+vr+"'.");
+				constraintViolated(o, "Class '"+name+"' is referenced, but cannot be loaded and resolved: '"+vr+"'.");
 			}
 		}
 
@@ -1740,7 +1848,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitINVOKESPECIAL(INVOKESPECIAL o){
+	@Override
+    public void visitINVOKESPECIAL(INVOKESPECIAL o){
 	    try {
 		// Don't init an object twice.
 		if ( (o.getMethodName(cpg).equals(Constants.CONSTRUCTOR_NAME)) && (!(stack().peek(o.getArgumentTypes(cpg).length) instanceof UninitializedObjectType)) ){
@@ -1755,7 +1864,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 			Verifier v = VerifierFactory.getVerifier( name );
 			VerificationResult vr = v.doPass2();
 			if (vr.getStatus() != VerificationResult.VERIFIED_OK){
-				constraintViolated((Instruction) o, "Class '"+name+"' is referenced, but cannot be loaded and resolved: '"+vr+"'.");
+				constraintViolated(o, "Class '"+name+"' is referenced, but cannot be loaded and resolved: '"+vr+"'.");
 			}
 		}
 
@@ -1825,14 +1934,15 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 		
 	    } catch (ClassNotFoundException e) {
 		// FIXME: maybe not the best way to handle this
-		throw new AssertionViolatedException("Missing class: " + e.toString());
+		throw new AssertionViolatedException("Missing class: " + e, e);
 	    }
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitINVOKESTATIC(INVOKESTATIC o){
+	@Override
+    public void visitINVOKESTATIC(INVOKESTATIC o){
 	    try {
 		// Method is not native, otherwise pass 3 would not happen.
 		
@@ -1842,7 +1952,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 			Verifier v = VerifierFactory.getVerifier( name );
 			VerificationResult vr = v.doPass2();
 			if (vr.getStatus() != VerificationResult.VERIFIED_OK){
-				constraintViolated((Instruction) o, "Class '"+name+"' is referenced, but cannot be loaded and resolved: '"+vr+"'.");
+				constraintViolated(o, "Class '"+name+"' is referenced, but cannot be loaded and resolved: '"+vr+"'.");
 			}
 		}
 
@@ -1876,14 +1986,15 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 		}
 	    } catch (ClassNotFoundException e) {
 		// FIXME: maybe not the best way to handle this
-		throw new AssertionViolatedException("Missing class: " + e.toString());
+		throw new AssertionViolatedException("Missing class: " + e, e);
 	    }
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitINVOKEVIRTUAL(INVOKEVIRTUAL o){
+	@Override
+    public void visitINVOKEVIRTUAL(INVOKEVIRTUAL o){
 	    try {
 		// the o.getClassType(cpg) type has passed pass 2; see visitLoadClass(o).
 
@@ -1893,7 +2004,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 			Verifier v = VerifierFactory.getVerifier( name );
 			VerificationResult vr = v.doPass2();
 			if (vr.getStatus() != VerificationResult.VERIFIED_OK){
-				constraintViolated((Instruction) o, "Class '"+name+"' is referenced, but cannot be loaded and resolved: '"+vr+"'.");
+				constraintViolated(o, "Class '"+name+"' is referenced, but cannot be loaded and resolved: '"+vr+"'.");
 			}
 		}
 
@@ -1953,14 +2064,15 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 		}	
 	    } catch (ClassNotFoundException e) {
 		// FIXME: maybe not the best way to handle this
-		throw new AssertionViolatedException("Missing class: " + e.toString());
+		throw new AssertionViolatedException("Missing class: " + e, e);
 	    }
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIOR(IOR o){
+	@Override
+    public void visitIOR(IOR o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1972,7 +2084,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIREM(IREM o){
+	@Override
+    public void visitIREM(IREM o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1984,7 +2097,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIRETURN(IRETURN o){
+	@Override
+    public void visitIRETURN(IRETURN o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -1993,19 +2107,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitISHL(ISHL o){
-		if (stack().peek() != Type.INT){
-			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
-		}
-		if (stack().peek(1) != Type.INT){
-			constraintViolated(o, "The value at the stack next-to-top is not of type 'int', but of type '"+stack().peek(1)+"'.");
-		}
-	}
-
-	/**
-	 * Ensures the specific preconditions of the said instruction.
-	 */
-	public void visitISHR(ISHR o){
+	@Override
+    public void visitISHL(ISHL o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -2017,7 +2120,21 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitISTORE(ISTORE o){
+	@Override
+    public void visitISHR(ISHR o){
+		if (stack().peek() != Type.INT){
+			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
+		}
+		if (stack().peek(1) != Type.INT){
+			constraintViolated(o, "The value at the stack next-to-top is not of type 'int', but of type '"+stack().peek(1)+"'.");
+		}
+	}
+
+	/**
+	 * Ensures the specific preconditions of the said instruction.
+	 */
+	@Override
+    public void visitISTORE(ISTORE o){
 		//visitStoreInstruction(StoreInstruction) is called before.
 		
 		// Nothing else needs to be done here.
@@ -2026,7 +2143,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitISUB(ISUB o){
+	@Override
+    public void visitISUB(ISUB o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -2038,7 +2156,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIUSHR(IUSHR o){
+	@Override
+    public void visitIUSHR(IUSHR o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -2050,7 +2169,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitIXOR(IXOR o){
+	@Override
+    public void visitIXOR(IXOR o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -2062,21 +2182,24 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitJSR(JSR o){
+	@Override
+    public void visitJSR(JSR o){
 		// nothing to do here.
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitJSR_W(JSR_W o){
+	@Override
+    public void visitJSR_W(JSR_W o){
 		// nothing to do here.
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitL2D(L2D o){
+	@Override
+    public void visitL2D(L2D o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2085,7 +2208,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitL2F(L2F o){
+	@Override
+    public void visitL2F(L2F o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2094,7 +2218,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitL2I(L2I o){
+	@Override
+    public void visitL2I(L2I o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2103,7 +2228,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLADD(LADD o){
+	@Override
+    public void visitLADD(LADD o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2115,7 +2241,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLALOAD(LALOAD o){
+	@Override
+    public void visitLALOAD(LALOAD o){
 		indexOfInt(o, stack().peek());
 		if (stack().peek(1) == Type.NULL){
 			return;
@@ -2132,7 +2259,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLAND(LAND o){
+	@Override
+    public void visitLAND(LAND o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2144,7 +2272,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLASTORE(LASTORE o){
+	@Override
+    public void visitLASTORE(LASTORE o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2164,7 +2293,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLCMP(LCMP o){
+	@Override
+    public void visitLCMP(LCMP o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2176,22 +2306,25 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLCONST(LCONST o){
+	@Override
+    public void visitLCONST(LCONST o){
 		// Nothing to do here.
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLDC(LDC o){
+	@Override
+    public void visitLDC(LDC o){
 		// visitCPInstruction is called first.
 		
-		Constant c = cpg.getConstant(o.getIndex());
-		if 	(!	(	( c instanceof ConstantInteger) ||
-							( c instanceof ConstantFloat	)	||
-							( c instanceof ConstantString )	)	){
-			constraintViolated(o, "Referenced constant should be a CONSTANT_Integer, a CONSTANT_Float or a CONSTANT_String, but is '"+c+"'.");
-		}
+	    Constant c = cpg.getConstant(o.getIndex());
+	    if 	(!	(	( c instanceof ConstantInteger) ||
+					( c instanceof ConstantFloat	)	||
+					( c instanceof ConstantString	)	||
+					( c instanceof ConstantClass	) )	){
+	        constraintViolated(o, "Referenced constant should be a CONSTANT_Integer, a CONSTANT_Float, a CONSTANT_String or a CONSTANT_Class, but is '"+c+"'.");
+	    }
 	}
 
 	/**
@@ -2201,17 +2334,19 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 		// visitCPInstruction is called first.
 		
 		Constant c = cpg.getConstant(o.getIndex());
-		if 	(!	(	( c instanceof ConstantInteger) ||
-							( c instanceof ConstantFloat	)	||
-							( c instanceof ConstantString )	)	){
-			constraintViolated(o, "Referenced constant should be a CONSTANT_Integer, a CONSTANT_Float or a CONSTANT_String, but is '"+c+"'.");
-		}
+	    if 	(!	(	( c instanceof ConstantInteger) ||
+					( c instanceof ConstantFloat	)	||
+					( c instanceof ConstantString	)	||
+					( c instanceof ConstantClass	) )	){
+	        constraintViolated(o, "Referenced constant should be a CONSTANT_Integer, a CONSTANT_Float, a CONSTANT_String or a CONSTANT_Class, but is '"+c+"'.");
+	    }
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLDC2_W(LDC2_W o){
+	@Override
+    public void visitLDC2_W(LDC2_W o){
 		// visitCPInstruction is called first.
 		
 		Constant c = cpg.getConstant(o.getIndex());
@@ -2224,7 +2359,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLDIV(LDIV o){
+	@Override
+    public void visitLDIV(LDIV o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2236,7 +2372,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLLOAD(LLOAD o){
+	@Override
+    public void visitLLOAD(LLOAD o){
 		//visitLoadInstruction(LoadInstruction) is called before.
 		
 		// Nothing else needs to be done here.
@@ -2245,7 +2382,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLMUL(LMUL o){
+	@Override
+    public void visitLMUL(LMUL o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2257,7 +2395,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLNEG(LNEG o){
+	@Override
+    public void visitLNEG(LNEG o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2266,7 +2405,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLOOKUPSWITCH(LOOKUPSWITCH o){
+	@Override
+    public void visitLOOKUPSWITCH(LOOKUPSWITCH o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -2276,7 +2416,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLOR(LOR o){
+	@Override
+    public void visitLOR(LOR o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2288,7 +2429,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLREM(LREM o){
+	@Override
+    public void visitLREM(LREM o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2300,7 +2442,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLRETURN(LRETURN o){
+	@Override
+    public void visitLRETURN(LRETURN o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2309,7 +2452,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLSHL(LSHL o){
+	@Override
+    public void visitLSHL(LSHL o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -2321,7 +2465,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLSHR(LSHR o){
+	@Override
+    public void visitLSHR(LSHR o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -2333,7 +2478,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLSTORE(LSTORE o){
+	@Override
+    public void visitLSTORE(LSTORE o){
 		//visitStoreInstruction(StoreInstruction) is called before.
 		
 		// Nothing else needs to be done here.
@@ -2342,7 +2488,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLSUB(LSUB o){
+	@Override
+    public void visitLSUB(LSUB o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2354,7 +2501,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLUSHR(LUSHR o){
+	@Override
+    public void visitLUSHR(LUSHR o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -2366,7 +2514,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitLXOR(LXOR o){
+	@Override
+    public void visitLXOR(LXOR o){
 		if (stack().peek() != Type.LONG){
 			constraintViolated(o, "The value at the stack top is not of type 'long', but of type '"+stack().peek()+"'.");
 		}
@@ -2378,7 +2527,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitMONITORENTER(MONITORENTER o){
+	@Override
+    public void visitMONITORENTER(MONITORENTER o){
 		if (! ((stack().peek()) instanceof ReferenceType)){
 			constraintViolated(o, "The stack top should be of a ReferenceType, but is '"+stack().peek()+"'.");
 		}
@@ -2388,7 +2538,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitMONITOREXIT(MONITOREXIT o){
+	@Override
+    public void visitMONITOREXIT(MONITOREXIT o){
 		if (! ((stack().peek()) instanceof ReferenceType)){
 			constraintViolated(o, "The stack top should be of a ReferenceType, but is '"+stack().peek()+"'.");
 		}
@@ -2398,7 +2549,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitMULTIANEWARRAY(MULTIANEWARRAY o){
+	@Override
+    public void visitMULTIANEWARRAY(MULTIANEWARRAY o){
 		int dimensions = o.getDimensions();
 		// Dimensions argument is okay: see Pass 3a.
 		for (int i=0; i<dimensions; i++){
@@ -2413,7 +2565,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitNEW(NEW o){
+	@Override
+    public void visitNEW(NEW o){
 		//visitCPInstruction(CPInstruction) has been called before.
 		//visitLoadClass(LoadClass) has been called before.
 		
@@ -2435,7 +2588,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitNEWARRAY(NEWARRAY o){
+	@Override
+    public void visitNEWARRAY(NEWARRAY o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -2444,14 +2598,16 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitNOP(NOP o){
+	@Override
+    public void visitNOP(NOP o){
 		// nothing is to be done here.
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitPOP(POP o){
+	@Override
+    public void visitPOP(POP o){
 		if (stack().peek().getSize() != 1){
 			constraintViolated(o, "Stack top size should be 1 but stack top is '"+stack().peek()+"' of size '"+stack().peek().getSize()+"'.");
 		}
@@ -2460,7 +2616,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitPOP2(POP2 o){
+	@Override
+    public void visitPOP2(POP2 o){
 		if (stack().peek().getSize() != 2){
 			constraintViolated(o, "Stack top size should be 2 but stack top is '"+stack().peek()+"' of size '"+stack().peek().getSize()+"'.");
 		}
@@ -2469,7 +2626,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitPUTFIELD(PUTFIELD o){
+	@Override
+    public void visitPUTFIELD(PUTFIELD o){
 	    try {
 
 		Type objectref = stack().peek(1);
@@ -2482,15 +2640,15 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 		JavaClass jc = Repository.lookupClass(o.getClassType(cpg).getClassName());
 		Field[] fields = jc.getFields();
 		Field f = null;
-		for (int i=0; i<fields.length; i++){
-			if (fields[i].getName().equals(field_name)){
-				  Type f_type = Type.getType(fields[i].getSignature());
+		for (Field field : fields) {
+			if (field.getName().equals(field_name)){
+				  Type f_type = Type.getType(field.getSignature());
 				  Type o_type = o.getType(cpg);
 					/* TODO: Check if assignment compatibility is sufficient.
 				   * What does Sun do?
 				   */
 				  if (f_type.equals(o_type)){
-						f = fields[i];
+						f = field;
 						break;
 					}
 			}
@@ -2532,7 +2690,7 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 		
 		if (f.isProtected()){
 			ObjectType classtype = o.getClassType(cpg);
-			ObjectType curr = new ObjectType(mg.getClassName());
+			ObjectType curr = ObjectType.getInstance(mg.getClassName());
 
 			if (	classtype.equals(curr) ||
 						curr.subclassOf(classtype)	){
@@ -2558,28 +2716,29 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 
 	    } catch (ClassNotFoundException e) {
 		// FIXME: maybe not the best way to handle this
-		throw new AssertionViolatedException("Missing class: " + e.toString());
+		throw new AssertionViolatedException("Missing class: " + e, e);
 	    }
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitPUTSTATIC(PUTSTATIC o){
+	@Override
+    public void visitPUTSTATIC(PUTSTATIC o){
 	    try {
 		String field_name = o.getFieldName(cpg);
 		JavaClass jc = Repository.lookupClass(o.getClassType(cpg).getClassName());
 		Field[] fields = jc.getFields();
 		Field f = null;
-		for (int i=0; i<fields.length; i++){
-			if (fields[i].getName().equals(field_name)){
-					Type f_type = Type.getType(fields[i].getSignature());
+		for (Field field : fields) {
+			if (field.getName().equals(field_name)){
+					Type f_type = Type.getType(field.getSignature());
 				  Type o_type = o.getType(cpg);
 					/* TODO: Check if assignment compatibility is sufficient.
 				   * What does Sun do?
 				   */
 				  if (f_type.equals(o_type)){
-						f = fields[i];
+						f = field;
 						break;
 					}
 			}
@@ -2622,14 +2781,15 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 
 	    } catch (ClassNotFoundException e) {
 		// FIXME: maybe not the best way to handle this
-		throw new AssertionViolatedException("Missing class: " + e.toString());
+		throw new AssertionViolatedException("Missing class: " + e, e);
 	    }
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitRET(RET o){
+	@Override
+    public void visitRET(RET o){
 		if (! (locals().get(o.getIndex()) instanceof ReturnaddressType)){
 			constraintViolated(o, "Expecting a ReturnaddressType in local variable "+o.getIndex()+".");
 		}
@@ -2643,7 +2803,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitRETURN(RETURN o){
+	@Override
+    public void visitRETURN(RETURN o){
 		if (mg.getName().equals(Constants.CONSTRUCTOR_NAME)){// If we leave an <init> method
 			if ((Frame._this != null) && (!(mg.getClassName().equals(Type.OBJECT.getClassName()))) ) {
 				constraintViolated(o, "Leaving a constructor that itself did not call a constructor.");
@@ -2654,7 +2815,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitSALOAD(SALOAD o){
+	@Override
+    public void visitSALOAD(SALOAD o){
 		indexOfInt(o, stack().peek());
 		if (stack().peek(1) == Type.NULL){
 			return;
@@ -2671,7 +2833,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitSASTORE(SASTORE o){
+	@Override
+    public void visitSASTORE(SASTORE o){
 		if (stack().peek() != Type.INT){
 			constraintViolated(o, "The value at the stack top is not of type 'int', but of type '"+stack().peek()+"'.");
 		}
@@ -2691,14 +2854,16 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitSIPUSH(SIPUSH o){
+	@Override
+    public void visitSIPUSH(SIPUSH o){
 		// nothing to do here. Generic visitXXX() methods did the trick before.
 	}
 
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitSWAP(SWAP o){
+	@Override
+    public void visitSWAP(SWAP o){
 		if (stack().peek().getSize() != 1){
 			constraintViolated(o, "The value at the stack top is not of size '1', but of size '"+stack().peek().getSize()+"'.");
 		}
@@ -2710,7 +2875,8 @@ public class InstConstraintVisitor extends EmptyVisitor implements com.crash4j.e
 	/**
 	 * Ensures the specific preconditions of the said instruction.
 	 */
-	public void visitTABLESWITCH(TABLESWITCH o){
+	@Override
+    public void visitTABLESWITCH(TABLESWITCH o){
 		indexOfInt(o, stack().peek());
 		// See Pass 3a.
 	}

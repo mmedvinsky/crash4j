@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,10 +20,10 @@ package com.crash4j.engine.spi.instrument.bcel.util;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 
 import com.crash4j.engine.spi.instrument.bcel.Constants;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Utility;
@@ -61,14 +62,14 @@ import com.crash4j.engine.spi.instrument.bcel.generic.Type;
  * A helper class for BCELifier.
  *
  * @see BCELifier
- * @version $Id: BCELFactory.java 410087 2006-05-29 12:12:19Z tcurdt $
+ * @version $Id: BCELFactory.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 class BCELFactory extends EmptyVisitor {
 
-    private MethodGen _mg;
-    private PrintWriter _out;
-    private ConstantPoolGen _cp;
+    private final MethodGen _mg;
+    private final PrintWriter _out;
+    private final ConstantPoolGen _cp;
 
 
     BCELFactory(MethodGen mg, PrintWriter out) {
@@ -77,7 +78,7 @@ class BCELFactory extends EmptyVisitor {
         _out = out;
     }
 
-    private Map branch_map = new HashMap(); // Map<InstructionImpl, InstructionHandle>
+    private final Map<Instruction, InstructionHandle> branch_map = new HashMap<Instruction, InstructionHandle>();
 
 
     public void start() {
@@ -119,6 +120,7 @@ class BCELFactory extends EmptyVisitor {
     }
 
 
+    @Override
     public void visitLocalVariableInstruction( LocalVariableInstruction i ) {
         short opcode = i.getOpcode();
         Type type = i.getType(_cp);
@@ -133,6 +135,7 @@ class BCELFactory extends EmptyVisitor {
     }
 
 
+    @Override
     public void visitArrayInstruction( ArrayInstruction i ) {
         short opcode = i.getOpcode();
         Type type = i.getType(_cp);
@@ -142,6 +145,7 @@ class BCELFactory extends EmptyVisitor {
     }
 
 
+    @Override
     public void visitFieldInstruction( FieldInstruction i ) {
         short opcode = i.getOpcode();
         String class_name = i.getClassName(_cp);
@@ -153,6 +157,7 @@ class BCELFactory extends EmptyVisitor {
     }
 
 
+    @Override
     public void visitInvokeInstruction( InvokeInstruction i ) {
         short opcode = i.getOpcode();
         String class_name = i.getClassName(_cp);
@@ -166,6 +171,7 @@ class BCELFactory extends EmptyVisitor {
     }
 
 
+    @Override
     public void visitAllocationInstruction( AllocationInstruction i ) {
         Type type;
         if (i instanceof CPInstruction) {
@@ -182,6 +188,7 @@ class BCELFactory extends EmptyVisitor {
                 break;
             case Constants.MULTIANEWARRAY:
                 dim = ((MULTIANEWARRAY) i).getDimensions();
+                //$FALL-THROUGH$
             case Constants.ANEWARRAY:
             case Constants.NEWARRAY:
                 if (type instanceof ArrayType) {
@@ -199,50 +206,65 @@ class BCELFactory extends EmptyVisitor {
     private void createConstant( Object value ) {
         String embed = value.toString();
         if (value instanceof String) {
-            embed = '"' + Utility.convertString(value.toString()) + '"';
+            embed = '"' + Utility.convertString(embed) + '"';
         } else if (value instanceof Character) {
             embed = "(char)0x" + Integer.toHexString(((Character) value).charValue());
+        } else if (value instanceof Float) {
+            embed += "f";
+        } else if (value instanceof Long) {
+            embed += "L";
+        } else if (value instanceof ObjectType){
+            ObjectType ot = (ObjectType) value;
+            embed = "new ObjectType(\""+ot.getClassName()+"\")";
         }
+
         _out.println("il.append(new PUSH(_cp, " + embed + "));");
     }
 
 
+    @Override
     public void visitLDC( LDC i ) {
         createConstant(i.getValue(_cp));
     }
 
 
+    @Override
     public void visitLDC2_W( LDC2_W i ) {
         createConstant(i.getValue(_cp));
     }
 
 
+    @Override
     public void visitConstantPushInstruction( ConstantPushInstruction i ) {
         createConstant(i.getValue());
     }
 
 
+    @Override
     public void visitINSTANCEOF( INSTANCEOF i ) {
         Type type = i.getType(_cp);
         _out.println("il.append(new INSTANCEOF(_cp.addClass(" + BCELifier.printType(type) + ")));");
     }
 
 
+    @Override
     public void visitCHECKCAST( CHECKCAST i ) {
         Type type = i.getType(_cp);
         _out.println("il.append(_factory.createCheckCast(" + BCELifier.printType(type) + "));");
     }
 
 
+    @Override
     public void visitReturnInstruction( ReturnInstruction i ) {
         Type type = i.getType(_cp);
         _out.println("il.append(_factory.createReturn(" + BCELifier.printType(type) + "));");
     }
 
     // Memorize BranchInstructions that need an update
-    private List branches = new ArrayList();
+    private final List<BranchInstruction> branches = new ArrayList<BranchInstruction>();
 
 
+    @Override
     public void visitBranchInstruction( BranchInstruction bi ) {
         BranchHandle bh = (BranchHandle) branch_map.get(bi);
         int pos = bh.getPosition();
@@ -289,14 +311,14 @@ class BCELFactory extends EmptyVisitor {
     }
 
 
+    @Override
     public void visitRET( RET i ) {
         _out.println("il.append(new RET(" + i.getIndex() + ")));");
     }
 
 
     private void updateBranchTargets() {
-        for (Iterator i = branches.iterator(); i.hasNext();) {
-            BranchInstruction bi = (BranchInstruction) i.next();
+        for (BranchInstruction bi : branches) {
             BranchHandle bh = (BranchHandle) branch_map.get(bi);
             int pos = bh.getPosition();
             String name = bi.getName() + "_" + pos;
@@ -315,8 +337,7 @@ class BCELFactory extends EmptyVisitor {
 
     private void updateExceptionHandlers() {
         CodeExceptionGen[] handlers = _mg.getExceptionHandlers();
-        for (int i = 0; i < handlers.length; i++) {
-            CodeExceptionGen h = handlers[i];
+        for (CodeExceptionGen h : handlers) {
             String type = (h.getCatchType() == null) ? "null" : BCELifier.printType(h
                     .getCatchType());
             _out.println("    method.addExceptionHandler(" + "ih_" + h.getStartPC().getPosition()

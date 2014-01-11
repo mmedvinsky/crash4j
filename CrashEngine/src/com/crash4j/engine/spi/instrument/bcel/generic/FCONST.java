@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,17 +22,18 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  *
  * <PRE>Stack: ... -&gt; ..., </PRE>
  *
- * @version $Id: FCONST.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: FCONST.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
-public class FCONST extends Instruction implements ConstantPushInstruction, TypedInstruction {
+public class FCONST extends Instruction implements ConstantPushInstruction {
 
+    private static final long serialVersionUID = 3018815844848018054L;
     private float value;
 
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     FCONST() {
     }
@@ -72,6 +74,7 @@ public class FCONST extends Instruction implements ConstantPushInstruction, Type
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitPushInstruction(this);
         v.visitStackProducer(this);

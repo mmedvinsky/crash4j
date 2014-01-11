@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,22 +18,23 @@
 package com.crash4j.engine.spi.instrument.bcel.generic;
 
 import com.crash4j.engine.spi.instrument.bcel.classfile.ConstantCP;
-import com.crash4j.engine.spi.instrument.bcel.classfile.ConstantNameAndType;
 import com.crash4j.engine.spi.instrument.bcel.classfile.ConstantPool;
-import com.crash4j.engine.spi.instrument.bcel.classfile.ConstantUtf8;
 
 /**
  * Super class for InvokeInstruction and FieldInstruction, since they have
  * some methods in common!
  *
- * @version $Id: FieldOrMethod.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: FieldOrMethod.java 1551450 2013-12-17 02:51:54Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
-public abstract class FieldOrMethod extends CPInstruction implements LoadClass {
+public abstract class FieldOrMethod extends NameSignatureInstruction implements LoadClass {
+
+    private static final long serialVersionUID = 2036985877748835708L;
+
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     FieldOrMethod() {
     }
@@ -46,26 +48,6 @@ public abstract class FieldOrMethod extends CPInstruction implements LoadClass {
     }
 
 
-    /** @return signature of referenced method/field.
-     */
-    public String getSignature( ConstantPoolGen cpg ) {
-        ConstantPool cp = cpg.getConstantPool();
-        ConstantCP cmr = (ConstantCP) cp.getConstant(index);
-        ConstantNameAndType cnat = (ConstantNameAndType) cp.getConstant(cmr.getNameAndTypeIndex());
-        return ((ConstantUtf8) cp.getConstant(cnat.getSignatureIndex())).getBytes();
-    }
-
-
-    /** @return name of referenced method/field.
-     */
-    public String getName( ConstantPoolGen cpg ) {
-        ConstantPool cp = cpg.getConstantPool();
-        ConstantCP cmr = (ConstantCP) cp.getConstant(index);
-        ConstantNameAndType cnat = (ConstantNameAndType) cp.getConstant(cmr.getNameAndTypeIndex());
-        return ((ConstantUtf8) cp.getConstant(cnat.getNameIndex())).getBytes();
-    }
-
-
     /** @return name of the referenced class/interface
      *  @deprecated If the instruction references an array class,
      *    this method will return "java.lang.Object".
@@ -75,6 +57,7 @@ public abstract class FieldOrMethod extends CPInstruction implements LoadClass {
      *    the getReferenceType() method, which correctly distinguishes
      *    between class types and array types.
      */
+    @Deprecated
     public String getClassName( ConstantPoolGen cpg ) {
         ConstantPool cp = cpg.getConstantPool();
         ConstantCP cmr = (ConstantCP) cp.getConstant(index);
@@ -93,8 +76,9 @@ public abstract class FieldOrMethod extends CPInstruction implements LoadClass {
      *    the ObjectType returned will be invalid.  Use
      *    getReferenceType() instead.
      */
+    @Deprecated
     public ObjectType getClassType( ConstantPoolGen cpg ) {
-        return new ObjectType(getClassName(cpg));
+        return ObjectType.getInstance(getClassName(cpg));
     }
 
 
@@ -115,7 +99,7 @@ public abstract class FieldOrMethod extends CPInstruction implements LoadClass {
             return (ArrayType) Type.getType(className);
         } else {
             className = className.replace('/', '.');
-            return new ObjectType(className);
+            return ObjectType.getInstance(className);
         }
     }
 

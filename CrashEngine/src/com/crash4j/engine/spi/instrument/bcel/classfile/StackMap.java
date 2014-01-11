@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -29,16 +30,17 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * (J2ME). This attribute is used by the <a
  * href="http://java.sun.com/products/cldc/">KVM</a> and contained
  * within the Code attribute of a method. See CLDC specification
- * §5.3.1.2
+ * ï¿½5.3.1.2
  *
- * @version $Id: StackMap.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: StackMap.java 1152077 2011-07-29 02:29:42Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Code
  * @see     StackMapEntry
  * @see     StackMapType
  */
-public final class StackMap extends Attribute implements Node {
+public final class StackMap extends Attribute {
 
+    private static final long serialVersionUID = -6238662431726968495L;
     private int map_length;
     private StackMapEntry[] map; // Table of stack map entries
 
@@ -80,6 +82,7 @@ public final class StackMap extends Attribute implements Node {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         super.dump(file);
         file.writeShort(map_length);
@@ -109,8 +112,9 @@ public final class StackMap extends Attribute implements Node {
     /**
      * @return String representation.
      */
+    @Override
     public final String toString() {
-        StringBuffer buf = new StringBuffer("StackMap(");
+        StringBuilder buf = new StringBuilder("StackMap(");
         for (int i = 0; i < map_length; i++) {
             buf.append(map[i].toString());
             if (i < map_length - 1) {
@@ -125,6 +129,7 @@ public final class StackMap extends Attribute implements Node {
     /**
      * @return deep copy of this attribute
      */
+    @Override
     public Attribute copy( ConstantPool _constant_pool ) {
         StackMap c = (StackMap) clone();
         c.map = new StackMapEntry[map_length];
@@ -143,6 +148,7 @@ public final class StackMap extends Attribute implements Node {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitStackMap(this);
     }

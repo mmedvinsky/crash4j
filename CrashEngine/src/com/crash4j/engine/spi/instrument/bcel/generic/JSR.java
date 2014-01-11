@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,14 +23,17 @@ import java.io.IOException;
 /** 
  * JSR - Jump to subroutine
  *
- * @version $Id: JSR.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: JSR.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class JSR extends JsrInstruction implements VariableLengthInstruction {
 
+    private static final long serialVersionUID = 7425681395340093184L;
+
+
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     JSR() {
     }
@@ -44,6 +48,7 @@ public class JSR extends JsrInstruction implements VariableLengthInstruction {
      * Dump instruction as byte code to stream out.
      * @param out Output stream
      */
+    @Override
     public void dump( DataOutputStream out ) throws IOException {
         index = getTargetOffset();
         if (opcode == com.crash4j.engine.spi.instrument.bcel.Constants.JSR) {
@@ -56,13 +61,15 @@ public class JSR extends JsrInstruction implements VariableLengthInstruction {
     }
 
 
+    @Override
     protected int updatePosition( int offset, int max_offset ) {
         int i = getTargetOffset(); // Depending on old position value
         position += offset; // Position may be shifted by preceding expansions
         if (Math.abs(i) >= (32767 - max_offset)) { // to large for short (estimate)
             opcode = com.crash4j.engine.spi.instrument.bcel.Constants.JSR_W;
+            short old_length = length;
             length = 5;
-            return 2; // 5 - 3
+            return length - old_length;
         }
         return 0;
     }
@@ -76,6 +83,7 @@ public class JSR extends JsrInstruction implements VariableLengthInstruction {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitStackProducer(this);
         v.visitVariableLengthInstruction(this);

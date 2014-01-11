@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,6 +19,7 @@ package com.crash4j.engine.spi.instrument.bcel.util;
 
 import java.io.ByteArrayInputStream;
 import java.util.Hashtable;
+
 
 import com.crash4j.engine.spi.instrument.bcel.Constants;
 import com.crash4j.engine.spi.instrument.bcel.classfile.ClassParser;
@@ -46,7 +48,7 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.Utility;
  * constructor. The default value contains "java.", "sun.",
  * "javax."</p>
  *
- * @version $Id: ClassLoader.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ClassLoader.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see JavaWrapper
  * @see ClassPath
@@ -56,7 +58,7 @@ public class ClassLoader extends java.lang.ClassLoader {
     public static final String[] DEFAULT_IGNORED_PACKAGES = {
             "java.", "javax.", "sun."
     };
-    private Hashtable classes = new Hashtable(); // Hashtable is synchronized thus thread-safe
+    private Hashtable<String, Class<?>> classes = new Hashtable<String, Class<?>>(); // Hashtable is synchronized thus thread-safe
     private String[] ignored_packages;
     private Repository repository = SyntheticRepository.getInstance();
 
@@ -95,17 +97,17 @@ public class ClassLoader extends java.lang.ClassLoader {
         this.repository = new ClassLoaderRepository(deferTo);
     }
 
-
-    protected Class loadClass( String class_name, boolean resolve ) throws ClassNotFoundException {
-        Class cl = null;
+    @Override
+    protected Class<?> loadClass( String class_name, boolean resolve ) throws ClassNotFoundException {
+        Class<?> cl = null;
         /* First try: lookup hash table.
          */
-        if ((cl = (Class) classes.get(class_name)) == null) {
+        if ((cl = classes.get(class_name)) == null) {
             /* Second try: Load system class using system class loader. You better
              * don't mess around with them.
              */
-            for (int i = 0; i < ignored_packages.length; i++) {
-                if (class_name.startsWith(ignored_packages[i])) {
+            for (String ignored_package : ignored_packages) {
+                if (class_name.startsWith(ignored_package)) {
                     cl = getParent().loadClass(class_name);
                     break;
                 }

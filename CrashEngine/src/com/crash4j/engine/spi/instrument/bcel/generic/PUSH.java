@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,7 +23,7 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * Wrapper class for push operations, which are implemented either as BIPUSH,
  * LDC or xCONST_n instructions.
  *
- * @version $Id: PUSH.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: PUSH.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public final class PUSH implements CompoundInstruction, VariableLengthInstruction,
@@ -118,7 +119,19 @@ public final class PUSH implements CompoundInstruction, VariableLengthInstructio
         }
     }
 
-
+    /**
+     * 
+     * @param cp
+     * @param value
+     */
+    public PUSH(ConstantPoolGen cp, ObjectType value) {
+        if (value == null) {
+            instruction = ACONST_NULL;
+        } else {
+            instruction = new LDC(cp.addClass(value));
+        }
+    }
+    
     /**
      * @param cp Constant pool
      * @param value to be pushed 
@@ -172,6 +185,7 @@ public final class PUSH implements CompoundInstruction, VariableLengthInstructio
     /**
      * @return mnemonic for instruction
      */
+    @Override
     public String toString() {
         return instruction.toString() + " (PUSH)";
     }

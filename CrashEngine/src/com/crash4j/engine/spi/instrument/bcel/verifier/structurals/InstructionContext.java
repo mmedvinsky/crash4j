@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,6 +19,7 @@ package com.crash4j.engine.spi.instrument.bcel.verifier.structurals;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.crash4j.engine.spi.instrument.bcel.generic.InstructionHandle;
 
@@ -26,7 +28,7 @@ import com.crash4j.engine.spi.instrument.bcel.generic.InstructionHandle;
  * to information like control flow successors and
  * such.
  *
- * @version $Id: InstructionContext.java 382272 2006-03-02 03:31:46Z tcurdt $
+ * @version $Id: InstructionContext.java 1158060 2011-08-15 23:17:19Z dbrosius $
  * @author Enver Haase
  */
 public interface InstructionContext{
@@ -39,7 +41,7 @@ public interface InstructionContext{
 	 * 
 	 * @see #setTag(int tag)
 	 */
-	public int getTag();
+	int getTag();
 
 	/**
 	 * The getTag and setTag methods may be used for
@@ -49,10 +51,10 @@ public interface InstructionContext{
 	 * 
 	 * @see #getTag()
 	 */
-	public void setTag(int tag);
+	void setTag(int tag);
 
 	/**
-	 * This method symbolically executes the InstructionImpl
+	 * This method symbolically executes the Instruction
 	 * held in the InstructionContext.
 	 * It "merges in" the incoming execution frame situation
 	 * (see The Java Virtual Machine Specification, 2nd
@@ -68,11 +70,11 @@ public interface InstructionContext{
 	 *
 	 * @see ControlFlowGraph
 	 * @see ExecutionVisitor
-	 * @see #getOutFrame(ArrayList)
+	 * @see #getOutFrame(List)
 	 * @return true -  if and only if the "outgoing" frame situation
 	 * changed from the one before execute()ing.
 	 */
-	boolean execute(Frame inFrame, ArrayList executionPredecessors, InstConstraintVisitor icv, ExecutionVisitor ev);
+	boolean execute(Frame inFrame, ArrayList<InstructionContext> executionPredecessors, InstConstraintVisitor icv, ExecutionVisitor ev);
 
 	Frame getInFrame();
 
@@ -83,7 +85,7 @@ public interface InstructionContext{
 	 *
 	 * @see #execute(Frame, ArrayList, InstConstraintVisitor, ExecutionVisitor)
 	 */
-	Frame getOutFrame(ArrayList executionPredecessors);
+	Frame getOutFrame(List<InstructionContext> executionPredecessors);
 	
 	/**
 	 * Returns the InstructionHandle this InstructionContext is wrapped around.

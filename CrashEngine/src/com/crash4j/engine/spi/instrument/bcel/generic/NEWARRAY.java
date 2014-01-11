@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -26,18 +27,19 @@ import com.crash4j.engine.spi.instrument.bcel.util.ByteSequence;
  * <PRE>Stack: ..., count -&gt; ..., arrayref</PRE>
  * type must be one of T_INT, T_SHORT, ...
  * 
- * @version $Id: NEWARRAY.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: NEWARRAY.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class NEWARRAY extends Instruction implements AllocationInstruction, ExceptionThrower,
         StackProducer {
 
+    private static final long serialVersionUID = 7048445841018649405L;
     private byte type;
 
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     NEWARRAY() {
     }
@@ -58,6 +60,7 @@ public class NEWARRAY extends Instruction implements AllocationInstruction, Exce
      * Dump instruction as byte code to stream out.
      * @param out Output stream
      */
+    @Override
     public void dump( DataOutputStream out ) throws IOException {
         out.writeByte(opcode);
         out.writeByte(type);
@@ -83,6 +86,7 @@ public class NEWARRAY extends Instruction implements AllocationInstruction, Exce
     /**
      * @return mnemonic for instruction
      */
+    @Override
     public String toString( boolean verbose ) {
         return super.toString(verbose) + " " + com.crash4j.engine.spi.instrument.bcel.Constants.TYPE_NAMES[type];
     }
@@ -91,13 +95,14 @@ public class NEWARRAY extends Instruction implements AllocationInstruction, Exce
     /**
      * Read needed data (e.g. index) from file.
      */
+    @Override
     protected void initFromFile( ByteSequence bytes, boolean wide ) throws IOException {
         type = bytes.readByte();
         length = 2;
     }
 
 
-    public Class[] getExceptions() {
+    public Class<?>[] getExceptions() {
         return new Class[] {
             com.crash4j.engine.spi.instrument.bcel.ExceptionConstants.NEGATIVE_ARRAY_SIZE_EXCEPTION
         };
@@ -112,6 +117,7 @@ public class NEWARRAY extends Instruction implements AllocationInstruction, Exce
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitAllocationInstruction(this);
         v.visitExceptionThrower(this);

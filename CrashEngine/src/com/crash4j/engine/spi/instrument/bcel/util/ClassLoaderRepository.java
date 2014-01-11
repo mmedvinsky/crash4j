@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -33,14 +34,15 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.JavaClass;
  *
  * @see com.crash4j.engine.spi.instrument.bcel.Repository
  *
- * @version $Id: ClassLoaderRepository.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ClassLoaderRepository.java 1532202 2013-10-15 06:13:17Z dbrosius $
  * @author <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @author David Dixon-Peugh
  */
 public class ClassLoaderRepository implements Repository {
 
+    private static final long serialVersionUID = -1052781833503868187L;
     private java.lang.ClassLoader loader;
-    private Map loadedClasses = new HashMap(); // CLASSNAME X JAVACLASS
+    private Map<String, JavaClass> loadedClasses = new HashMap<String, JavaClass>(); // CLASSNAME X JAVACLASS
 
 
     public ClassLoaderRepository(java.lang.ClassLoader loader) {
@@ -70,7 +72,7 @@ public class ClassLoaderRepository implements Repository {
      */
     public JavaClass findClass( String className ) {
         if (loadedClasses.containsKey(className)) {
-            return (JavaClass) loadedClasses.get(className);
+            return loadedClasses.get(className);
         } else {
             return null;
         }
@@ -96,12 +98,12 @@ public class ClassLoaderRepository implements Repository {
             storeClass(RC);
             return RC;
         } catch (IOException e) {
-            throw new ClassNotFoundException(e.toString());
+            throw new ClassNotFoundException(className + " not found: " + e, e);
         }
     }
 
 
-    public JavaClass loadClass( Class clazz ) throws ClassNotFoundException {
+    public JavaClass loadClass( Class<?> clazz ) throws ClassNotFoundException {
         return loadClass(clazz.getName());
     }
 

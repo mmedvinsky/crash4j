@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,7 +17,7 @@
  */
 package com.crash4j.engine.spi.instrument.bcel.classfile;
 
-import java.io.DataInputStream;
+import java.io.DataInput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -27,12 +28,13 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * This class represents a local variable within a method. It contains its
  * scope, name, signature and index on the method's frame.
  *
- * @version $Id: LocalVariable.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: LocalVariable.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     LocalVariableTable
  */
 public final class LocalVariable implements Constants, Cloneable, Node, Serializable {
 
+    private static final long serialVersionUID = -51081099265972179L;
     private int start_pc; // Range in which the variable is valid
     private int length;
     private int name_index; // Index in constant pool of variable name
@@ -58,7 +60,7 @@ public final class LocalVariable implements Constants, Cloneable, Node, Serializ
      * @param file Input stream
      * @throws IOException
      */
-    LocalVariable(DataInputStream file, ConstantPool constant_pool) throws IOException {
+    LocalVariable(DataInput file, ConstantPool constant_pool) throws IOException {
         this(file.readUnsignedShort(), file.readUnsignedShort(), file.readUnsignedShort(), file
                 .readUnsignedShort(), file.readUnsignedShort(), constant_pool);
     }
@@ -229,6 +231,7 @@ public final class LocalVariable implements Constants, Cloneable, Node, Serializ
     /**
      * @return string representation.
      */
+    @Override
     public final String toString() {
         String name = getName(), signature = Utility.signatureToString(getSignature());
         return "LocalVariable(start_pc = " + start_pc + ", length = " + length + ", index = "

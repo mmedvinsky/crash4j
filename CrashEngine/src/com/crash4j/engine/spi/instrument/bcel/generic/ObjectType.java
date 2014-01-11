@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,6 +17,10 @@
  */
 package com.crash4j.engine.spi.instrument.bcel.generic;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 
 import com.crash4j.engine.spi.instrument.bcel.Constants;
 import com.crash4j.engine.spi.instrument.bcel.Repository;
@@ -24,13 +29,37 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.JavaClass;
 /** 
  * Denotes reference such as java.lang.String.
  *
- * @version $Id: ObjectType.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ObjectType.java 1554578 2013-12-31 22:06:59Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class ObjectType extends ReferenceType {
 
-    private String class_name; // Class name of type
+    private static final long serialVersionUID = -2819379966444533294L;
+    private final String class_name; // Class name of type
+    private static final int MAX_CACHE_ENTRIES = 200;
+    private static final int INITIAL_CACHE_CAPACITY = (int)(MAX_CACHE_ENTRIES/0.75);
+    private static HashMap<String, ObjectType> cache;
 
+    public synchronized static ObjectType getInstance(String class_name) {
+        if (cache == null) {
+            cache = new LinkedHashMap<String, ObjectType>(INITIAL_CACHE_CAPACITY, 0.75f, true) {
+
+
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<String, ObjectType> eldest) {
+               return size() > MAX_CACHE_ENTRIES;
+            }
+
+        };
+        }
+        ObjectType result = cache.get(class_name);
+        if (result != null) {
+            return result;
+        }
+        result = new ObjectType(class_name);
+        cache.put(class_name, result);
+        return result;
+    }
 
     /**
      * @param class_name fully qualified class name, e.g. java.lang.String
@@ -50,6 +79,7 @@ public class ObjectType extends ReferenceType {
 
     /** @return a hash code value for the object.
      */
+    @Override
     public int hashCode() {
         return class_name.hashCode();
     }
@@ -57,6 +87,7 @@ public class ObjectType extends ReferenceType {
 
     /** @return true if both type objects refer to the same class.
      */
+    @Override
     public boolean equals( Object type ) {
         return (type instanceof ObjectType)
                 ? ((ObjectType) type).class_name.equals(class_name)
@@ -71,6 +102,7 @@ public class ObjectType extends ReferenceType {
      *   if the class or interface referenced cannot
      *   be found: use referencesClassExact() instead
      */
+    @Deprecated
     public boolean referencesClass() {
         try {
             JavaClass jc = Repository.lookupClass(class_name);
@@ -88,6 +120,7 @@ public class ObjectType extends ReferenceType {
      *   if the class or interface referenced cannot
      *   be found: use referencesInterfaceExact() instead
      */
+    @Deprecated
     public boolean referencesInterface() {
         try {
             JavaClass jc = Repository.lookupClass(class_name);
@@ -140,7 +173,7 @@ public class ObjectType extends ReferenceType {
 
 
     /**
-     * Java Virtual Machine Specification edition 2, § 5.4.4 Access Control
+     * Java Virtual Machine Specification edition 2, ï¿½ 5.4.4 Access Control
      * @throws ClassNotFoundException if the class referenced by this type
      *   can't be found
      */

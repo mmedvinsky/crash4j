@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,13 +28,14 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * purposes. This attribute is used by the <em>Code</em> attribute. It
  * contains pairs of PCs and line numbers.
  *
- * @version $Id: LineNumberTable.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: LineNumberTable.java 1152077 2011-07-29 02:29:42Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Code
  * @see LineNumber
  */
 public final class LineNumberTable extends Attribute {
 
+    private static final long serialVersionUID = -6967221519632128904L;
     private int line_number_table_length;
     private LineNumber[] line_number_table; // Table of line/numbers pairs
 
@@ -86,6 +88,7 @@ public final class LineNumberTable extends Attribute {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitLineNumberTable(this);
     }
@@ -97,6 +100,7 @@ public final class LineNumberTable extends Attribute {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         super.dump(file);
         file.writeShort(line_number_table_length);
@@ -126,9 +130,10 @@ public final class LineNumberTable extends Attribute {
     /**
      * @return String representation.
      */
+    @Override
     public final String toString() {
-        StringBuffer buf = new StringBuffer();
-        StringBuffer line = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
+        StringBuilder line = new StringBuilder();
         String newLine = System.getProperty("line.separator", "\n");
         for (int i = 0; i < line_number_table_length; i++) {
             line.append(line_number_table[i].toString());
@@ -192,6 +197,7 @@ public final class LineNumberTable extends Attribute {
     /**
      * @return deep copy of this attribute
      */
+    @Override
     public Attribute copy( ConstantPool _constant_pool ) {
         LineNumberTable c = (LineNumberTable) clone();
         c.line_number_table = new LineNumber[line_number_table_length];

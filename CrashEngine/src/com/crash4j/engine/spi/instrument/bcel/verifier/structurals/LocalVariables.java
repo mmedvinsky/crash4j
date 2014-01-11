@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,14 +21,14 @@ package com.crash4j.engine.spi.instrument.bcel.verifier.structurals;
 
 import com.crash4j.engine.spi.instrument.bcel.generic.ReferenceType;
 import com.crash4j.engine.spi.instrument.bcel.generic.Type;
-import com.crash4j.engine.spi.instrument.bcel.verifier.exc.AssertionViolatedException;
-import com.crash4j.engine.spi.instrument.bcel.verifier.exc.StructuralCodeConstraintException;
+import com.crash4j.engine.spi.instrument.verifier.exc.AssertionViolatedException;
+import com.crash4j.engine.spi.instrument.verifier.exc.StructuralCodeConstraintException;
 
 /**
  * This class implements an array of local variables used for symbolic JVM
  * simulation.
  *
- * @version $Id: LocalVariables.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: LocalVariables.java 1532202 2013-10-15 06:13:17Z dbrosius $
  * @author Enver Haase
  */
 public class LocalVariables{
@@ -49,7 +50,8 @@ public class LocalVariables{
 	 * operates on a new local variable array.
 	 * However, the Type objects in the array are shared.
 	 */
-	protected Object clone(){
+	@Override
+    protected Object clone(){
 		LocalVariables lvs = new LocalVariables(locals.length);
 		for (int i=0; i<locals.length; i++){
 			lvs.locals[i] = this.locals[i];
@@ -92,12 +94,14 @@ public class LocalVariables{
 
 	/** @return a hash code value for the object.
      */
-	public int hashCode() { return locals.length; }
+	@Override
+    public int hashCode() { return locals.length; }
 
 	/*
 	 * Fulfills the general contract of Object.equals().
 	 */
-	public boolean equals(Object o){
+	@Override
+    public boolean equals(Object o){
 		if (!(o instanceof LocalVariables)) {
             return false;
         }
@@ -178,15 +182,16 @@ public class LocalVariables{
 		}
 	    } catch (ClassNotFoundException e) {
 		// FIXME: maybe not the best way to handle this
-		throw new AssertionViolatedException("Missing class: " + e.toString());
+		throw new AssertionViolatedException("Missing class: " + e, e);
 	    }
 	}
 
 	/**
 	 * Returns a String representation of this object.
 	 */
-	public String toString(){
-		StringBuffer sb = new StringBuffer();
+	@Override
+    public String toString(){
+	    StringBuilder sb = new StringBuilder();
 		for (int i=0; i<locals.length; i++){
 			sb.append(Integer.toString(i));
 			sb.append(": ");

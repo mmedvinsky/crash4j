@@ -89,9 +89,10 @@ public class ThreadContext
     public static void pop()
     {
         __hread_context r = tlh.get();
-        if (r == null)
+        
+        if (r == null || r.frames.isEmpty())
         {
-            throw new RuntimeException("Stack frame is out of order!");
+        	throw new RuntimeException("Stack frame is out of order!");
         }
         r.frames.pop();
     }

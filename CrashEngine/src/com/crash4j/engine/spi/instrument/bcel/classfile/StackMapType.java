@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,9 +17,10 @@
  */
 package com.crash4j.engine.spi.instrument.bcel.classfile;
 
-import java.io.DataInputStream;
+import java.io.DataInput;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
 import com.crash4j.engine.spi.instrument.bcel.Constants;
 
@@ -26,13 +28,15 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * This class represents the type of a local variable or item on stack
  * used in the StackMap entries.
  *
- * @version $Id: StackMapType.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: StackMapType.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     StackMapEntry
  * @see     StackMap
  * @see     Constants
  */
-public final class StackMapType implements Cloneable {
+public final class StackMapType implements Cloneable, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private byte type;
     private int index = -1; // Index to CONSTANT_Class or offset
@@ -44,7 +48,7 @@ public final class StackMapType implements Cloneable {
      * @param file Input stream
      * @throws IOException
      */
-    StackMapType(DataInputStream file, ConstantPool constant_pool) throws IOException {
+    StackMapType(DataInput file, ConstantPool constant_pool) throws IOException {
         this(file.readByte(), -1, constant_pool);
         if (hasIndex()) {
             setIndex(file.readShort());
@@ -128,6 +132,7 @@ public final class StackMapType implements Cloneable {
     /**
      * @return String representation
      */
+    @Override
     public final String toString() {
         return "(type=" + Constants.ITEM_NAMES[type] + printIndex() + ")";
     }

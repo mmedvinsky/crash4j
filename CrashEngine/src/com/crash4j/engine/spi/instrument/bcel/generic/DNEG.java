@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,10 +21,13 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  * DNEG - Negate double
  * <PRE>Stack: ..., value.word1, value.word2 -&gt; ..., result.word1, result.word2</PRE>
  *
- * @version $Id: DNEG.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: DNEG.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class DNEG extends ArithmeticInstruction {
+
+    private static final long serialVersionUID = -8860107731099493429L;
+
 
     public DNEG() {
         super(com.crash4j.engine.spi.instrument.bcel.Constants.DNEG);
@@ -38,6 +42,7 @@ public class DNEG extends ArithmeticInstruction {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitTypedInstruction(this);
         v.visitStackProducer(this);

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,10 +21,13 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  * IDIV - Divide ints
  * <PRE>Stack: ..., value1, value2 -&gt; result</PRE>
  *
- * @version $Id: IDIV.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: IDIV.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class IDIV extends ArithmeticInstruction implements ExceptionThrower {
+
+    private static final long serialVersionUID = -7104037931993634172L;
+
 
     /** Divide ints
      */
@@ -34,7 +38,7 @@ public class IDIV extends ArithmeticInstruction implements ExceptionThrower {
 
     /** @return exceptions this instruction may cause
      */
-    public Class[] getExceptions() {
+    public Class<?>[] getExceptions() {
         return new Class[] {
             com.crash4j.engine.spi.instrument.bcel.ExceptionConstants.ARITHMETIC_EXCEPTION
         };
@@ -49,6 +53,7 @@ public class IDIV extends ArithmeticInstruction implements ExceptionThrower {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitExceptionThrower(this);
         v.visitTypedInstruction(this);

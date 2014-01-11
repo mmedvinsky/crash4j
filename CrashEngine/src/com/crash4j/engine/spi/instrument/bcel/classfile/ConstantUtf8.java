@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,9 +17,13 @@
  */
 package com.crash4j.engine.spi.instrument.bcel.classfile;
 
+import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.crash4j.engine.spi.instrument.bcel.Constants;
 
@@ -27,14 +32,69 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * <A HREF="org.apache.bcel.classfile.Constant.html">Constant</A> class 
  * and represents a reference to a Utf8 encoded string.
  *
- * @version $Id: ConstantUtf8.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ConstantUtf8.java 1554578 2013-12-31 22:06:59Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Constant
  */
 public final class ConstantUtf8 extends Constant {
 
-    private String bytes;
+    private static final long serialVersionUID = -8709101585611518985L;
+    private final String bytes;
 
+    private static final int MAX_CACHE_ENTRIES = 20000;
+    private static final int INITIAL_CACHE_CAPACITY = (int)(MAX_CACHE_ENTRIES/0.75);
+    private static HashMap<String, ConstantUtf8> cache;
+    private static int considered = 0;
+    private static int hits = 0;
+    private static int skipped = 0;
+    private static int created = 0;
+    final static boolean BCEL_STATISTICS = Boolean.getBoolean("bcel.statistics");
+    final static boolean BCEL_DONT_CACHE = Boolean.getBoolean("bcel.dontCache");
+
+    static {
+        if (BCEL_STATISTICS) {
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    System.err.println("Cache hit " + hits + "/" + considered +", "
+                            + skipped + " skipped");
+                    System.err.println("Total of " + created + " ConstantUtf8 objects created");
+                }
+            });
+        }
+    }
+
+    public static synchronized ConstantUtf8 getCachedInstance(String s) {
+        if (BCEL_DONT_CACHE || s.length() > 200) {
+            skipped++;
+            return  new ConstantUtf8(s);
+        }
+        considered++;
+        if (cache == null)  {
+            cache = new LinkedHashMap<String, ConstantUtf8>(INITIAL_CACHE_CAPACITY, 0.75f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<String, ConstantUtf8> eldest) {
+                     return size() > MAX_CACHE_ENTRIES;
+                }
+            };
+        }
+        ConstantUtf8 result = cache.get(s);
+        if (result != null) {
+                hits++;
+                return result;
+            }
+        result = new ConstantUtf8(s);
+        cache.put(s, result);
+        return result;
+    }
+
+    public static ConstantUtf8 getInstance(String s) {
+        return getCachedInstance(s);
+    }
+
+    public static ConstantUtf8 getInstance (DataInputStream file)  throws IOException {
+        return getInstance(file.readUTF());
+    }
 
     /**
      * Initialize from another object.
@@ -50,9 +110,10 @@ public final class ConstantUtf8 extends Constant {
      * @param file Input stream
      * @throws IOException
      */
-    ConstantUtf8(DataInputStream file) throws IOException {
+    ConstantUtf8(DataInput file) throws IOException {
         super(Constants.CONSTANT_Utf8);
         bytes = file.readUTF();
+        created++;
     }
 
 
@@ -65,6 +126,7 @@ public final class ConstantUtf8 extends Constant {
             throw new IllegalArgumentException("bytes must not be null!");
         }
         this.bytes = bytes;
+        created++;
     }
 
 
@@ -75,6 +137,7 @@ public final class ConstantUtf8 extends Constant {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitConstantUtf8(this);
     }
@@ -86,6 +149,7 @@ public final class ConstantUtf8 extends Constant {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         file.writeByte(tag);
         file.writeUTF(bytes);
@@ -102,15 +166,17 @@ public final class ConstantUtf8 extends Constant {
 
     /**
      * @param bytes the raw bytes of this Utf-8
+     * @deprecated
      */
     public final void setBytes( String bytes ) {
-        this.bytes = bytes;
+        throw new UnsupportedOperationException();
     }
 
 
     /**
      * @return String representation
      */
+    @Override
     public final String toString() {
         return super.toString() + "(\"" + Utility.replace(bytes, "\n", "\\n") + "\")";
     }

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,7 +18,6 @@
 package com.crash4j.engine.spi.instrument.bcel.verifier;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -28,7 +28,7 @@ import java.util.Vector;
  * operate on. That means, for every class (represented by a unique fully qualified
  * class name) there is exactly one Verifier.
  *
- * @version $Id: VerifierFactory.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: VerifierFactory.java 1151716 2011-07-28 03:58:16Z dbrosius $
  * @author Enver Haase
  * @see com.crash4j.engine.spi.instrument.bcel.verifier.Verifier
  */
@@ -37,11 +37,11 @@ public class VerifierFactory {
     /**
      * The HashMap that holds the data about the already-constructed Verifier instances.
      */
-    private static Map hashMap = new HashMap();
+    private static final Map<String, Verifier> hashMap = new HashMap<String, Verifier>();
     /**
      * The VerifierFactoryObserver instances that observe the VerifierFactory.
      */
-    private static List observers = new Vector();
+    private static final List<VerifierFactoryObserver> observers = new Vector<VerifierFactoryObserver>();
 
 
     /**
@@ -57,7 +57,7 @@ public class VerifierFactory {
      * @return the (only) verifier responsible for the class with the given name.
      */
     public static Verifier getVerifier( String fully_qualified_classname ) {
-        Verifier v = (Verifier) (hashMap.get(fully_qualified_classname));
+        Verifier v = hashMap.get(fully_qualified_classname);
         if (v == null) {
             v = new Verifier(fully_qualified_classname);
             hashMap.put(fully_qualified_classname, v);
@@ -72,9 +72,7 @@ public class VerifierFactory {
      */
     private static void notify( String fully_qualified_classname ) {
         // notify the observers
-        Iterator i = observers.iterator();
-        while (i.hasNext()) {
-            VerifierFactoryObserver vfo = (VerifierFactoryObserver) i.next();
+        for (VerifierFactoryObserver vfo : observers) {
             vfo.update(fully_qualified_classname);
         }
     }
@@ -89,7 +87,7 @@ public class VerifierFactory {
      */
     public static Verifier[] getVerifiers() {
         Verifier[] vs = new Verifier[hashMap.values().size()];
-        return (Verifier[]) (hashMap.values().toArray(vs)); // Because vs is big enough, vs is used to store the values into and returned!
+        return hashMap.values().toArray(vs); // Because vs is big enough, vs is used to store the values into and returned!
     }
 
 

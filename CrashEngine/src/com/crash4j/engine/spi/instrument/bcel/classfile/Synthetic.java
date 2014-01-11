@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -31,12 +32,13 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * is intended to be instantiated from the
  * <em>Attribute.readAttribute()</em> method.
  *
- * @version $Id: Synthetic.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Synthetic.java 1152077 2011-07-29 02:29:42Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Attribute
  */
 public final class Synthetic extends Attribute {
 
+    private static final long serialVersionUID = -123334426995458366L;
     private byte[] bytes;
 
 
@@ -89,6 +91,7 @@ public final class Synthetic extends Attribute {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitSynthetic(this);
     }
@@ -100,6 +103,7 @@ public final class Synthetic extends Attribute {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         super.dump(file);
         if (length > 0) {
@@ -127,8 +131,9 @@ public final class Synthetic extends Attribute {
     /**
      * @return String representation.
      */
+    @Override
     public final String toString() {
-        StringBuffer buf = new StringBuffer("Synthetic");
+        StringBuilder buf = new StringBuilder("Synthetic");
         if (length > 0) {
             buf.append(" ").append(Utility.toHexString(bytes));
         }
@@ -139,6 +144,7 @@ public final class Synthetic extends Attribute {
     /**
      * @return deep copy of this attribute
      */
+    @Override
     public Attribute copy( ConstantPool _constant_pool ) {
         Synthetic c = (Synthetic) clone();
         if (bytes != null) {

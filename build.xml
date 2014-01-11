@@ -30,7 +30,7 @@
   <target name="compile-engine" depends="compile-lexer"
         description="compile the source">
     <!-- Compile the java code from ${src} into ${build} -->
-    <javac destdir="bin/CrashEngine">
+    <javac destdir="bin/CrashEngine" debuglevel="lines,vars,source" debug="on">
       <src path="CrashEngine/src"/>
       <src path="CrashAgent/src"/>
     </javac>
@@ -44,7 +44,7 @@
   <target name="compile-client" depends="init"
         description="compile the source " >
     <!-- Compile the java code from ${src} into ${build} -->
-    <javac destdir="bin/CrashClient" classpath="lib/junit-4.8.2.jar">
+    <javac destdir="bin/CrashClient" debuglevel="lines,vars,source" debug="on" classpath="lib/junit-4.8.2.jar">
       <src path="CrashClient/src"/>
       <src path="Crash4jUnit/src"/>
     </javac>

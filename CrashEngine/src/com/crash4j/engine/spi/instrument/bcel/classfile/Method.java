@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -28,11 +29,12 @@ import com.crash4j.engine.spi.instrument.bcel.util.BCELComparator;
  * for a method in the class. See JVM specification for details.
  * A method has access flags, a name, a signature and a number of attributes.
  *
- * @version $Id: Method.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Method.java 1312005 2012-04-10 21:37:21Z tcurdt $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public final class Method extends FieldOrMethod {
 
+    private static final long serialVersionUID = -2013983967283787941L;
     private static BCELComparator _cmp = new BCELComparator() {
 
         public boolean equals( Object o1, Object o2 ) {
@@ -49,6 +51,8 @@ public final class Method extends FieldOrMethod {
         }
     };
 
+    // annotations defined on the parameters of a method
+    private ParameterAnnotationEntry[] parameterAnnotationEntries;
 
     /**
      * Empty constructor, all attributes have to be defined via `setXXX'
@@ -161,10 +165,11 @@ public final class Method extends FieldOrMethod {
      *
      * @return String representation of the method.
      */
+    @Override
     public final String toString() {
         ConstantUtf8 c;
         String name, signature, access; // Short cuts to constant pool
-        StringBuffer buf;
+        StringBuilder buf;
         access = Utility.accessToString(access_flags);
         // Get name and signature from constant pool
         c = (ConstantUtf8) constant_pool.getConstant(signature_index, Constants.CONSTANT_Utf8);
@@ -173,7 +178,7 @@ public final class Method extends FieldOrMethod {
         name = c.getBytes();
         signature = Utility.methodSignatureToString(signature, name, access, true,
                 getLocalVariableTable());
-        buf = new StringBuffer(signature);
+        buf = new StringBuilder(signature);
         for (int i = 0; i < attributes_count; i++) {
             Attribute a = attributes[i];
             if (!((a instanceof Code) || (a instanceof ExceptionTable))) {
@@ -238,6 +243,7 @@ public final class Method extends FieldOrMethod {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals( Object obj ) {
         return _cmp.equals(this, obj);
     }
@@ -249,7 +255,18 @@ public final class Method extends FieldOrMethod {
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return _cmp.hashCode(this);
+    }
+
+    /**
+     * @return Annotations on the parameters of a method
+     */
+    public ParameterAnnotationEntry[] getParameterAnnotationEntries() {
+        if (parameterAnnotationEntries == null) {
+            parameterAnnotationEntries = ParameterAnnotationEntry.createParameterAnnotationEntries(getAttributes());
+        }
+        return parameterAnnotationEntries;
     }
 }

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,23 +20,35 @@ package com.crash4j.engine.spi.instrument.bcel.classfile;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.crash4j.engine.spi.instrument.bcel.Constants;
+import com.crash4j.engine.spi.instrument.bcel.classfile.Attribute;
+import com.crash4j.engine.spi.instrument.bcel.classfile.Signature;
 
 /** 
  * Abstract super class for fields and methods.
  *
- * @version $Id: FieldOrMethod.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: FieldOrMethod.java 1554577 2013-12-31 22:06:09Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public abstract class FieldOrMethod extends AccessFlags implements Cloneable, Node {
 
+    private static final long serialVersionUID = -1833306330869469714L;
     protected int name_index; // Points to field name in constant pool 
     protected int signature_index; // Points to encoded signature
     protected int attributes_count; // No. of attributes
     protected Attribute[] attributes; // Collection of attributes
+    protected AnnotationEntry[] annotationEntries; // annotations defined on the field or method 
     protected ConstantPool constant_pool;
 
+    private String signatureAttributeString = null;
+    private boolean searchedForSignatureAttribute = false;
+    
+
+    // Annotations are collected from certain attributes, don't do it more than necessary!
+    private boolean annotationsOutOfDate = true;
 
     FieldOrMethod() {
     }
@@ -192,16 +205,88 @@ public abstract class FieldOrMethod extends AccessFlags implements Cloneable, No
      * @return deep copy of this field
      */
     protected FieldOrMethod copy_( ConstantPool _constant_pool ) {
+    	FieldOrMethod c = null;
+
         try {
-            FieldOrMethod c = (FieldOrMethod) clone();
-            c.constant_pool = _constant_pool;
-            c.attributes = new Attribute[attributes_count];
-            for (int i = 0; i < attributes_count; i++) {
-                c.attributes[i] = attributes[i].copy(_constant_pool);
-            }
-            return c;
-        } catch (CloneNotSupportedException e) {
-            return null;
+          c = (FieldOrMethod)clone();
+        } catch(CloneNotSupportedException e) {}
+
+        c.constant_pool    = constant_pool;
+        c.attributes       = new Attribute[attributes_count];
+
+        for(int i=0; i < attributes_count; i++) {
+            c.attributes[i] = attributes[i].copy(constant_pool);
         }
+
+        return c;
     }
+    
+    /**
+	 * Ensure we have unpacked any attributes that contain annotations.
+	 * We don't remove these annotation attributes from the attributes list, they
+	 * remain there.
+	 */
+	private void ensureAnnotationsUpToDate()
+	{
+		if (annotationsOutOfDate)
+		{
+			// Find attributes that contain annotation data
+			Attribute[] attrs = getAttributes();
+			List<AnnotationEntry> accumulatedAnnotations = new ArrayList<AnnotationEntry>();
+			for (Attribute attribute : attrs) {
+				if (attribute instanceof Annotations)
+				{
+					Annotations annotations = (Annotations) attribute;
+					for (int j = 0; j < annotations.getAnnotationEntries().length; j++)
+					{
+						accumulatedAnnotations.add(annotations
+								.getAnnotationEntries()[j]);
+					}
+				}
+			}
+			annotationEntries = accumulatedAnnotations
+					.toArray(new AnnotationEntry[accumulatedAnnotations.size()]);
+			annotationsOutOfDate = false;
+		}
+	}
+
+	public AnnotationEntry[] getAnnotationEntries()
+	{
+		ensureAnnotationsUpToDate();
+		return annotationEntries;
+	}
+
+	public void addAnnotationEntry(AnnotationEntry a)
+	{
+		ensureAnnotationsUpToDate();
+		int len = annotationEntries.length;
+		AnnotationEntry[] newAnnotations = new AnnotationEntry[len + 1];
+		System.arraycopy(annotationEntries, 0, newAnnotations, 0, len);
+		newAnnotations[len] = a;
+		annotationEntries = newAnnotations;
+	}
+
+	/**
+	 * Hunts for a signature attribute on the member and returns its contents.  So where the 'regular' signature
+	 * may be (Ljava/util/Vector;)V the signature attribute may in fact say 'Ljava/lang/Vector<Ljava/lang/String>;'
+	 * Coded for performance - searches for the attribute only when requested - only searches for it once.
+	 */
+	public final String getGenericSignature()
+	{
+		if (!searchedForSignatureAttribute)
+		{
+			boolean found = false;
+			for (int i = 0; !found && i < attributes_count; i++)
+			{
+				if (attributes[i] instanceof Signature)
+				{
+					signatureAttributeString = ((Signature) attributes[i])
+							.getSignature();
+					found = true;
+				}
+			}
+			searchedForSignatureAttribute = true;
+		}
+		return signatureAttributeString;
+	}
 }

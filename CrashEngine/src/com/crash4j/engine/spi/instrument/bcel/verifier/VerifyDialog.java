@@ -1,5 +1,5 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
+ * Copyright  2000-2009 The Apache Software Foundation
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); 
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.crash4j.engine.spi.instrument.bcel.verifier;
 
 import java.awt.Color;
 
+
 import com.crash4j.engine.spi.instrument.bcel.Repository;
 import com.crash4j.engine.spi.instrument.bcel.classfile.JavaClass;
 
@@ -30,13 +31,14 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.JavaClass;
  * class in your application.
  * [This class was created using VisualAge for Java,
  * but it does not work under VAJ itself (Version 3.02 JDK 1.2)]
- * @version $Id: VerifyDialog.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: VerifyDialog.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author Enver Haase
  * @see #main(String[])
  * @see #VerifyDialog(String)
  */
 public class VerifyDialog extends javax.swing.JDialog {
 
+    private static final long serialVersionUID = -6374807677043142313L;
     /** Machine-generated. */
     private javax.swing.JPanel ivjJDialogContentPane = null;
     /** Machine-generated. */
@@ -82,8 +84,8 @@ public class VerifyDialog extends javax.swing.JDialog {
             if (e.getSource() == VerifyDialog.this.getFlushButton()) {
                 connEtoC4(e);
             }
-        };
-    };
+        }
+    }
 
     /** Machine-generated. */
     private javax.swing.JButton ivjFlushButton = null;
@@ -465,19 +467,20 @@ public class VerifyDialog extends javax.swing.JDialog {
      */
     public static void main( java.lang.String[] args ) {
         classes_to_verify = args.length;
-        for (int i = 0; i < args.length; i++) {
+        for (String arg : args) {
             try {
                 VerifyDialog aVerifyDialog;
-                aVerifyDialog = new VerifyDialog(args[i]);
+                aVerifyDialog = new VerifyDialog(arg);
                 aVerifyDialog.setModal(true);
                 aVerifyDialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
+                    @Override
                     public void windowClosing( java.awt.event.WindowEvent e ) {
                         classes_to_verify--;
                         if (classes_to_verify == 0) {
                             System.exit(0);
                         }
-                    };
+                    }
                 });
                 aVerifyDialog.setVisible(true);
             } catch (Throwable exception) {

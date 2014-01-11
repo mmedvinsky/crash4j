@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -31,7 +32,7 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.Utility;
 /**
  * Convert methods and fields into HTML file.
  *
- * @version $Id: MethodHTML.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: MethodHTML.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * 
  */
@@ -52,8 +53,8 @@ final class MethodHTML implements com.crash4j.engine.spi.instrument.bcel.Constan
         file.println("<HTML><BODY BGCOLOR=\"#C0C0C0\"><TABLE BORDER=0>");
         file.println("<TR><TH ALIGN=LEFT>Access&nbsp;flags</TH><TH ALIGN=LEFT>Type</TH>"
                 + "<TH ALIGN=LEFT>Field&nbsp;name</TH></TR>");
-        for (int i = 0; i < fields.length; i++) {
-            writeField(fields[i]);
+        for (Field field : fields) {
+            writeField(field);
         }
         file.println("</TABLE>");
         file.println("<TABLE BORDER=0><TR><TH ALIGN=LEFT>Access&nbsp;flags</TH>"
@@ -100,7 +101,7 @@ final class MethodHTML implements com.crash4j.engine.spi.instrument.bcel.Constan
     }
 
 
-    private final void writeMethod( Method method, int method_number ) throws IOException {
+    private final void writeMethod( Method method, int method_number ) {
         // Get raw signature
         String signature = method.getSignature();
         // Get array of strings containing the argument types 

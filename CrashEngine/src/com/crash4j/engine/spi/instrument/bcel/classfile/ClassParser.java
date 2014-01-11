@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -38,7 +39,7 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * JVM specification 1.0</a>. See this paper for
  * further details about the structure of a bytecode file.
  *
- * @version $Id: ClassParser.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ClassParser.java 1136408 2011-06-16 12:42:51Z sebb $
  * @author <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A> 
  */
 public final class ClassParser {
@@ -82,7 +83,7 @@ public final class ClassParser {
      *
      * @param file_name file name
      */
-    public ClassParser(String file_name) throws IOException {
+    public ClassParser(String file_name) {
         is_zip = false;
         this.file_name = file_name;
         fileOwned = true;
@@ -120,6 +121,11 @@ public final class ClassParser {
                 if (is_zip) {
                     zip = new ZipFile(zip_file);
                     ZipEntry entry = zip.getEntry(file_name);
+                    
+                    if (entry == null) {
+                        throw new IOException("File " + file_name + " not found");
+                    }
+                    
                     file = new DataInputStream(new BufferedInputStream(zip.getInputStream(entry),
                             BUFSIZE));
                 } else {
@@ -156,16 +162,22 @@ public final class ClassParser {
             //        byte[] buf = new byte[bytes];
             //        file.read(buf);
             //        if(!(is_zip && (buf.length == 1))) {
-            //  	System.err.println("WARNING: Trailing garbage at end of " + file_name);
-            //  	System.err.println(bytes + " extra bytes: " + Utility.toHexString(buf));
+            //      System.err.println("WARNING: Trailing garbage at end of " + file_name);
+            //      System.err.println(bytes + " extra bytes: " + Utility.toHexString(buf));
             //        }
             //      }
         } finally {
             // Read everything of interest, so close the file
             if (fileOwned) {
-                file.close();
-                if (zip != null) {
-                    zip.close();
+                try {
+                    if (file != null) {
+                        file.close();
+                    }
+                    if (zip != null) {
+                        zip.close();
+                    }
+                } catch (IOException ioe) {
+                    //ignore close exceptions
                 }
             }
         }
@@ -207,7 +219,7 @@ public final class ClassParser {
         }
         if (((access_flags & Constants.ACC_ABSTRACT) != 0)
                 && ((access_flags & Constants.ACC_FINAL) != 0)) {
-            throw new ClassFormatException("Class can't be both final and abstract");
+            throw new ClassFormatException("Class " + file_name + " can't be both final and abstract");
         }
         class_name_index = file.readUnsignedShort();
         superclass_name_index = file.readUnsignedShort();

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,18 +25,19 @@ import com.crash4j.engine.spi.instrument.bcel.util.ByteSequence;
 /**
  * IINC - Increment local variable by constant
  *
- * @version $Id: IINC.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: IINC.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class IINC extends LocalVariableInstruction {
 
+    private static final long serialVersionUID = -8938364416647466869L;
     private boolean wide;
     private int c;
 
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     IINC() {
     }
@@ -58,6 +60,7 @@ public class IINC extends LocalVariableInstruction {
      * Dump instruction as byte code to stream out.
      * @param out Output stream
      */
+    @Override
     public void dump( DataOutputStream out ) throws IOException {
         if (wide) {
             out.writeByte(com.crash4j.engine.spi.instrument.bcel.Constants.WIDE);
@@ -86,6 +89,7 @@ public class IINC extends LocalVariableInstruction {
     /**
      * Read needed data (e.g. index) from file.
      */
+    @Override
     protected void initFromFile( ByteSequence bytes, boolean wide ) throws IOException {
         this.wide = wide;
         if (wide) {
@@ -103,6 +107,7 @@ public class IINC extends LocalVariableInstruction {
     /**
      * @return mnemonic for instruction
      */
+    @Override
     public String toString( boolean verbose ) {
         return super.toString(verbose) + " " + c;
     }
@@ -111,6 +116,7 @@ public class IINC extends LocalVariableInstruction {
     /**
      * Set index of local variable.
      */
+    @Override
     public final void setIndex( int n ) {
         if (n < 0) {
             throw new ClassGenException("Negative index value: " + n);
@@ -139,6 +145,7 @@ public class IINC extends LocalVariableInstruction {
 
     /** @return int type
      */
+    @Override
     public Type getType( ConstantPoolGen cp ) {
         return Type.INT;
     }
@@ -152,6 +159,7 @@ public class IINC extends LocalVariableInstruction {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitLocalVariableInstruction(this);
         v.visitIINC(this);

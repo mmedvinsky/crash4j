@@ -30,15 +30,6 @@
         "signature": "prepareCall(Ljava/lang/String;)Ljava/sql/CallableStatement;",
         "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_prepareCall_Ljava_lang_String__Ljava_sql_CallableStatement_"
       },
-      "close()V": {
-        "native": "false",
-        "aclass": "SQL",
-        "aclasstype": "CLOSE",        
-        "rtype": "db",
-        "method": "close",
-        "signature": "close()V",
-        "handler": "com.crash4j.engine.spi.instrument.handlers.java_sql_Connection_close__V"
-      },
       "createStatement(III)Ljava/sql/Statement;": {
         "native": "false",
         "aclass": "NOACTION",        

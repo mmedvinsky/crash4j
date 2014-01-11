@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,18 +20,21 @@ package com.crash4j.engine.spi.instrument.bcel.classfile;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * This class represents a stack map entry recording the types of
  * local variables and the the of stack items at a given byte code offset.
- * See CLDC specification §5.3.1.2
+ * See CLDC specification ï¿½5.3.1.2
  *
- * @version $Id: StackMapEntry.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: StackMapEntry.java 1152077 2011-07-29 02:29:42Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     StackMap
  * @see     StackMapType
  */
-public final class StackMapEntry implements Cloneable {
+public final class StackMapEntry implements Cloneable, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private int byte_code_offset;
     private int number_of_locals;
@@ -93,8 +97,9 @@ public final class StackMapEntry implements Cloneable {
     /**
      * @return String representation.
      */
+    @Override
     public final String toString() {
-        StringBuffer buf = new StringBuffer(64);
+        StringBuilder buf = new StringBuilder(64);
         buf.append("(offset=").append(byte_code_offset);
         if (number_of_locals > 0) {
             buf.append(", locals={");

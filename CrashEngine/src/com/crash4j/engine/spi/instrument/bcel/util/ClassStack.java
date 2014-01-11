@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,13 +24,14 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.JavaClass;
 /** 
  * Utility class implementing a (typesafe) stack of JavaClass objects.
  *
- * @version $Id: ClassStack.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ClassStack.java 1149459 2011-07-22 04:34:27Z dbrosius $
  * @author <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A> 
  * @see Stack
  */
 public class ClassStack implements java.io.Serializable {
 
-    private Stack stack = new Stack();
+    private static final long serialVersionUID = 6126079269396985982L;
+    private Stack<JavaClass> stack = new Stack<JavaClass>();
 
 
     public void push( JavaClass clazz ) {
@@ -38,12 +40,12 @@ public class ClassStack implements java.io.Serializable {
 
 
     public JavaClass pop() {
-        return (JavaClass) stack.pop();
+        return stack.pop();
     }
 
 
     public JavaClass top() {
-        return (JavaClass) stack.peek();
+        return stack.peek();
     }
 
 

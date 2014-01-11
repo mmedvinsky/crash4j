@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,15 +20,18 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
 /**
  * Super class for instructions dealing with array access such as IALOAD.
  *
- * @version $Id: ArrayInstruction.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ArrayInstruction.java 1149459 2011-07-22 04:34:27Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public abstract class ArrayInstruction extends Instruction implements ExceptionThrower,
         TypedInstruction {
 
+    private static final long serialVersionUID = 1355074014869910296L;
+
+
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     ArrayInstruction() {
     }
@@ -41,7 +45,7 @@ public abstract class ArrayInstruction extends Instruction implements ExceptionT
     }
 
 
-    public Class[] getExceptions() {
+    public Class<?>[] getExceptions() {
         return com.crash4j.engine.spi.instrument.bcel.ExceptionConstants.EXCS_ARRAY_EXCEPTION;
     }
 

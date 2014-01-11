@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,26 +24,26 @@ import java.util.List;
 /**
  * A small utility class representing a set of basic int values.
  *
- * @version $Id: IntList.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: IntList.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author Enver Haase
  */
 public class IntList{
 	/** The int are stored as Integer objects here. */
-	private List theList;
+	private List<Integer> theList;
 	/** This constructor creates an empty list. */
 	IntList(){
-		theList = new ArrayList();
+		theList = new ArrayList<Integer>();
 	}
 	/** Adds an element to the list. */
 	void add(int i){
-		theList.add(new Integer(i));
+		theList.add(Integer.valueOf(i));
 	}
 	/** Checks if the specified int is already in the list. */
 	boolean contains(int i){
 		Integer[] ints = new Integer[theList.size()];
 		theList.toArray(ints);
-		for (int j=0; j<ints.length; j++){
-			if (i == ints[j].intValue()) {
+		for (Integer k : ints) {
+			if (i == k.intValue()) {
                 return true;
             }
 		}

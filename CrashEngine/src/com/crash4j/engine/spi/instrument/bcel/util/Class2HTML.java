@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -48,7 +49,7 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.Utility;
  * method in the Method's frame will jump to the appropiate method in
  * the Code frame.
  *
- * @version $Id: Class2HTML.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Class2HTML.java 1152077 2011-07-29 02:29:42Z dbrosius $
  * @author <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A> 
  */
 public class Class2HTML implements Constants {
@@ -86,8 +87,8 @@ public class Class2HTML implements Constants {
          */
         AttributeHTML attribute_html = new AttributeHTML(dir, class_name, constant_pool,
                 constant_html);
-        MethodHTML method_html = new MethodHTML(dir, class_name, methods, java_class.getFields(),
-                constant_html, attribute_html);
+//        MethodHTML method_html = new MethodHTML(dir, class_name, methods, java_class.getFields(),
+//                constant_html, attribute_html);
         // Write main file (with frames, yuk)
         writeMainHTML(attribute_html);
         new CodeHTML(dir, class_name, methods, constant_pool, constant_html);
@@ -108,7 +109,7 @@ public class Class2HTML implements Constants {
              */
             for (int i = 0; i < argv.length; i++) {
                 if (argv[i].charAt(0) == '-') { // command line switch
-                    if (argv[i].equals("-d")) { // Specify target directory, default `.´
+                    if (argv[i].equals("-d")) { // Specify target directory, default `.ï¿½
                         dir = argv[++i];
                         if (!dir.endsWith("" + sep)) {
                             dir = dir + sep;
@@ -179,7 +180,7 @@ public class Class2HTML implements Constants {
 
 
     static String toHTML( String str ) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         try { // Filter any characters HTML doesn't like such as < and > in particular
             for (int i = 0; i < str.length(); i++) {
                 char ch;

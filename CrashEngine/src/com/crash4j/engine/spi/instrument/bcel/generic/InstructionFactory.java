@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,11 +25,17 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * byte code generating backend of a compiler. You can subclass it to
  * add your own create methods.
  *
- * @version $Id: InstructionFactory.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: InstructionFactory.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see Constants
  */
 public class InstructionFactory implements InstructionConstants, java.io.Serializable {
+
+	private static final long serialVersionUID = -1210011499635580258L;
+
+    private static final String[] short_names = {
+            "C", "F", "D", "B", "S", "I", "L"
+    };
 
     protected ClassGen cg;
     protected ConstantPoolGen cp;
@@ -69,8 +76,8 @@ public class InstructionFactory implements InstructionConstants, java.io.Seriali
         int index;
         int nargs = 0;
         String signature = Type.getMethodSignature(ret_type, arg_types);
-        for (int i = 0; i < arg_types.length; i++) {
-            nargs += arg_types[i].getSize();
+        for (Type arg_type : arg_types) {
+            nargs += arg_type.getSize();
         }
         if (kind == Constants.INVOKEINTERFACE) {
             index = cp.addInterfaceMethodref(class_name, name, signature);
@@ -132,15 +139,13 @@ public class InstructionFactory implements InstructionConstants, java.io.Seriali
         Type result_type;
         String class_name;
         String name;
-        int access;
 
 
-        MethodObject(String c, String n, Type r, Type[] a, int acc) {
+        MethodObject(String c, String n, Type r, Type[] a) {
             class_name = c;
             name = n;
             result_type = r;
             arg_types = a;
-            access = acc;
         }
     }
 
@@ -149,41 +154,41 @@ public class InstructionFactory implements InstructionConstants, java.io.Seriali
         return createInvoke(m.class_name, m.name, m.result_type, m.arg_types, kind);
     }
 
-    private static MethodObject[] append_mos = {
+    private static final MethodObject[] append_mos = {
             new MethodObject("java.lang.StringBuffer", "append", Type.STRINGBUFFER, new Type[] {
                 Type.STRING
-            }, Constants.ACC_PUBLIC),
+            }),
             new MethodObject("java.lang.StringBuffer", "append", Type.STRINGBUFFER, new Type[] {
                 Type.OBJECT
-            }, Constants.ACC_PUBLIC),
+            }),
             null,
             null, // indices 2, 3
             new MethodObject("java.lang.StringBuffer", "append", Type.STRINGBUFFER, new Type[] {
                 Type.BOOLEAN
-            }, Constants.ACC_PUBLIC),
+            }),
             new MethodObject("java.lang.StringBuffer", "append", Type.STRINGBUFFER, new Type[] {
                 Type.CHAR
-            }, Constants.ACC_PUBLIC),
+            }),
             new MethodObject("java.lang.StringBuffer", "append", Type.STRINGBUFFER, new Type[] {
                 Type.FLOAT
-            }, Constants.ACC_PUBLIC),
+            }),
             new MethodObject("java.lang.StringBuffer", "append", Type.STRINGBUFFER, new Type[] {
                 Type.DOUBLE
-            }, Constants.ACC_PUBLIC),
+            }),
             new MethodObject("java.lang.StringBuffer", "append", Type.STRINGBUFFER, new Type[] {
                 Type.INT
-            }, Constants.ACC_PUBLIC),
+            }),
             new MethodObject("java.lang.StringBuffer", "append", Type.STRINGBUFFER, // No append(byte)
                     new Type[] {
                         Type.INT
-                    }, Constants.ACC_PUBLIC),
+                    }),
             new MethodObject("java.lang.StringBuffer", "append", Type.STRINGBUFFER, // No append(short)
                     new Type[] {
                         Type.INT
-                    }, Constants.ACC_PUBLIC),
+                    }),
             new MethodObject("java.lang.StringBuffer", "append", Type.STRINGBUFFER, new Type[] {
                 Type.LONG
-            }, Constants.ACC_PUBLIC)
+            })
     };
 
 
@@ -348,6 +353,8 @@ public class InstructionFactory implements InstructionConstants, java.io.Seriali
                 return FMUL;
             case '/':
                 return FDIV;
+            case '%':
+            	return FREM;
             default:
                 throw new RuntimeException("Invalid operand " + op);
         }
@@ -364,6 +371,8 @@ public class InstructionFactory implements InstructionConstants, java.io.Seriali
                 return DMUL;
             case '/':
                 return DDIV;
+            case '%':
+            	return DREM;
             default:
                 throw new RuntimeException("Invalid operand " + op);
         }
@@ -548,16 +557,13 @@ public class InstructionFactory implements InstructionConstants, java.io.Seriali
                     && (src == Constants.T_CHAR || src == Constants.T_BYTE || src == Constants.T_SHORT)) {
                 src = Constants.T_INT;
             }
-            String[] short_names = {
-                    "C", "F", "D", "B", "S", "I", "L"
-            };
-            String name = "com.crash4j.engine.spi.instrument.bcel." + short_names[src - Constants.T_CHAR] + "2"
+            String name = "org.apache.bcel.generic." + short_names[src - Constants.T_CHAR] + "2"
                     + short_names[dest - Constants.T_CHAR];
             Instruction i = null;
             try {
                 i = (Instruction) java.lang.Class.forName(name).newInstance();
             } catch (Exception e) {
-                throw new RuntimeException("Could not find instruction: " + name);
+                throw new RuntimeException("Could not find instruction: " + name, e);
             }
             return i;
         } else if ((src_type instanceof ReferenceType) && (dest_type instanceof ReferenceType)) {
@@ -616,7 +622,7 @@ public class InstructionFactory implements InstructionConstants, java.io.Seriali
 
 
     public NEW createNew( String s ) {
-        return createNew(new ObjectType(s));
+        return createNew(ObjectType.getInstance(s));
     }
 
 

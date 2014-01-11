@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,7 +17,7 @@
  */
 package com.crash4j.engine.spi.instrument.bcel.classfile;
 
-import java.io.DataInputStream;
+import java.io.DataInput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -28,12 +29,13 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * should appear per classfile.  The intention of this class is that it is
  * instantiated from the <em>Attribute.readAttribute()</em> method.
  *
- * @version $Id: SourceFile.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: SourceFile.java 1532221 2013-10-15 06:49:16Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Attribute
  */
 public final class SourceFile extends Attribute {
 
+    private static final long serialVersionUID = -804226255663222912L;
     private int sourcefile_index;
 
 
@@ -54,7 +56,7 @@ public final class SourceFile extends Attribute {
      * @param constant_pool Array of constants
      * @throws IOException
      */
-    SourceFile(int name_index, int length, DataInputStream file, ConstantPool constant_pool)
+    SourceFile(int name_index, int length, DataInput file, ConstantPool constant_pool)
             throws IOException {
         this(name_index, length, file.readUnsignedShort(), constant_pool);
     }
@@ -86,6 +88,7 @@ public final class SourceFile extends Attribute {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitSourceFile(this);
     }
@@ -97,6 +100,7 @@ public final class SourceFile extends Attribute {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         super.dump(file);
         file.writeShort(sourcefile_index);
@@ -132,6 +136,7 @@ public final class SourceFile extends Attribute {
     /**
      * @return String representation
      */
+    @Override
     public final String toString() {
         return "SourceFile(" + getSourceFileName() + ")";
     }
@@ -140,7 +145,8 @@ public final class SourceFile extends Attribute {
     /**
      * @return deep copy of this attribute
      */
+    @Override
     public Attribute copy( ConstantPool _constant_pool ) {
-        return (SourceFile) clone();
+        return clone();
     }
 }

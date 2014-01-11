@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -40,7 +41,7 @@ import java.util.List;
  * That means, if you really want a new verification run of a certain
  * pass you must use a new instance of a given PassVerifier.
  *
- * @version $Id: PassVerifier.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: PassVerifier.java 1149459 2011-07-22 04:34:27Z dbrosius $
  * @author Enver Haase
  * @see com.crash4j.engine.spi.instrument.bcel.verifier.Verifier
  * @see #verify()
@@ -48,7 +49,7 @@ import java.util.List;
 public abstract class PassVerifier {
 
     /** The (warning) messages. */
-    private List messages = new ArrayList(); //Type of elements: String
+    private List<String> messages = new ArrayList<String>();
     /** The VerificationResult cache. */
     private VerificationResult verificationResult = null;
 
@@ -100,6 +101,6 @@ public abstract class PassVerifier {
      */
     public String[] getMessages() {
         verify(); // create messages if not already done (cached!)
-        return (String[]) messages.toArray(new String[messages.size()]);
+        return messages.toArray(new String[messages.size()]);
     }
 }

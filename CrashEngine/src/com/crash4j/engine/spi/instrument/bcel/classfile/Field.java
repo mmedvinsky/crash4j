@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,11 +28,12 @@ import com.crash4j.engine.spi.instrument.bcel.util.BCELComparator;
  * This class represents the field info structure, i.e., the representation 
  * for a variable in the class. See JVM specification for details.
  *
- * @version $Id: Field.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Field.java 1152077 2011-07-29 02:29:42Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public final class Field extends FieldOrMethod {
 
+    private static final long serialVersionUID = -4604082205545049134L;
     private static BCELComparator _cmp = new BCELComparator() {
 
         public boolean equals( Object o1, Object o2 ) {
@@ -112,6 +114,7 @@ public final class Field extends FieldOrMethod {
      *
      * @return String representation of field, including the signature.
      */
+    @Override
     public final String toString() {
         String name, signature, access; // Short cuts to constant pool
         // Get names from constant pool
@@ -119,7 +122,7 @@ public final class Field extends FieldOrMethod {
         access = access.equals("") ? "" : (access + " ");
         signature = Utility.signatureToString(getSignature());
         name = getName();
-        StringBuffer buf = new StringBuffer(64);
+        StringBuilder buf = new StringBuilder(64);
         buf.append(access).append(signature).append(" ").append(name);
         ConstantValue cv = getConstantValue();
         if (cv != null) {
@@ -174,6 +177,7 @@ public final class Field extends FieldOrMethod {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals( Object obj ) {
         return _cmp.equals(this, obj);
     }
@@ -185,6 +189,7 @@ public final class Field extends FieldOrMethod {
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return _cmp.hashCode(this);
     }

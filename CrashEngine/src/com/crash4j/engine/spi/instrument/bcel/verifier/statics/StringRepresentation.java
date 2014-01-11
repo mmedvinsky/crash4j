@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,6 +19,7 @@ package com.crash4j.engine.spi.instrument.bcel.verifier.statics;
 
 
 
+import com.crash4j.engine.spi.instrument.bcel.classfile.Annotations;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Code;
 import com.crash4j.engine.spi.instrument.bcel.classfile.CodeException;
 import com.crash4j.engine.spi.instrument.bcel.classfile.ConstantClass;
@@ -43,6 +45,7 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.LineNumber;
 import com.crash4j.engine.spi.instrument.bcel.classfile.LineNumberTable;
 import com.crash4j.engine.spi.instrument.bcel.classfile.LocalVariable;
 import com.crash4j.engine.spi.instrument.bcel.classfile.LocalVariableTable;
+import com.crash4j.engine.spi.instrument.bcel.classfile.LocalVariableTypeTable;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Method;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Node;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Signature;
@@ -50,8 +53,7 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.SourceFile;
 import com.crash4j.engine.spi.instrument.bcel.classfile.StackMap;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Synthetic;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Unknown;
-import com.crash4j.engine.spi.instrument.bcel.classfile.Visitor;
-import com.crash4j.engine.spi.instrument.bcel.verifier.exc.AssertionViolatedException;
+import com.crash4j.engine.spi.instrument.verifier.exc.AssertionViolatedException;
 
 /**
  * BCEL's Node classes (those from the classfile API that <B>accept()</B> Visitor
@@ -65,10 +67,10 @@ import com.crash4j.engine.spi.instrument.bcel.verifier.exc.AssertionViolatedExce
  * Note that this class also serves as a placeholder for more sophisticated message
  * handling in future versions of JustIce.
  *
- * @version $Id: StringRepresentation.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: StringRepresentation.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author Enver Haase
  */
-public class StringRepresentation extends com.crash4j.engine.spi.instrument.bcel.classfile.EmptyVisitor implements Visitor {
+public class StringRepresentation extends com.crash4j.engine.spi.instrument.bcel.classfile.EmptyVisitor {
     /** The string representation, created by a visitXXX() method, output by toString(). */
     private String tostring;
     /** The node we ask for its string representation. Not really needed; only for debug output. */
@@ -87,6 +89,7 @@ public class StringRepresentation extends com.crash4j.engine.spi.instrument.bcel
     /**
      * Returns the String representation.
      */
+    @Override
     public String toString() {
 // The run-time check below is needed because we don't want to omit inheritance
 // of "EmptyVisitor" and provide a thousand empty methods.
@@ -123,127 +126,174 @@ public class StringRepresentation extends com.crash4j.engine.spi.instrument.bcel
     // We don't of course need to call some default implementation:
     // e.g. we could also simply output "Code" instead of a possibly
     // lengthy Code attribute's toString().
+    @Override
     public void visitCode(Code obj) {
         //tostring = toString(obj);
         tostring = "<CODE>"; // We don't need real code outputs.
     }
 
+    @Override
+    public void visitAnnotation(Annotations obj)
+    {
+        //this is invoked whenever an annotation is found
+        //when verifier is passed over a class
+        tostring = toString(obj);
+    }
+    
+    @Override
+    public void visitLocalVariableTypeTable(LocalVariableTypeTable obj)
+    {
+        //this is invoked whenever a local variable type is found
+        //when verifier is passed over a class
+        tostring = toString(obj);
+    }
+    
+    @Override
     public void visitCodeException(CodeException obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantClass(ConstantClass obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantDouble(ConstantDouble obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantFieldref(ConstantFieldref obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantFloat(ConstantFloat obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantInteger(ConstantInteger obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantInterfaceMethodref(ConstantInterfaceMethodref obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantLong(ConstantLong obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantMethodref(ConstantMethodref obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantNameAndType(ConstantNameAndType obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantPool(ConstantPool obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantString(ConstantString obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantUtf8(ConstantUtf8 obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitConstantValue(ConstantValue obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitDeprecated(Deprecated obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitExceptionTable(ExceptionTable obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitField(Field obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitInnerClass(InnerClass obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitInnerClasses(InnerClasses obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitJavaClass(JavaClass obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitLineNumber(LineNumber obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitLineNumberTable(LineNumberTable obj) {
         tostring = "<LineNumberTable: " + toString(obj) + ">";
     }
 
+    @Override
     public void visitLocalVariable(LocalVariable obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitLocalVariableTable(LocalVariableTable obj) {
         tostring = "<LocalVariableTable: " + toString(obj) + ">";
     }
 
+    @Override
     public void visitMethod(Method obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitSignature(Signature obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitSourceFile(SourceFile obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitStackMap(StackMap obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitSynthetic(Synthetic obj) {
         tostring = toString(obj);
     }
 
+    @Override
     public void visitUnknown(Unknown obj) {
         tostring = toString(obj);
     }

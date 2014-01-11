@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -34,7 +35,7 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.Utility;
 /**
  * Convert constant pool into HTML file.
  *
- * @version $Id: ConstantHTML.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ConstantHTML.java 1152077 2011-07-29 02:29:42Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * 
  */
@@ -113,7 +114,6 @@ final class ConstantHTML implements com.crash4j.engine.spi.instrument.bcel.Const
                 // Partially compacted class name, i.e., / -> .
                 String method_class = constant_pool.constantToString(class_index, CONSTANT_Class);
                 String short_method_class = Utility.compactClassName(method_class); // I.e., remove java.lang.
-                short_method_class = Utility.compactClassName(method_class); // I.e., remove java.lang.
                 short_method_class = Utility.compactClassName(short_method_class, class_package
                         + ".", true); // Remove class package prefix
                 // Get method signature
@@ -126,7 +126,7 @@ final class ConstantHTML implements com.crash4j.engine.spi.instrument.bcel.Const
                 // Get return type string
                 String type = Utility.methodSignatureReturnType(signature, false);
                 String ret_type = Class2HTML.referenceType(type);
-                StringBuffer buf = new StringBuffer("(");
+                StringBuilder buf = new StringBuilder("(");
                 for (int i = 0; i < args.length; i++) {
                     buf.append(Class2HTML.referenceType(args[i]));
                     if (i < args.length - 1) {

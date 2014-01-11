@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,7 +17,7 @@
  */
 package com.crash4j.engine.spi.instrument.bcel.classfile;
 
-import java.io.DataInputStream;
+import java.io.DataInput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
 /** 
  * Abstract super class for Fieldref and Methodref constants.
  *
- * @version $Id: ConstantCP.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ConstantCP.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     ConstantFieldref
  * @see     ConstantMethodref
@@ -33,6 +34,7 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  */
 public abstract class ConstantCP extends Constant {
 
+    private static final long serialVersionUID = -6275762995206209402L;
     /** References to the constants containing the class and the field signature
      */
     protected int class_index, name_and_type_index;
@@ -53,7 +55,7 @@ public abstract class ConstantCP extends Constant {
      * @param file Input stream
      * @throws IOException
      */
-    ConstantCP(byte tag, DataInputStream file) throws IOException {
+    ConstantCP(byte tag, DataInput file) throws IOException {
         this(tag, file.readUnsignedShort(), file.readUnsignedShort());
     }
 
@@ -75,6 +77,7 @@ public abstract class ConstantCP extends Constant {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         file.writeByte(tag);
         file.writeShort(class_index);
@@ -125,6 +128,7 @@ public abstract class ConstantCP extends Constant {
     /**
      * @return String representation.
      */
+    @Override
     public final String toString() {
         return super.toString() + "(class_index = " + class_index + ", name_and_type_index = "
                 + name_and_type_index + ")";

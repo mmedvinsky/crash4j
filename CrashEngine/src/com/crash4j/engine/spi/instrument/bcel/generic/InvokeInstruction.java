@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -25,15 +26,18 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.ConstantPool;
 /**
  * Super class for the INVOKExxx family of instructions.
  *
- * @version $Id: InvokeInstruction.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: InvokeInstruction.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public abstract class InvokeInstruction extends FieldOrMethod implements ExceptionThrower,
-        TypedInstruction, StackConsumer, StackProducer {
+        StackConsumer, StackProducer {
+
+    private static final long serialVersionUID = 6089031137856650442L;
+
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     InvokeInstruction() {
     }
@@ -50,6 +54,7 @@ public abstract class InvokeInstruction extends FieldOrMethod implements Excepti
     /**
      * @return mnemonic for instruction with symbolic references resolved
      */
+    @Override
     public String toString( ConstantPool cp ) {
         Constant c = cp.getConstant(index);
         StringTokenizer tok = new StringTokenizer(cp.constantToString(c));
@@ -63,19 +68,17 @@ public abstract class InvokeInstruction extends FieldOrMethod implements Excepti
      * constant pool entry they reference.
      * @return Number of words consumed from stack by this instruction
      */
+    @Override
     public int consumeStack( ConstantPoolGen cpg ) {
-        String signature = getSignature(cpg);
-        Type[] args = Type.getArgumentTypes(signature);
         int sum;
         if (opcode == Constants.INVOKESTATIC) {
             sum = 0;
         } else {
             sum = 1; // this reference
         }
-        int n = args.length;
-        for (int i = 0; i < n; i++) {
-            sum += args[i].getSize();
-        }
+        
+        String signature = getSignature(cpg);
+        sum += Type.getArgumentTypesSize(signature);
         return sum;
     }
 
@@ -85,13 +88,16 @@ public abstract class InvokeInstruction extends FieldOrMethod implements Excepti
      * constant pool entry they reference.
      * @return Number of words produced onto stack by this instruction
      */
+    @Override
     public int produceStack( ConstantPoolGen cpg ) {
-        return getReturnType(cpg).getSize();
+    	String signature = getSignature(cpg);
+    	return Type.getReturnTypeSize(signature);
     }
 
 
     /** @return return type of referenced method.
      */
+    @Override
     public Type getType( ConstantPoolGen cpg ) {
         return getReturnType(cpg);
     }

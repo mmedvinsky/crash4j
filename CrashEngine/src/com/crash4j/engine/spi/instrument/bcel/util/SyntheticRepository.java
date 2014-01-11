@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -35,23 +36,19 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.JavaClass;
  * It is designed to be used as a singleton, however it
  * can also be used with custom classpaths.
  *
- /**
- * Abstract definition of a class repository. Instances may be used
- * to load classes from different sources and may be used in the
- * Repository.setRepository method.
- *
  * @see com.crash4j.engine.spi.instrument.bcel.Repository
  *
- * @version $Id: SyntheticRepository.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: SyntheticRepository.java 1532202 2013-10-15 06:13:17Z dbrosius $
  * @author <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @author David Dixon-Peugh
  */
 public class SyntheticRepository implements Repository {
 
-    private static final String DEFAULT_PATH = ClassPath.getClassPath();
-    private static Map _instances = new HashMap(); // CLASSPATH X REPOSITORY
+    private static final long serialVersionUID = 2923440730410019444L;
+    //private static final String DEFAULT_PATH = ClassPath.getClassPath();
+    private static final Map<ClassPath, SyntheticRepository> _instances = new HashMap<ClassPath, SyntheticRepository>(); // CLASSPATH X REPOSITORY
     private ClassPath _path = null;
-    private Map _loadedClasses = new HashMap(); // CLASSNAME X JAVACLASS
+    private Map<String, SoftReference<JavaClass>> _loadedClasses = new HashMap<String, SoftReference<JavaClass>>(); // CLASSNAME X JAVACLASS
 
 
     private SyntheticRepository(ClassPath path) {
@@ -65,7 +62,7 @@ public class SyntheticRepository implements Repository {
 
 
     public static SyntheticRepository getInstance( ClassPath classPath ) {
-        SyntheticRepository rep = (SyntheticRepository) _instances.get(classPath);
+        SyntheticRepository rep = _instances.get(classPath);
         if (rep == null) {
             rep = new SyntheticRepository(classPath);
             _instances.put(classPath, rep);
@@ -78,7 +75,7 @@ public class SyntheticRepository implements Repository {
      * Store a new JavaClass instance into this Repository.
      */
     public void storeClass( JavaClass clazz ) {
-        _loadedClasses.put(clazz.getClassName(), new SoftReference(clazz));
+        _loadedClasses.put(clazz.getClassName(), new SoftReference<JavaClass>(clazz));
         clazz.setRepository(this);
     }
 
@@ -95,11 +92,11 @@ public class SyntheticRepository implements Repository {
      * Find an already defined (cached) JavaClass object by name.
      */
     public JavaClass findClass( String className ) {
-        SoftReference ref = (SoftReference) _loadedClasses.get(className);
+        SoftReference<JavaClass> ref = _loadedClasses.get(className);
         if (ref == null) {
             return null;
         }
-        return (JavaClass) ref.get();
+        return ref.get();
     }
 
 
@@ -127,7 +124,7 @@ public class SyntheticRepository implements Repository {
             return loadClass(_path.getInputStream(className), className);
         } catch (IOException e) {
             throw new ClassNotFoundException("Exception while looking for class " + className
-                    + ": " + e.toString());
+                    + ": " + e, e);
         }
     }
 
@@ -145,18 +142,30 @@ public class SyntheticRepository implements Repository {
      * @throws ClassNotFoundException if the class is not in the
      *   Repository, and its representation could not be found
      */
-    public JavaClass loadClass( Class clazz ) throws ClassNotFoundException {
-        String className = clazz.getName();
-        JavaClass repositoryClass = findClass(className);
-        if (repositoryClass != null) {
-            return repositoryClass;
-        }
-        String name = className;
-        int i = name.lastIndexOf('.');
-        if (i > 0) {
-            name = name.substring(i + 1);
-        }
-        return loadClass(clazz.getResourceAsStream(name + ".class"), className);
+    public JavaClass loadClass( Class<?> clazz ) throws ClassNotFoundException {
+    	InputStream clsStream = null;
+    	try{
+	        String className = clazz.getName();
+	        JavaClass repositoryClass = findClass(className);
+	        if (repositoryClass != null) {
+	            return repositoryClass;
+	        }
+	        String name = className;
+	        int i = name.lastIndexOf('.');
+	        if (i > 0) {
+	            name = name.substring(i + 1);
+	        }
+	        clsStream = clazz.getResourceAsStream(name + ".class");
+	        return loadClass(clsStream, className);
+    	} finally {
+    		try{
+	    		if (clsStream != null){
+	    			clsStream.close();
+	    		}
+    		} catch(IOException ioe){
+    			//don't care
+    		}
+    	}
     }
 
 
@@ -170,7 +179,14 @@ public class SyntheticRepository implements Repository {
             }
         } catch (IOException e) {
             throw new ClassNotFoundException("Exception while looking for class " + className
-                    + ": " + e.toString());
+                    + ": " + e, e);
+        } finally {
+            if (is != null){
+                try {
+                    is.close();
+                } catch (IOException e) {
+                }
+            }
         }
         throw new ClassNotFoundException("SyntheticRepository could not load " + className);
     }

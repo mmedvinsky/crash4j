@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,10 +20,13 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
 /**
  * IMPDEP2 - Implementation dependent
  *
- * @version $Id: IMPDEP2.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: IMPDEP2.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class IMPDEP2 extends Instruction {
+
+    private static final long serialVersionUID = 4097564761941607538L;
+
 
     public IMPDEP2() {
         super(com.crash4j.engine.spi.instrument.bcel.Constants.IMPDEP2, (short) 1);
@@ -37,6 +41,7 @@ public class IMPDEP2 extends Instruction {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitIMPDEP2(this);
     }

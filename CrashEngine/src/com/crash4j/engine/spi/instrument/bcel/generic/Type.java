@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,6 +20,7 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import com.crash4j.engine.spi.instrument.bcel.Constants;
 import com.crash4j.engine.spi.instrument.bcel.classfile.ClassFormatException;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Utility;
@@ -27,12 +29,13 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.Utility;
  * Abstract super class for all possible java types, namely basic types
  * such as int, object types like String and array types, e.g. int[]
  *
- * @version $Id: Type.java 393344 2006-04-12 00:38:34Z tcurdt $
+ * @version $Id: Type.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public abstract class Type implements java.io.Serializable {
 
-    protected byte type;
+    private static final long serialVersionUID = -1985077286871826895L;
+    protected final byte type;
     protected String signature; // signature for the type
     /** Predefined constants
      */
@@ -45,15 +48,19 @@ public abstract class Type implements java.io.Serializable {
     public static final BasicType DOUBLE = new BasicType(Constants.T_DOUBLE);
     public static final BasicType FLOAT = new BasicType(Constants.T_FLOAT);
     public static final BasicType CHAR = new BasicType(Constants.T_CHAR);
-    public static final ObjectType OBJECT = new ObjectType("java.lang.Object");
-    public static final ObjectType CLASS = new ObjectType("java.lang.Class");
-    public static final ObjectType STRING = new ObjectType("java.lang.String");
-    public static final ObjectType STRINGBUFFER = new ObjectType("java.lang.StringBuffer");
-    public static final ObjectType THROWABLE = new ObjectType("java.lang.Throwable");
+    public static final ObjectType OBJECT = ObjectType.getInstance("java.lang.Object");
+    public static final ObjectType CLASS = ObjectType.getInstance("java.lang.Class");
+    public static final ObjectType STRING = ObjectType.getInstance("java.lang.String");
+    public static final ObjectType STRINGBUFFER = ObjectType.getInstance("java.lang.StringBuffer");
+    public static final ObjectType THROWABLE = ObjectType.getInstance("java.lang.Throwable");
     public static final Type[] NO_ARGS = new Type[0];
     public static final ReferenceType NULL = new ReferenceType() {
+
+        private static final long serialVersionUID = 4526765862386946282L;
     };
     public static final Type UNKNOWN = new Type(Constants.T_UNKNOWN, "<unknown object>") {
+
+        private static final long serialVersionUID = 1321113605813486066L;
     };
 
 
@@ -66,6 +73,7 @@ public abstract class Type implements java.io.Serializable {
     /**
      * @return hashcode of Type
      */
+    @Override
     public int hashCode() {
     	return type ^ signature.hashCode();
     }
@@ -74,6 +82,7 @@ public abstract class Type implements java.io.Serializable {
     /**
      * @return whether the Types are equal
      */
+    @Override
     public boolean equals(Object o) {
   		if (o instanceof Type) {
   			Type t = (Type)o;
@@ -118,6 +127,7 @@ public abstract class Type implements java.io.Serializable {
     /**
      * @return Type string, e.g. `int[]'
      */
+    @Override
     public String toString() {
         return ((this.equals(Type.NULL) || (type >= Constants.T_UNKNOWN))) ? signature : Utility
                 .signatureToString(signature, false);
@@ -133,31 +143,33 @@ public abstract class Type implements java.io.Serializable {
      * @return method signature for given type(s).
      */
     public static String getMethodSignature( Type return_type, Type[] arg_types ) {
-        StringBuffer buf = new StringBuffer("(");
-        int length = (arg_types == null) ? 0 : arg_types.length;
-        for (int i = 0; i < length; i++) {
-            buf.append(arg_types[i].getSignature());
+        StringBuilder buf = new StringBuilder("(");
+        if (arg_types != null) {
+            for (Type arg_type : arg_types) {
+                buf.append(arg_type.getSignature());
+            }
         }
         buf.append(')');
         buf.append(return_type.getSignature());
         return buf.toString();
     }
 
-    private static ThreadLocal consumed_chars = new ThreadLocal() {
+    private static final ThreadLocal<Integer> consumed_chars = new ThreadLocal<Integer>() {
 
-        protected Object initialValue() {
-            return new Integer(0);
+        @Override
+        protected Integer initialValue() {
+            return Integer.valueOf(0);
         }
     };//int consumed_chars=0; // Remember position in string, see getArgumentTypes
 
 
-    private static int unwrap( ThreadLocal tl ) {
-        return ((Integer) tl.get()).intValue();
+    private static int unwrap( ThreadLocal<Integer> tl ) {
+        return tl.get().intValue();
     }
 
 
-    private static void wrap( ThreadLocal tl, int value ) {
-        tl.set(new Integer(value));
+    private static void wrap( ThreadLocal<Integer> tl, int value ) {
+        tl.set(Integer.valueOf(value));
     }
 
 
@@ -191,7 +203,7 @@ public abstract class Type implements java.io.Serializable {
             }
             //corrected concurrent private static field acess
             wrap(consumed_chars, index + 1); // "Lblabla;" `L' and `;' are removed
-            return new ObjectType(signature.substring(1, index).replace('/', '.'));
+            return ObjectType.getInstance(signature.substring(1, index).replace('/', '.'));
         }
     }
 
@@ -208,7 +220,7 @@ public abstract class Type implements java.io.Serializable {
             int index = signature.lastIndexOf(')') + 1;
             return getType(signature.substring(index));
         } catch (StringIndexOutOfBoundsException e) { // Should never occur
-            throw new ClassFormatException("Invalid method signature: " + signature);
+            throw new ClassFormatException("Invalid method signature: " + signature, e);
         }
     }
 
@@ -219,7 +231,7 @@ public abstract class Type implements java.io.Serializable {
      * @return array of argument types
      */
     public static Type[] getArgumentTypes( String signature ) {
-        List vec = new ArrayList();
+        List<Type> vec = new ArrayList<Type>();
         int index;
         Type[] types;
         try { // Read all declarations between for `(' and `)'
@@ -233,7 +245,7 @@ public abstract class Type implements java.io.Serializable {
                 index += unwrap(consumed_chars); // update position
             }
         } catch (StringIndexOutOfBoundsException e) { // Should never occur
-            throw new ClassFormatException("Invalid method signature: " + signature);
+            throw new ClassFormatException("Invalid method signature: " + signature, e);
         }
         types = new Type[vec.size()];
         vec.toArray(types);
@@ -245,7 +257,7 @@ public abstract class Type implements java.io.Serializable {
      * @param cl Java class
      * @return corresponding Type object
      */
-    public static Type getType( java.lang.Class cl ) {
+    public static Type getType( java.lang.Class<?> cl ) {
         if (cl == null) {
             throw new IllegalArgumentException("Class must not be null");
         }
@@ -279,7 +291,7 @@ public abstract class Type implements java.io.Serializable {
                 throw new IllegalStateException("Ooops, what primitive type is " + cl);
             }
         } else { // "Real" class
-            return new ObjectType(cl.getName());
+            return ObjectType.getInstance(cl.getName());
         }
     }
 
@@ -289,7 +301,7 @@ public abstract class Type implements java.io.Serializable {
      * @param classes an array of runtime class objects
      * @return array of corresponding Type objects
      */
-    public static Type[] getTypes( java.lang.Class[] classes ) {
+    public static Type[] getTypes( java.lang.Class<?>[] classes ) {
         Type[] ret = new Type[classes.length];
         for (int i = 0; i < ret.length; i++) {
             ret[i] = getType(classes[i]);
@@ -299,13 +311,71 @@ public abstract class Type implements java.io.Serializable {
 
 
     public static String getSignature( java.lang.reflect.Method meth ) {
-        StringBuffer sb = new StringBuffer("(");
-        Class[] params = meth.getParameterTypes(); // avoid clone
-        for (int j = 0; j < params.length; j++) {
-            sb.append(getType(params[j]).getSignature());
+        StringBuilder sb = new StringBuilder("(");
+        Class<?>[] params = meth.getParameterTypes(); // avoid clone
+        for (Class<?> param : params) {
+            sb.append(getType(param).getSignature());
         }
         sb.append(")");
         sb.append(getType(meth.getReturnType()).getSignature());
         return sb.toString();
     }
+    
+    static int size(int coded) {
+    	return coded & 3;
+    }
+    
+    static int consumed(int coded) {
+    	return coded >> 2;
+    }
+    
+    static int encode(int size, int consumed) {
+    	return consumed << 2 | size;
+    }
+    
+    static int getArgumentTypesSize( String signature ) {
+        int res = 0;
+        int index;
+        try { // Read all declarations between for `(' and `)'
+            if (signature.charAt(0) != '(') {
+                throw new ClassFormatException("Invalid method signature: " + signature);
+            }
+            index = 1; // current string position
+            while (signature.charAt(index) != ')') {
+                int coded = getTypeSize(signature.substring(index));
+                res += size(coded);
+                index += consumed(coded);
+            }
+        } catch (StringIndexOutOfBoundsException e) { // Should never occur
+            throw new ClassFormatException("Invalid method signature: " + signature, e);
+        }
+        return res;
+    }
+    
+    static final int getTypeSize( String signature ) throws StringIndexOutOfBoundsException {
+        byte type = Utility.typeOfSignature(signature);
+        if (type <= Constants.T_VOID) {
+            return encode(BasicType.getType(type).getSize(), 1);
+        } else if (type == Constants.T_ARRAY) {
+            int dim = 0;
+            do { // Count dimensions
+                dim++;
+            } while (signature.charAt(dim) == '[');
+            // Recurse, but just once, if the signature is ok
+            int consumed = consumed(getTypeSize(signature.substring(dim)));
+            return encode(1, dim + consumed);
+        } else { // type == T_REFERENCE
+            int index = signature.indexOf(';'); // Look for closing `;'
+            if (index < 0) {
+                throw new ClassFormatException("Invalid signature: " + signature);
+            }
+            return encode(1, index + 1);
+        }
+    }
+
+
+	static int getReturnTypeSize(String signature) {
+		int index = signature.lastIndexOf(')') + 1;
+		return Type.size(getTypeSize(signature.substring(index)));
+	}
 }

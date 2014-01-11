@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,7 +22,7 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  * TABLESWITCH instruction, depending on whether the match values (int[]) can be
  * sorted with no gaps between the numbers.
  *
- * @version $Id: SWITCH.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: SWITCH.java 1149459 2011-07-22 04:34:27Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public final class SWITCH implements CompoundInstruction {
@@ -48,8 +49,8 @@ public final class SWITCH implements CompoundInstruction {
      * @param max_gap maximum gap that may between case branches
      */
     public SWITCH(int[] match, InstructionHandle[] targets, InstructionHandle target, int max_gap) {
-        this.match = (int[]) match.clone();
-        this.targets = (InstructionHandle[]) targets.clone();
+        this.match = match.clone();
+        this.targets = targets.clone();
         if ((match_length = match.length) < 2) {
             instruction = new TABLESWITCH(match, targets, target);
         } else {

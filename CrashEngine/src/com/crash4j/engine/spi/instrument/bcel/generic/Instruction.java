@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,7 +20,7 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Locale;
+
 
 import com.crash4j.engine.spi.instrument.bcel.Constants;
 import com.crash4j.engine.spi.instrument.bcel.classfile.ConstantPool;
@@ -28,11 +29,12 @@ import com.crash4j.engine.spi.instrument.bcel.util.ByteSequence;
 /** 
  * Abstract super class for all Java byte codes.
  *
- * @version $Id: InstructionImpl.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Instruction.java 1547656 2013-12-04 00:43:17Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public abstract class Instruction implements Cloneable, Serializable {
 
+    private static final long serialVersionUID = -2518741982574515847L;
     protected short length = 1; // Length of instruction in bytes 
     protected short opcode = -1; // Opcode number
     private static InstructionComparator cmp = InstructionComparator.DEFAULT;
@@ -40,7 +42,7 @@ public abstract class Instruction implements Cloneable, Serializable {
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     Instruction() {
     }
@@ -89,6 +91,7 @@ public abstract class Instruction implements Cloneable, Serializable {
     /**
      * @return mnemonic for instruction in verbose format
      */
+    @Override
     public String toString() {
         return toString(true);
     }
@@ -131,6 +134,7 @@ public abstract class Instruction implements Cloneable, Serializable {
      *
      * @param bytes byte sequence to read from
      * @param wide "wide" instruction flag
+     * @throws IOException may be thrown if the implementation needs to read data from the file
      */
     protected void initFromFile( ByteSequence bytes, boolean wide ) throws IOException {
     }
@@ -154,53 +158,312 @@ public abstract class Instruction implements Cloneable, Serializable {
         if (InstructionConstants.INSTRUCTIONS[opcode] != null) {
             return InstructionConstants.INSTRUCTIONS[opcode]; // Used predefined immutable object, if available
         }
-        /* Find appropiate class, instantiate an (empty) instruction object
-         * and initialize it by hand.
-         */
-        Class clazz;
-        try {
-            clazz = Class.forName(className(opcode));
-        } catch (ClassNotFoundException cnfe) {
-            // If a class by that name does not exist, the opcode is illegal.
-            // Note that IMPDEP1, IMPDEP2, BREAKPOINT are also illegal in a sense.
-            throw new ClassGenException("Illegal opcode detected.");
-        }
-        try {
-            obj = (Instruction) clazz.newInstance();
-            if (wide
-                    && !((obj instanceof LocalVariableInstruction) || (obj instanceof IINC) || (obj instanceof RET))) {
-                throw new Exception("Illegal opcode after wide: " + opcode);
-            }
-            obj.setOpcode(opcode);
-            obj.initFromFile(bytes, wide); // Do further initializations, if any
-            // Byte code offset set in InstructionList
-        } catch (Exception e) {
-            throw new ClassGenException(e.toString());
-        }
-        return obj;
-    }
+        
+        switch (opcode) {
+			case Constants.BIPUSH:
+				obj = new BIPUSH();
+				break;
+			case Constants.SIPUSH:
+				obj = new SIPUSH();
+				break;
+			case Constants.LDC:
+				obj = new LDC();
+				break;
+			case Constants.LDC_W:
+				obj = new LDC_W();
+				break;
+			case Constants.LDC2_W:
+				obj = new LDC2_W();
+				break;
+			case Constants.ILOAD:
+				obj = new ILOAD();
+				break;
+			case Constants.LLOAD:
+				obj = new LLOAD();
+				break;
+			case Constants.FLOAD:
+				obj = new FLOAD();
+				break;
+			case Constants.DLOAD:
+				obj = new DLOAD();
+				break;
+			case Constants.ALOAD:
+				obj = new ALOAD();
+				break;
+			case Constants.ILOAD_0:
+				obj = new ILOAD(0);
+				break;
+			case Constants.ILOAD_1:
+				obj = new ILOAD(1);
+				break;
+			case Constants.ILOAD_2:
+				obj = new ILOAD(2);
+				break;
+			case Constants.ILOAD_3:
+				obj = new ILOAD(3);
+				break;
+			case Constants.LLOAD_0:
+				obj = new LLOAD(0);
+				break;
+			case Constants.LLOAD_1:
+				obj = new LLOAD(1);
+				break;
+			case Constants.LLOAD_2:
+				obj = new LLOAD(2);
+				break;
+			case Constants.LLOAD_3:
+				obj = new LLOAD(3);
+				break;
+			case Constants.FLOAD_0:
+				obj = new FLOAD(0);
+				break;
+			case Constants.FLOAD_1:
+				obj = new FLOAD(1);
+				break;
+			case Constants.FLOAD_2:
+				obj = new FLOAD(2);
+				break;
+			case Constants.FLOAD_3:
+				obj = new FLOAD(3);
+				break;
+			case Constants.DLOAD_0:
+				obj = new DLOAD(0);
+				break;
+			case Constants.DLOAD_1:
+				obj = new DLOAD(1);
+				break;
+			case Constants.DLOAD_2:
+				obj = new DLOAD(2);
+				break;
+			case Constants.DLOAD_3:
+				obj = new DLOAD(3);
+				break;
+			case Constants.ALOAD_0:
+				obj = new ALOAD(0);
+				break;
+			case Constants.ALOAD_1:
+				obj = new ALOAD(1);
+				break;
+			case Constants.ALOAD_2:
+				obj = new ALOAD(2);
+				break;
+			case Constants.ALOAD_3:
+				obj = new ALOAD(3);
+				break;
+			case Constants.ISTORE:
+				obj = new ISTORE();
+				break;
+			case Constants.LSTORE:
+				obj = new LSTORE();
+				break;
+			case Constants.FSTORE:
+				obj = new FSTORE();
+				break;
+			case Constants.DSTORE:
+				obj = new DSTORE();
+				break;
+			case Constants.ASTORE:
+				obj = new ASTORE();
+				break;
+			case Constants.ISTORE_0:
+				obj = new ISTORE(0);
+				break;
+			case Constants.ISTORE_1:
+				obj = new ISTORE(1);
+				break;
+			case Constants.ISTORE_2:
+				obj = new ISTORE(2);
+				break;
+			case Constants.ISTORE_3:
+				obj = new ISTORE(3);
+				break;
+			case Constants.LSTORE_0:
+				obj = new LSTORE(0);
+				break;
+			case Constants.LSTORE_1:
+				obj = new LSTORE(1);
+				break;
+			case Constants.LSTORE_2:
+				obj = new LSTORE(2);
+				break;
+			case Constants.LSTORE_3:
+				obj = new LSTORE(3);
+				break;
+			case Constants.FSTORE_0:
+				obj = new FSTORE(0);
+				break;
+			case Constants.FSTORE_1:
+				obj = new FSTORE(1);
+				break;
+			case Constants.FSTORE_2:
+				obj = new FSTORE(2);
+				break;
+			case Constants.FSTORE_3:
+				obj = new FSTORE(3);
+				break;
+			case Constants.DSTORE_0:
+				obj = new DSTORE(0);
+				break;
+			case Constants.DSTORE_1:
+				obj = new DSTORE(1);
+				break;
+			case Constants.DSTORE_2:
+				obj = new DSTORE(2);
+				break;
+			case Constants.DSTORE_3:
+				obj = new DSTORE(3);
+				break;
+			case Constants.ASTORE_0:
+				obj = new ASTORE(0);
+				break;
+			case Constants.ASTORE_1:
+				obj = new ASTORE(1);
+				break;
+			case Constants.ASTORE_2:
+				obj = new ASTORE(2);
+				break;
+			case Constants.ASTORE_3:
+				obj = new ASTORE(3);
+				break;
+			case Constants.IINC:
+				obj = new IINC();
+				break;
+			case Constants.IFEQ:
+				obj = new IFEQ();
+				break;
+			case Constants.IFNE:
+				obj = new IFNE();
+				break;
+			case Constants.IFLT:
+				obj = new IFLT();
+				break;
+			case Constants.IFGE:
+				obj = new IFGE();
+				break;
+			case Constants.IFGT:
+				obj = new IFGT();
+				break;
+			case Constants.IFLE:
+				obj = new IFLE();
+				break;
+			case Constants.IF_ICMPEQ:
+				obj = new IF_ICMPEQ();
+				break;
+			case Constants.IF_ICMPNE:
+				obj = new IF_ICMPNE();
+				break;
+			case Constants.IF_ICMPLT:
+				obj = new IF_ICMPLT();
+				break;
+			case Constants.IF_ICMPGE:
+				obj = new IF_ICMPGE();
+				break;
+			case Constants.IF_ICMPGT:
+				obj = new IF_ICMPGT();
+				break;
+			case Constants.IF_ICMPLE:
+				obj = new IF_ICMPLE();
+				break;
+			case Constants.IF_ACMPEQ:
+				obj = new IF_ACMPEQ();
+				break;
+			case Constants.IF_ACMPNE:
+				obj = new IF_ACMPNE();
+				break;
+			case Constants.GOTO:
+				obj = new GOTO();
+				break;
+			case Constants.JSR:
+				obj = new JSR();
+				break;
+			case Constants.RET:
+				obj = new RET();
+				break;
+			case Constants.TABLESWITCH:
+				obj = new TABLESWITCH();
+				break;
+			case Constants.LOOKUPSWITCH:
+				obj = new LOOKUPSWITCH();
+				break;
+			case Constants.GETSTATIC:
+				obj = new GETSTATIC();
+				break;
+			case Constants.PUTSTATIC:
+				obj = new PUTSTATIC();
+				break;
+			case Constants.GETFIELD:
+				obj = new GETFIELD();
+				break;
+			case Constants.PUTFIELD:
+				obj = new PUTFIELD();
+				break;
+			case Constants.INVOKEVIRTUAL:
+				obj = new INVOKEVIRTUAL();
+				break;
+			case Constants.INVOKESPECIAL:
+				obj = new INVOKESPECIAL();
+				break;
+			case Constants.INVOKESTATIC:
+				obj = new INVOKESTATIC();
+				break;
+			case Constants.INVOKEINTERFACE:
+				obj = new INVOKEINTERFACE();
+				break;
+			case Constants.INVOKEDYNAMIC:
+				obj = new INVOKEDYNAMIC();
+				break;
+			case Constants.NEW:
+				obj = new NEW();
+				break;
+			case Constants.NEWARRAY:
+				obj = new NEWARRAY();
+				break;
+			case Constants.ANEWARRAY:
+				obj = new ANEWARRAY();
+				break;
+			case Constants.CHECKCAST:
+				obj = new CHECKCAST();
+				break;
+			case Constants.INSTANCEOF:
+				obj = new INSTANCEOF();
+				break;
+			case Constants.MULTIANEWARRAY:
+				obj = new MULTIANEWARRAY();
+				break;
+			case Constants.IFNULL:
+				obj = new IFNULL();
+				break;
+			case Constants.IFNONNULL:
+				obj = new IFNONNULL();
+				break;
+			case Constants.GOTO_W:
+				obj = new GOTO_W();
+				break;
+			case Constants.JSR_W:
+				obj = new JSR_W();
+				break;
+			case Constants.BREAKPOINT:
+				obj = new BREAKPOINT();
+				break;
+			case Constants.IMPDEP1:
+				obj = new IMPDEP1();
+				break;
+			case Constants.IMPDEP2:
+				obj = new IMPDEP2();
+				break;
+			default:
+				throw new ClassGenException("Illegal opcode detected: " + opcode);
 
-
-    private static final String className( short opcode ) {
-        String name = Constants.OPCODE_NAMES[opcode].toUpperCase(Locale.ENGLISH);
-        /* ICONST_0, etc. will be shortened to ICONST, etc., since ICONST_0 and the like
-         * are not implemented (directly).
-         */
-        try {
-            int len = name.length();
-            char ch1 = name.charAt(len - 2), ch2 = name.charAt(len - 1);
-            if ((ch1 == '_') && (ch2 >= '0') && (ch2 <= '5')) {
-                name = name.substring(0, len - 2);
-            }
-            if (name.equals("ICONST_M1")) {
-                name = "ICONST";
-            }
-        } catch (StringIndexOutOfBoundsException e) {
-            System.err.println(e);
-        }
-        return "com.crash4j.engine.spi.instrument.bcel.generic." + name;
-    }
-
+		}
+        
+        if (wide
+				&& !((obj instanceof LocalVariableInstruction) || (obj instanceof IINC) || (obj instanceof RET))) {
+			throw new ClassGenException("Illegal opcode after wide: " + opcode);
+		}
+		obj.setOpcode(opcode);
+		obj.initFromFile(bytes, wide); // Do further initializations, if any
+		return obj;
+	}
 
     /**
      * This method also gives right results for instructions whose
@@ -271,23 +534,36 @@ public abstract class Instruction implements Cloneable, Serializable {
      * equality of instructions.
      *
      * @return currently used comparator for equals()
+     * @deprecated use the built in comparator, or wrap this class in another object that implements these methods
      */
+    @Deprecated
     public static InstructionComparator getComparator() {
         return cmp;
     }
 
 
     /** Set comparator to be used for equals().
+      * @deprecated use the built in comparator, or wrap this class in another object that implements these methods
      */
+    @Deprecated
     public static void setComparator( InstructionComparator c ) {
         cmp = c;
     }
 
 
     /** Check for equality, delegated to comparator
-     * @return true if that is an InstructionImpl and has the same opcode
+     * @return true if that is an Instruction and has the same opcode
      */
+    @Override
     public boolean equals( Object that ) {
         return (that instanceof Instruction) ? cmp.equals(this, (Instruction) that) : false;
+    }
+    
+    /** calculate the hashCode of this object
+     * @return the hashCode
+     */
+    @Override
+    public int hashCode() {
+        return opcode;
     }
 }

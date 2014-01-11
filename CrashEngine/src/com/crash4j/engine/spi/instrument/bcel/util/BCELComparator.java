@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,7 +21,7 @@ package com.crash4j.engine.spi.instrument.bcel.util;
  * Used for BCEL comparison strategy
  * 
  * @author <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
- * @version $Id: BCELComparator.java 410087 2006-05-29 12:12:19Z tcurdt $
+ * @version $Id: BCELComparator.java 1158060 2011-08-15 23:17:19Z dbrosius $
  * @since 5.2
  */
 public interface BCELComparator {
@@ -32,7 +33,7 @@ public interface BCELComparator {
      * @param THAT
      * @return true if and only if THIS equals THAT
      */
-    public boolean equals( Object THIS, Object THAT );
+    boolean equals( Object THIS, Object THAT );
 
 
     /**
@@ -41,5 +42,5 @@ public interface BCELComparator {
      * @param THIS
      * @return hashcode for THIS.hashCode()
      */
-    public int hashCode( Object THIS );
+    int hashCode( Object THIS );
 }

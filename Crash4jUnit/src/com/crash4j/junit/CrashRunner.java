@@ -120,7 +120,7 @@ public class CrashRunner extends BlockJUnit4ClassRunner
                 {
                 }
                 
-                
+                System.out.println("Before Plan");
                 //If there is no plan then just exit.
                 if (!resolver.hasPlan(jklass, method.getMethod()))
                 {
@@ -139,6 +139,8 @@ public class CrashRunner extends BlockJUnit4ClassRunner
                 	moniker = resolver.getAdapter().registerCollector("com.crash4j.engine.spi.json.StatsJSONFileCollector", 
                 			map, resolver.getCollectionPeriod(), TimeUnit.MILLISECONDS);
                 }
+                
+                System.out.println("After Plan");
                 
                 ExecutorService executor = Executors.newFixedThreadPool(concrrency);
 

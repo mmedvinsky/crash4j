@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,8 +25,8 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.JavaClass;
 import com.crash4j.engine.spi.instrument.bcel.verifier.PassVerifier;
 import com.crash4j.engine.spi.instrument.bcel.verifier.VerificationResult;
 import com.crash4j.engine.spi.instrument.bcel.verifier.Verifier;
-import com.crash4j.engine.spi.instrument.bcel.verifier.exc.LoadingException;
-import com.crash4j.engine.spi.instrument.bcel.verifier.exc.Utility;
+import com.crash4j.engine.spi.instrument.verifier.exc.LoadingException;
+import com.crash4j.engine.spi.instrument.verifier.exc.Utility;
 
 /**
  * This PassVerifier verifies a class file according to pass 1 as
@@ -33,7 +34,7 @@ import com.crash4j.engine.spi.instrument.bcel.verifier.exc.Utility;
  * More detailed information is to be found at the do_verify() method's
  * documentation.
  *
- * @version $Id: Pass1Verifier.java 371539 2006-01-23 14:08:00Z tcurdt $
+ * @version $Id: Pass1Verifier.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author Enver Haase
  * @see #do_verify()
  */
@@ -131,7 +132,8 @@ public final class Pass1Verifier extends PassVerifier{
 	 *
 	 * @see com.crash4j.engine.spi.instrument.bcel.Repository
 	 */
-	public VerificationResult do_verify(){
+	@Override
+    public VerificationResult do_verify(){
 		JavaClass jc;
 		try{
 			jc = getJavaClass();	//loads in the class file if not already done.
@@ -178,7 +180,8 @@ public final class Pass1Verifier extends PassVerifier{
 	 * method is currently useless and therefore marked as
 	 * <B>TODO</B>.
 	 */
-	public String[] getMessages(){
+	@Override
+    public String[] getMessages(){
 		// This method is only here to override the javadoc-comment.
 		return super.getMessages();
 	}

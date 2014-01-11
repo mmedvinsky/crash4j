@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -31,7 +32,7 @@ import java.lang.reflect.Modifier;
  * <pre>java org.apache.bcel.util.JavaWrapper -Dbcel.classloader=foo.MyLoader &lt;real.class.name&gt; [arguments]</pre>
  * </p>
  *
- * @version $Id: JavaWrapper.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: JavaWrapper.java 1149459 2011-07-22 04:34:27Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see ClassLoader
  */
@@ -43,12 +44,12 @@ public class JavaWrapper {
     private static java.lang.ClassLoader getClassLoader() {
         String s = System.getProperty("bcel.classloader");
         if ((s == null) || "".equals(s)) {
-            s = "com.crash4j.engine.spi.instrument.bcel.util.ClassLoader";
+            s = "org.apache.bcel.util.ClassLoader";
         }
         try {
             return (java.lang.ClassLoader) Class.forName(s).newInstance();
         } catch (Exception e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e.toString(), e);
         }
     }
 
@@ -69,7 +70,7 @@ public class JavaWrapper {
      * @param argv the arguments just as you would pass them directly
      */
     public void runMain( String class_name, String[] argv ) throws ClassNotFoundException {
-        Class cl = loader.loadClass(class_name);
+        Class<?> cl = loader.loadClass(class_name);
         Method method = null;
         try {
             method = cl.getMethod("main", new Class[] {
@@ -78,7 +79,7 @@ public class JavaWrapper {
             /* Method main is sane ?
              */
             int m = method.getModifiers();
-            Class r = method.getReturnType();
+            Class<?> r = method.getReturnType();
             if (!(Modifier.isPublic(m) && Modifier.isStatic(m)) || Modifier.isAbstract(m)
                     || (r != Void.TYPE)) {
                 throw new NoSuchMethodException();

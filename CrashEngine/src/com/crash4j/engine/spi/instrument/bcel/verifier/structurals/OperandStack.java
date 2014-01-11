@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,21 +23,21 @@ import java.util.ArrayList;
 import com.crash4j.engine.spi.instrument.bcel.generic.ObjectType;
 import com.crash4j.engine.spi.instrument.bcel.generic.ReferenceType;
 import com.crash4j.engine.spi.instrument.bcel.generic.Type;
-import com.crash4j.engine.spi.instrument.bcel.verifier.exc.AssertionViolatedException;
-import com.crash4j.engine.spi.instrument.bcel.verifier.exc.StructuralCodeConstraintException;
+import com.crash4j.engine.spi.instrument.verifier.exc.AssertionViolatedException;
+import com.crash4j.engine.spi.instrument.verifier.exc.StructuralCodeConstraintException;
 
 /**
  * This class implements a stack used for symbolic JVM stack simulation.
  * [It's used an an operand stack substitute.]
  * Elements of this stack are org.apache.bcel.generic.Type objects.
  *
- * @version $Id: OperandStack.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: OperandStack.java 1532202 2013-10-15 06:13:17Z dbrosius $
  * @author Enver Haase
  */
 public class OperandStack{
 
 	/** We hold the stack information here. */
-	private ArrayList stack = new ArrayList();
+	private ArrayList<Type> stack = new ArrayList<Type>();
 
 	/** The maximum number of stack slots this OperandStack instance may hold. */
 	private int maxStack;
@@ -61,9 +62,10 @@ public class OperandStack{
 	 * on a new stack. However, the Type objects on the stack are
 	 * shared.
 	 */
-	protected Object clone(){
+	@Override
+    protected Object clone(){
 		OperandStack newstack = new OperandStack(this.maxStack);
-		newstack.stack = (ArrayList) this.stack.clone();
+		newstack.stack = (ArrayList<Type>) this.stack.clone();
 		return newstack;
 	}
 
@@ -71,19 +73,21 @@ public class OperandStack{
 	 * Clears the stack.
 	 */
 	public void clear(){
-		stack = new ArrayList();
+		stack = new ArrayList<Type>();
 	}
 
 	/** @return a hash code value for the object.
      */
-	public int hashCode() { return stack.hashCode(); }
+	@Override
+    public int hashCode() { return stack.hashCode(); }
 
 	/**
 	 * Returns true if and only if this OperandStack
 	 * equals another, meaning equal lengths and equal
 	 * objects on the stacks.
 	 */
-	public boolean equals(Object o){
+	@Override
+    public boolean equals(Object o){
 		if (!(o instanceof OperandStack)) {
             return false;
         }
@@ -126,14 +130,14 @@ public class OperandStack{
    * iff i==0 the top element is returned. The element is not popped off the stack!
    */
 	public Type peek(int i){
-		return (Type) stack.get(size()-i-1);
+		return stack.get(size()-i-1);
 	}
 
 	/**
 	 * Returns the element on top of the stack. The element is popped off the stack.
 	 */
 	public Type pop(){
-		Type e = (Type) stack.remove(size()-1);
+		Type e = stack.remove(size()-1);
 		return e;
 	}
 
@@ -189,8 +193,9 @@ public class OperandStack{
 	/**
 	 * Returns a String representation of this OperandStack instance.
 	 */
-	public String toString(){
-		StringBuffer sb = new StringBuffer();
+	@Override
+    public String toString(){
+	    StringBuilder sb = new StringBuilder();
 		sb.append("Slots used: ");
 		sb.append(slotsUsed());
 		sb.append(" MaxStack: ");
@@ -245,7 +250,7 @@ public class OperandStack{
 		}
 	    } catch (ClassNotFoundException e) {
 		// FIXME: maybe not the best way to handle this
-		throw new AssertionViolatedException("Missing class: " + e.toString());
+		throw new AssertionViolatedException("Missing class: " + e, e);
 	    }
 	}
 

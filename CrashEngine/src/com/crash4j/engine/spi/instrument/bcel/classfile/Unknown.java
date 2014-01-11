@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,7 +21,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import com.crash4j.engine.spi.instrument.bcel.Constants;
@@ -36,26 +36,24 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * org.apache.bcel.classfile.AttributeReader)">Attribute.addAttributeReader</a>.
 
  *
- * @version $Id: Unknown.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Unknown.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @see com.crash4j.engine.spi.instrument.bcel.classfile.Attribute
  * @see com.crash4j.engine.spi.instrument.bcel.classfile.AttributeReader
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public final class Unknown extends Attribute {
 
+    private static final long serialVersionUID = -4099655108069755015L;
     private byte[] bytes;
     private String name;
-    private static Map unknown_attributes = new HashMap();
+    private static final Map<String, Unknown> unknown_attributes = new HashMap<String, Unknown>();
 
 
     /** @return array of unknown attributes, but just one for each kind.
      */
     static Unknown[] getUnknownAttributes() {
         Unknown[] unknowns = new Unknown[unknown_attributes.size()];
-        Iterator entries = unknown_attributes.values().iterator();
-        for (int i = 0; entries.hasNext(); i++) {
-            unknowns[i] = (Unknown) entries.next();
-        }
+        unknown_attributes.values().toArray(unknowns);
         unknown_attributes.clear();
         return unknowns;
     }
@@ -112,6 +110,7 @@ public final class Unknown extends Attribute {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitUnknown(this);
     }
@@ -123,6 +122,7 @@ public final class Unknown extends Attribute {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         super.dump(file);
         if (length > 0) {
@@ -142,6 +142,7 @@ public final class Unknown extends Attribute {
     /**
      * @return name of attribute.
      */
+    @Override
     public final String getName() {
         return name;
     }
@@ -158,6 +159,7 @@ public final class Unknown extends Attribute {
     /**
      * @return String representation.
      */
+    @Override
     public final String toString() {
         if (length == 0 || bytes == null) {
             return "(Unknown attribute " + name + ")";
@@ -177,6 +179,7 @@ public final class Unknown extends Attribute {
     /**
      * @return deep copy of this attribute
      */
+    @Override
     public Attribute copy( ConstantPool _constant_pool ) {
         Unknown c = (Unknown) clone();
         if (bytes != null) {

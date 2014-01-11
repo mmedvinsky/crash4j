@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -25,14 +26,16 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.JavaClass;
  * Utility class implementing a (typesafe) collection of JavaClass
  * objects. Contains the most important methods of a Vector.
  *
- * @version $Id: ClassVector.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ClassVector.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A> 
  * 
  * @deprecated as of 5.1.1 - 7/17/2005
  */
+@Deprecated
 public class ClassVector implements java.io.Serializable {
 
-    protected List vec = new ArrayList();
+    private static final long serialVersionUID = 5600397075672780806L;
+    protected List<JavaClass> vec = new ArrayList<JavaClass>();
 
 
     public void addElement( JavaClass clazz ) {
@@ -41,7 +44,7 @@ public class ClassVector implements java.io.Serializable {
 
 
     public JavaClass elementAt( int index ) {
-        return (JavaClass) vec.get(index);
+        return vec.get(index);
     }
 
 

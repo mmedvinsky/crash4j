@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,7 +17,7 @@
  */
 package com.crash4j.engine.spi.instrument.bcel.classfile;
 
-import java.io.DataInputStream;
+import java.io.DataInput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -26,12 +27,13 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * This class is derived from <em>Attribute</em> and represents a reference
  * to a PMG attribute.
  *
- * @version $Id: PMGClass.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: PMGClass.java 1532221 2013-10-15 06:49:16Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Attribute
  */
 public final class PMGClass extends Attribute {
 
+    private static final long serialVersionUID = -7075964153234211509L;
     private int pmg_class_index, pmg_index;
 
 
@@ -53,7 +55,7 @@ public final class PMGClass extends Attribute {
      * @param constant_pool Array of constants
      * @throws IOException
      */
-    PMGClass(int name_index, int length, DataInputStream file, ConstantPool constant_pool)
+    PMGClass(int name_index, int length, DataInput file, ConstantPool constant_pool)
             throws IOException {
         this(name_index, length, file.readUnsignedShort(), file.readUnsignedShort(), constant_pool);
     }
@@ -81,6 +83,7 @@ public final class PMGClass extends Attribute {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         System.err.println("Visiting non-standard PMGClass object");
     }
@@ -92,6 +95,7 @@ public final class PMGClass extends Attribute {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         super.dump(file);
         file.writeShort(pmg_index);
@@ -154,6 +158,7 @@ public final class PMGClass extends Attribute {
     /**
      * @return String representation
      */
+    @Override
     public final String toString() {
         return "PMGClass(" + getPMGName() + ", " + getPMGClassName() + ")";
     }
@@ -162,7 +167,8 @@ public final class PMGClass extends Attribute {
     /**
      * @return deep copy of this attribute
      */
+    @Override
     public Attribute copy( ConstantPool _constant_pool ) {
-        return (PMGClass) clone();
+        return clone();
     }
 }

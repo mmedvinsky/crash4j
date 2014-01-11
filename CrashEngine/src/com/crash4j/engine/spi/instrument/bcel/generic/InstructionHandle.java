@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -26,7 +27,7 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.Utility;
 
 /**
  * Instances of this class give users a handle to the instructions contained in
- * an InstructionList. InstructionImpl objects may be used more than once within a
+ * an InstructionList. Instruction objects may be used more than once within a
  * list, this is useful because it saves memory and may be much faster.
  *
  * Within an InstructionList an InstructionHandle object is wrapped
@@ -36,19 +37,20 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.Utility;
  * can traverse the list via an Enumeration returned by
  * InstructionList.elements().
  *
- * @version $Id: InstructionHandle.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: InstructionHandle.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
- * @see InstructionImpl
+ * @see Instruction
  * @see BranchHandle
  * @see InstructionList 
  */
 public class InstructionHandle implements java.io.Serializable {
 
+    private static final long serialVersionUID = -3585254135692924106L;
     InstructionHandle next, prev; // Will be set from the outside
     Instruction instruction;
     protected int i_position = -1; // byte code offset of instruction
-    private Set targeters;
-    private Map attributes;
+    private Set<InstructionTargeter> targeters;
+    private Map<Object, Object> attributes;
 
 
     public final InstructionHandle getNext() {
@@ -68,7 +70,7 @@ public class InstructionHandle implements java.io.Serializable {
 
     /**
      * Replace current instruction contained in this handle.
-     * Old instruction is disposed using InstructionImpl.dispose().
+     * Old instruction is disposed using Instruction.dispose().
      */
     public void setInstruction( Instruction i ) { // Overridden in BranchHandle
         if (i == null) {
@@ -196,7 +198,7 @@ public class InstructionHandle implements java.io.Serializable {
      */
     public void addTargeter( InstructionTargeter t ) {
         if (targeters == null) {
-            targeters = new HashSet();
+            targeters = new HashSet<InstructionTargeter>();
         }
         //if(!targeters.contains(t))
         targeters.add(t);
@@ -213,7 +215,7 @@ public class InstructionHandle implements java.io.Serializable {
      */
     public InstructionTargeter[] getTargeters() {
         if (!hasTargeters()) {
-            return null;
+            return new InstructionTargeter[0];
         }
         InstructionTargeter[] t = new InstructionTargeter[targeters.size()];
         targeters.toArray(t);
@@ -230,6 +232,7 @@ public class InstructionHandle implements java.io.Serializable {
 
     /** @return a string representation of the contained instruction. 
      */
+    @Override
     public String toString() {
         return toString(true);
     }
@@ -242,7 +245,7 @@ public class InstructionHandle implements java.io.Serializable {
      */
     public void addAttribute( Object key, Object attr ) {
         if (attributes == null) {
-            attributes = new HashMap(3);
+            attributes = new HashMap<Object, Object>(3);
         }
         attributes.put(key, attr);
     }
@@ -273,9 +276,9 @@ public class InstructionHandle implements java.io.Serializable {
 
     /** @return all attributes associated with this handle
      */
-    public Collection getAttributes() {
+    public Collection<Object> getAttributes() {
         if (attributes == null) {
-            attributes = new HashMap(3);
+            attributes = new HashMap<Object, Object>(3);
         }
         return attributes.values();
     }

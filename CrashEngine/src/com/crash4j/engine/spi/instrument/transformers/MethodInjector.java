@@ -45,11 +45,12 @@ public class MethodInjector implements ClassFileTransformer
 			Class<?> classBeingRedefined, ProtectionDomain pd, byte[] bytes)
 			throws IllegalClassFormatException 
 	{
-		//log.logError("Processing "+className);
         if (className.contains("crash4j"))
         {
             return bytes;
         }
+
+        log.logError("Processing "+className);
         
         ThreadContext.beginIgnore();
 		try 
@@ -131,13 +132,14 @@ public class MethodInjector implements ClassFileTransformer
             }
             
             /*
-            if (pcl.getClassName().equalsIgnoreCase("com.mysql.jdbc.Connection"))
+            if (pcl.getClassName().equalsIgnoreCase("com.mysql.jdbc.Connection") ||
+            		pcl.getClassName().equalsIgnoreCase("com.mysql.jdbc.ConnectionImpl"))
             {
             	FileOutputStream fos = new FileOutputStream(pcl.getClassName());
             	fos.write(returnBytes);
             	fos.close();
             }
-            */
+             */
 			return returnBytes;
 		} 
 		catch (Throwable e) 

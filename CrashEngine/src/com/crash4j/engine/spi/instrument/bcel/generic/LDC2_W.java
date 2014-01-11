@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,14 +22,17 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  *
  * <PRE>Stack: ... -&gt; ..., item.word1, item.word2</PRE>
  *
- * @version $Id: LDC2_W.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: LDC2_W.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
-public class LDC2_W extends CPInstruction implements PushInstruction, TypedInstruction {
+public class LDC2_W extends CPInstruction implements PushInstruction {
+
+    private static final long serialVersionUID = 7403326732924539892L;
+
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     LDC2_W() {
     }
@@ -39,6 +43,7 @@ public class LDC2_W extends CPInstruction implements PushInstruction, TypedInstr
     }
 
 
+    @Override
     public Type getType( ConstantPoolGen cpg ) {
         switch (cpg.getConstantPool().getConstant(index).getTag()) {
             case com.crash4j.engine.spi.instrument.bcel.Constants.CONSTANT_Long:
@@ -55,7 +60,7 @@ public class LDC2_W extends CPInstruction implements PushInstruction, TypedInstr
         com.crash4j.engine.spi.instrument.bcel.classfile.Constant c = cpg.getConstantPool().getConstant(index);
         switch (c.getTag()) {
             case com.crash4j.engine.spi.instrument.bcel.Constants.CONSTANT_Long:
-                return new Long(((com.crash4j.engine.spi.instrument.bcel.classfile.ConstantLong) c).getBytes());
+                return Long.valueOf(((com.crash4j.engine.spi.instrument.bcel.classfile.ConstantLong) c).getBytes());
             case com.crash4j.engine.spi.instrument.bcel.Constants.CONSTANT_Double:
                 return new Double(((com.crash4j.engine.spi.instrument.bcel.classfile.ConstantDouble) c).getBytes());
             default: // Never reached
@@ -72,6 +77,7 @@ public class LDC2_W extends CPInstruction implements PushInstruction, TypedInstr
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitStackProducer(this);
         v.visitPushInstruction(this);

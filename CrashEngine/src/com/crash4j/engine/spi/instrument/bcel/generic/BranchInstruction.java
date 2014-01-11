@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,11 +28,12 @@ import com.crash4j.engine.spi.instrument.bcel.util.ByteSequence;
  * LOOKUPSWITCH and TABLESWITCH.
  *
  * @see InstructionList
- * @version $Id: BranchInstruction.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: BranchInstruction.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public abstract class BranchInstruction extends Instruction implements InstructionTargeter {
 
+    private static final long serialVersionUID = 3225905281842405051L;
     protected int index; // Branch target relative to this instruction
     protected InstructionHandle target; // Target object in instruction list
     protected int position; // Byte code offset
@@ -39,14 +41,14 @@ public abstract class BranchInstruction extends Instruction implements Instructi
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     BranchInstruction() {
     }
 
 
     /** Common super constructor
-     * @param opcode InstructionImpl opcode
+     * @param opcode Instruction opcode
      * @param target instruction to branch to
      */
     protected BranchInstruction(short opcode, InstructionHandle target) {
@@ -59,11 +61,12 @@ public abstract class BranchInstruction extends Instruction implements Instructi
      * Dump instruction as byte code to stream out.
      * @param out Output stream
      */
+    @Override
     public void dump( DataOutputStream out ) throws IOException {
         out.writeByte(opcode);
         index = getTargetOffset();
         if (Math.abs(index) >= 32767) {
-            throw new ClassGenException("Branch target offset too large for short");
+            throw new ClassGenException("Branch target offset too large for short: " + index);
         }
         out.writeShort(index); // May be negative, i.e., point backwards
     }
@@ -122,6 +125,7 @@ public abstract class BranchInstruction extends Instruction implements Instructi
      * @param verbose long/short format switch
      * @return mnemonic for instruction
      */
+    @Override
     public String toString( boolean verbose ) {
         String s = super.toString(verbose);
         String t = "null";
@@ -153,6 +157,7 @@ public abstract class BranchInstruction extends Instruction implements Instructi
      * @param wide wide prefix?
      * @see InstructionList
      */
+    @Override
     protected void initFromFile( ByteSequence bytes, boolean wide ) throws IOException {
         length = 3;
         index = bytes.readShort();
@@ -223,6 +228,7 @@ public abstract class BranchInstruction extends Instruction implements Instructi
     /**
      * Inform target that it's not targeted anymore.
      */
+    @Override
     void dispose() {
         setTarget(null);
         index = -1;

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,13 +23,14 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.LineNumber;
  * This class represents a line number within a method, i.e., give an instruction
  * a line number corresponding to the source code line.
  *
- * @version $Id: LineNumberGen.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: LineNumberGen.java 1532197 2013-10-15 05:52:15Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     LineNumber
  * @see     MethodGen
  */
 public class LineNumberGen implements InstructionTargeter, Cloneable, java.io.Serializable {
 
+    private static final long serialVersionUID = 4939965573936108738L;
     private InstructionHandle ih;
     private int src_line;
 
@@ -82,12 +84,12 @@ public class LineNumberGen implements InstructionTargeter, Cloneable, java.io.Se
     }
 
 
-    public Object clone() {
+    @Override
+    public LineNumberGen clone() {
         try {
-            return super.clone();
+            return (LineNumberGen) super.clone();
         } catch (CloneNotSupportedException e) {
-            System.err.println(e);
-            return null;
+            throw new Error("Clone Not Supported"); // never happens
         }
     }
 

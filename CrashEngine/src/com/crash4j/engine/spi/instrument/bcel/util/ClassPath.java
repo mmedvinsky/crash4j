@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,11 +24,14 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -35,22 +39,39 @@ import java.util.zip.ZipFile;
  * Responsible for loading (class) files from the CLASSPATH. Inspired by
  * sun.tools.ClassPath.
  *
- * @version $Id: ClassPath.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ClassPath.java 1554577 2013-12-31 22:06:09Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class ClassPath implements Serializable {
 
+    private static final long serialVersionUID = 2099441438483340671L;
     public static final ClassPath SYSTEM_CLASS_PATH = new ClassPath();
+    
+    private static final FilenameFilter ARCHIVE_FILTER = new FilenameFilter() {
+
+        public boolean accept( File dir, String name ) {
+            name = name.toLowerCase(Locale.ENGLISH);
+            return name.endsWith(".zip") || name.endsWith(".jar");
+        }
+    };
+    
     private PathEntry[] paths;
     private String class_path;
+    private ClassPath parent;
 
+    public ClassPath(ClassPath parent, String class_path) {
+        this(class_path);
+        this.parent = parent;
+    }
 
     /**
      * Search for classes in given path.
+     * 
+     * @param class_path
      */
     public ClassPath(String class_path) {
         this.class_path = class_path;
-        List vec = new ArrayList();
+        List<PathEntry> vec = new ArrayList<PathEntry>();
         for (StringTokenizer tok = new StringTokenizer(class_path, System
                 .getProperty("path.separator")); tok.hasMoreTokens();) {
             String path = tok.nextToken();
@@ -65,7 +86,9 @@ public class ClassPath implements Serializable {
                         }
                     }
                 } catch (IOException e) {
-                    System.err.println("CLASSPATH component " + file + ": " + e);
+                    if (path.endsWith(".zip") || path.endsWith(".jar")) {
+                        System.err.println("CLASSPATH component " + file + ": " + e);
+                    }
                 }
             }
         }
@@ -78,6 +101,7 @@ public class ClassPath implements Serializable {
      * Search for classes in CLASSPATH.
      * @deprecated Use SYSTEM_CLASS_PATH constant
      */
+    @Deprecated
     public ClassPath() {
         this(getClassPath());
     }
@@ -85,25 +109,34 @@ public class ClassPath implements Serializable {
 
     /** @return used class path string
      */
+    @Override
     public String toString() {
+        if (parent != null) {
+            return parent.toString() + File.pathSeparator + class_path;
+        }
         return class_path;
     }
 
-
+    @Override
     public int hashCode() {
+        if (parent != null) {
+            return class_path.hashCode() + parent.hashCode();            
+        }
         return class_path.hashCode();
     }
 
 
+    @Override
     public boolean equals( Object o ) {
         if (o instanceof ClassPath) {
-            return class_path.equals(((ClassPath) o).class_path);
+            ClassPath cp = (ClassPath)o;
+            return class_path.equals(cp.toString());
         }
         return false;
     }
 
 
-    private static final void getPathComponents( String path, List list ) {
+    private static final void getPathComponents( String path, List<String> list ) {
         if (path != null) {
             StringTokenizer tok = new StringTokenizer(path, File.pathSeparator);
             while (tok.hasMoreTokens()) {
@@ -126,32 +159,26 @@ public class ClassPath implements Serializable {
         String class_path = System.getProperty("java.class.path");
         String boot_path = System.getProperty("sun.boot.class.path");
         String ext_path = System.getProperty("java.ext.dirs");
-        List list = new ArrayList();
+        List<String> list = new ArrayList<String>();
         getPathComponents(class_path, list);
         getPathComponents(boot_path, list);
-        List dirs = new ArrayList();
+        List<String> dirs = new ArrayList<String>();
         getPathComponents(ext_path, dirs);
-        for (Iterator e = dirs.iterator(); e.hasNext();) {
-            File ext_dir = new File((String) e.next());
-            String[] extensions = ext_dir.list(new FilenameFilter() {
-
-                public boolean accept( File dir, String name ) {
-                    name = name.toLowerCase(Locale.ENGLISH);
-                    return name.endsWith(".zip") || name.endsWith(".jar");
-                }
-            });
+        for (String d : dirs) {
+            File ext_dir = new File(d);
+            String[] extensions = ext_dir.list(ARCHIVE_FILTER);
             if (extensions != null) {
-                for (int i = 0; i < extensions.length; i++) {
-                    list.add(ext_dir.getPath() + File.separatorChar + extensions[i]);
+                for (String extension : extensions) {
+                    list.add(ext_dir.getPath() + File.separatorChar + extension);
                 }
             }
         }
-        StringBuffer buf = new StringBuffer();
-        for (Iterator e = list.iterator(); e.hasNext();) {
-            buf.append((String) e.next());
-            if (e.hasNext()) {
-                buf.append(File.pathSeparatorChar);
-            }
+        StringBuilder buf = new StringBuilder();
+        String separator = "";
+        for (String path : list) {
+            buf.append(separator);
+            separator = File.pathSeparator;
+            buf.append(path);
         }
         return buf.toString().intern();
     }
@@ -185,6 +212,49 @@ public class ClassPath implements Serializable {
         return getClassFile(name, suffix).getInputStream();
     }
 
+    /**
+     * @param name fully qualified resource name, e.g. java/lang/String.class
+     * @return InputStream supplying the resource, or null if no resource with that name.
+     */
+    public InputStream getResourceAsStream(String name) {
+        for (PathEntry path : paths) {
+            InputStream is;
+            if ((is = path.getResourceAsStream(name)) != null) {
+                return is;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * @param name fully qualified resource name, e.g. java/lang/String.class
+     * @return URL supplying the resource, or null if no resource with that name.
+     */
+    public URL getResource(String name) {
+        for (PathEntry path : paths) {
+            URL url;
+            if ((url = path.getResource(name)) != null) {
+                return url;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param name fully qualified resource name, e.g. java/lang/String.class
+     * @return An Enumeration of URLs supplying the resource, or an
+     * empty Enumeration if no resource with that name.
+     */
+    public Enumeration<URL> getResources(String name) {
+        Vector<URL> results = new Vector<URL>();
+        for (PathEntry path : paths) {
+            URL url;
+            if ((url = path.getResource(name)) != null) {
+                results.add(url);
+            }
+        }
+        return results.elements();
+    }
 
     /**
      * @param name fully qualified file name, e.g. java/lang/String
@@ -192,14 +262,37 @@ public class ClassPath implements Serializable {
      * @return class file for the java class
      */
     public ClassFile getClassFile( String name, String suffix ) throws IOException {
-        for (int i = 0; i < paths.length; i++) {
-            ClassFile cf;
-            if ((cf = paths[i].getClassFile(name, suffix)) != null) {
+        for (PathEntry path : paths) {
+            ClassFile cf = null;
+
+            if(parent != null) {
+                cf = parent.getClassFileInternal(name, suffix);
+            }
+            
+            if(cf == null) {
+                cf = getClassFileInternal(name,suffix);
+            }
+            
+            if(cf != null) {
                 return cf;
             }
         }
+
         throw new IOException("Couldn't find: " + name + suffix);
     }
+
+    private ClassFile getClassFileInternal(String name, String suffix) throws IOException {
+
+      for (PathEntry path : paths) {
+          ClassFile cf = path.getClassFile(name, suffix);
+          
+          if(cf != null) {
+              return cf;
+          }
+      }
+
+      return null;
+   }
 
 
     /**
@@ -269,7 +362,10 @@ public class ClassPath implements Serializable {
 
     private static abstract class PathEntry implements Serializable {
 
+        private static final long serialVersionUID = 6828494485207666122L;
         abstract ClassFile getClassFile( String name, String suffix ) throws IOException;
+        abstract URL getResource(String name);
+        abstract InputStream getResourceAsStream(String name);
     }
 
     /** Contains information about file/ZIP entry of the Java class.
@@ -304,6 +400,7 @@ public class ClassPath implements Serializable {
 
     private static class Dir extends PathEntry {
 
+        private static final long serialVersionUID = 4374062802142373088L;
         private String dir;
 
 
@@ -311,7 +408,29 @@ public class ClassPath implements Serializable {
             dir = d;
         }
 
+        @Override
+        URL getResource(String name) {
+            // Resource specification uses '/' whatever the platform
+            final File file = new File(dir + File.separatorChar + name.replace('/', File.separatorChar));
+            try {
+                return file.exists() ? file.toURI().toURL() : null;
+            } catch (MalformedURLException e) {
+               return null;
+            }
+        }
+        
+        @Override
+        InputStream getResourceAsStream(String name) {
+            // Resource specification uses '/' whatever the platform
+            final File file = new File(dir + File.separatorChar + name.replace('/', File.separatorChar));
+            try {
+               return file.exists() ? new FileInputStream(file) : null;
+            } catch (IOException e) {
+               return null;
+            }
+        }
 
+        @Override
         ClassFile getClassFile( String name, String suffix ) throws IOException {
             final File file = new File(dir + File.separatorChar
                     + name.replace('.', File.separatorChar) + suffix);
@@ -348,6 +467,7 @@ public class ClassPath implements Serializable {
         }
 
 
+        @Override
         public String toString() {
             return dir;
         }
@@ -355,6 +475,7 @@ public class ClassPath implements Serializable {
 
     private static class Zip extends PathEntry {
 
+        private static final long serialVersionUID = -2210747632897905532L;
         private ZipFile zip;
 
 
@@ -362,10 +483,35 @@ public class ClassPath implements Serializable {
             zip = z;
         }
 
-
+        @Override
+        URL getResource(String name) {
+            final ZipEntry entry = zip.getEntry(name);
+            try {
+                return (entry != null) ? new URL("jar:file:" + zip.getName() + "!/" + name) : null;
+            } catch (MalformedURLException e) {
+                return null;
+           }
+        }
+        
+        @Override
+        InputStream getResourceAsStream(String name) {
+            final ZipEntry entry = zip.getEntry(name);
+            try {
+                return (entry != null) ? zip.getInputStream(entry) : null;
+            } catch (IOException e) {
+                return null;
+            }
+        }
+        	
+        @Override
         ClassFile getClassFile( String name, String suffix ) throws IOException {
             final ZipEntry entry = zip.getEntry(name.replace('.', '/') + suffix);
-            return (entry != null) ? new ClassFile() {
+            
+            if (entry == null) {
+                return null;
+            }
+            
+            return new ClassFile() {
 
                 public InputStream getInputStream() throws IOException {
                     return zip.getInputStream(entry);
@@ -390,7 +536,7 @@ public class ClassPath implements Serializable {
                 public String getBase() {
                     return zip.getName();
                 }
-            } : null;
+            };
         }
     }
 }

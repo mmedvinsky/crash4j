@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,15 +23,18 @@ import com.crash4j.engine.spi.instrument.bcel.ExceptionConstants;
  * CHECKCAST - Check whether object is of given type
  * <PRE>Stack: ..., objectref -&gt; ..., objectref</PRE>
  *
- * @version $Id: CHECKCAST.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: CHECKCAST.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class CHECKCAST extends CPInstruction implements LoadClass, ExceptionThrower, StackProducer,
         StackConsumer {
 
+    private static final long serialVersionUID = 1227128733786393518L;
+
+
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     CHECKCAST() {
     }
@@ -46,8 +50,8 @@ public class CHECKCAST extends CPInstruction implements LoadClass, ExceptionThro
 
     /** @return exceptions this instruction may cause
      */
-    public Class[] getExceptions() {
-        Class[] cs = new Class[1 + ExceptionConstants.EXCS_CLASS_AND_INTERFACE_RESOLUTION.length];
+    public Class<?>[] getExceptions() {
+        Class<?>[] cs = new Class[1 + ExceptionConstants.EXCS_CLASS_AND_INTERFACE_RESOLUTION.length];
         System.arraycopy(ExceptionConstants.EXCS_CLASS_AND_INTERFACE_RESOLUTION, 0, cs, 0,
                 ExceptionConstants.EXCS_CLASS_AND_INTERFACE_RESOLUTION.length);
         cs[ExceptionConstants.EXCS_CLASS_AND_INTERFACE_RESOLUTION.length] = ExceptionConstants.CLASS_CAST_EXCEPTION;
@@ -72,6 +76,7 @@ public class CHECKCAST extends CPInstruction implements LoadClass, ExceptionThro
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitLoadClass(this);
         v.visitExceptionThrower(this);

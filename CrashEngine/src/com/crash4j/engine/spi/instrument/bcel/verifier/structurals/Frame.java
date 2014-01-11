@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,7 +23,7 @@ package com.crash4j.engine.spi.instrument.bcel.verifier.structurals;
  * This class represents a JVM execution frame; that means,
  * a local variable array and an operand stack.
  *
- * @version $Id: Frame.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Frame.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author Enver Haase
  */
  
@@ -65,7 +66,8 @@ public class Frame{
 	/**
 	 *
 	 */
-	protected Object clone(){
+	@Override
+    protected Object clone(){
 		Frame f = new Frame(locals.getClone(), stack.getClone());
 		return f;
 	}
@@ -93,12 +95,14 @@ public class Frame{
 
 	/** @return a hash code value for the object.
      */
-	public int hashCode() { return stack.hashCode() ^ locals.hashCode(); }
+	@Override
+    public int hashCode() { return stack.hashCode() ^ locals.hashCode(); }
 
 	/**
 	 *
 	 */
-	public boolean equals(Object o){
+	@Override
+    public boolean equals(Object o){
 		if (!(o instanceof Frame)) {
             return false; // implies "null" is non-equal.
         }
@@ -109,7 +113,8 @@ public class Frame{
 	/**
 	 * Returns a String representation of the Frame instance.
 	 */
-	public String toString(){
+	@Override
+    public String toString(){
 		String s="Local Variables:\n";
 		s += locals;
 		s += "OperandStack:\n";

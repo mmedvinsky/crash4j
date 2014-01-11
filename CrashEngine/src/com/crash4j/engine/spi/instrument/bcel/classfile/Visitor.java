@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,111 +18,92 @@
 package com.crash4j.engine.spi.instrument.bcel.classfile;
 
 /**
- * Interface to make use of the Visitor pattern programming style.
- * I.e. a class that implements this interface can traverse the contents of
- * a Java class just by calling the `accept' method which all classes have.
- *
- * @version $Id: Visitor.java 386056 2006-03-15 11:31:56Z tcurdt $
- * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
+ * Interface to make use of the Visitor pattern programming style. I.e. a class
+ * that implements this interface can traverse the contents of a Java class just
+ * by calling the `accept' method which all classes have.
+ * 
+ * @version $Id: Visitor.java 1158060 2011-08-15 23:17:19Z dbrosius $
+ * @author <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
-public interface Visitor {
+public interface Visitor
+{
+	void visitCode(Code obj);
 
-    //public void visitAnnotation(Annotations obj);
-    //public void visitParameterAnnotation(ParameterAnnotations obj);
-    //public void visitAnnotationEntry(AnnotationEntry obj);
-    //public void visitAnnotationDefault(AnnotationDefault obj);
-    public void visitCode( Code obj );
+	void visitCodeException(CodeException obj);
 
+	void visitConstantClass(ConstantClass obj);
 
-    public void visitCodeException( CodeException obj );
+	void visitConstantDouble(ConstantDouble obj);
 
+	void visitConstantFieldref(ConstantFieldref obj);
 
-    public void visitConstantClass( ConstantClass obj );
+	void visitConstantFloat(ConstantFloat obj);
 
+	void visitConstantInteger(ConstantInteger obj);
 
-    public void visitConstantDouble( ConstantDouble obj );
+	void visitConstantInterfaceMethodref(ConstantInterfaceMethodref obj);
 
+	void visitConstantLong(ConstantLong obj);
 
-    public void visitConstantFieldref( ConstantFieldref obj );
+	void visitConstantMethodref(ConstantMethodref obj);
 
+	void visitConstantNameAndType(ConstantNameAndType obj);
 
-    public void visitConstantFloat( ConstantFloat obj );
+	void visitConstantPool(ConstantPool obj);
 
+	void visitConstantString(ConstantString obj);
 
-    public void visitConstantInteger( ConstantInteger obj );
+	void visitConstantUtf8(ConstantUtf8 obj);
 
+	void visitConstantValue(ConstantValue obj);
 
-    public void visitConstantInterfaceMethodref( ConstantInterfaceMethodref obj );
+	void visitDeprecated(Deprecated obj);
 
+	void visitExceptionTable(ExceptionTable obj);
 
-    public void visitConstantLong( ConstantLong obj );
+	void visitField(Field obj);
 
+	void visitInnerClass(InnerClass obj);
 
-    public void visitConstantMethodref( ConstantMethodref obj );
+	void visitInnerClasses(InnerClasses obj);
 
+	void visitJavaClass(JavaClass obj);
 
-    public void visitConstantNameAndType( ConstantNameAndType obj );
+	void visitLineNumber(LineNumber obj);
 
+	void visitLineNumberTable(LineNumberTable obj);
 
-    public void visitConstantPool( ConstantPool obj );
+	void visitLocalVariable(LocalVariable obj);
 
+	void visitLocalVariableTable(LocalVariableTable obj);
 
-    public void visitConstantString( ConstantString obj );
+	void visitMethod(Method obj);
 
+	void visitSignature(Signature obj);
 
-    public void visitConstantUtf8( ConstantUtf8 obj );
+	void visitSourceFile(SourceFile obj);
 
+	void visitSynthetic(Synthetic obj);
 
-    public void visitConstantValue( ConstantValue obj );
+	void visitUnknown(Unknown obj);
 
+	void visitStackMap(StackMap obj);
 
-    public void visitDeprecated( Deprecated obj );
+	void visitStackMapEntry(StackMapEntry obj);
 
+	void visitStackMapTable(StackMapTable obj);
 
-    public void visitExceptionTable( ExceptionTable obj );
+	void visitStackMapTableEntry(StackMapTableEntry obj);
 
+	void visitAnnotation(Annotations obj);
 
-    public void visitField( Field obj );
+	void visitParameterAnnotation(ParameterAnnotations obj);
 
+	void visitAnnotationEntry(AnnotationEntry obj);
 
-    public void visitInnerClass( InnerClass obj );
+	void visitAnnotationDefault(AnnotationDefault obj);
 
+	void visitLocalVariableTypeTable(LocalVariableTypeTable obj);
 
-    public void visitInnerClasses( InnerClasses obj );
-
-
-    public void visitJavaClass( JavaClass obj );
-
-
-    public void visitLineNumber( LineNumber obj );
-
-
-    public void visitLineNumberTable( LineNumberTable obj );
-
-
-    public void visitLocalVariable( LocalVariable obj );
-
-
-    public void visitLocalVariableTable( LocalVariableTable obj );
-
-
-    public void visitMethod( Method obj );
-
-
-    public void visitSignature( Signature obj );
-
-
-    public void visitSourceFile( SourceFile obj );
-
-
-    public void visitSynthetic( Synthetic obj );
-
-
-    public void visitUnknown( Unknown obj );
-
-
-    public void visitStackMap( StackMap obj );
-
-
-    public void visitStackMapEntry( StackMapEntry obj );
+	void visitEnclosingMethod(EnclosingMethod obj);
 }

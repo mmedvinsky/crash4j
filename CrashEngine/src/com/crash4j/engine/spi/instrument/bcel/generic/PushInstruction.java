@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,7 +21,7 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  * Denotes an unparameterized instruction to produce a value on top of the stack,
  * such as ILOAD, LDC, SIPUSH, DUP, ICONST, etc.
  *
- * @version $Id: PushInstruction.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: PushInstruction.java 947879 2010-05-25 00:48:30Z sebb $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
 
  * @see ILOAD

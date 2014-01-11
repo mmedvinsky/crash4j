@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,7 +18,7 @@
 package com.crash4j.engine.spi.instrument.bcel.classfile;
 
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
+import java.io.DataInput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -27,12 +28,13 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * This class is derived from <em>Attribute</em> and represents a reference
  * to a GJ attribute.
  *
- * @version $Id: Signature.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Signature.java 1532221 2013-10-15 06:49:16Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Attribute
  */
 public final class Signature extends Attribute {
 
+    private static final long serialVersionUID = 5808807822688827177L;
     private int signature_index;
 
 
@@ -53,7 +55,7 @@ public final class Signature extends Attribute {
      * @param constant_pool Array of constants
      * @throws IOException
      */
-    Signature(int name_index, int length, DataInputStream file, ConstantPool constant_pool)
+    Signature(int name_index, int length, DataInput file, ConstantPool constant_pool)
             throws IOException {
         this(name_index, length, file.readUnsignedShort(), constant_pool);
     }
@@ -78,6 +80,7 @@ public final class Signature extends Attribute {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         //System.err.println("Visiting non-standard Signature object");
         v.visitSignature(this);
@@ -90,6 +93,7 @@ public final class Signature extends Attribute {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         super.dump(file);
         file.writeShort(signature_index);
@@ -131,18 +135,8 @@ public final class Signature extends Attribute {
         }
 
 
-        final int mark() {
-            return pos;
-        }
-
-
         final String getData() {
             return new String(buf);
-        }
-
-
-        final void reset( int p ) {
-            pos = p;
         }
 
 
@@ -187,7 +181,7 @@ public final class Signature extends Attribute {
             }
             return;
         }
-        StringBuffer buf2 = new StringBuffer();
+        StringBuilder buf2 = new StringBuilder();
         ch = in.read();
         do {
             buf2.append((char) ch);
@@ -259,6 +253,7 @@ public final class Signature extends Attribute {
     /**
      * @return String representation
      */
+    @Override
     public final String toString() {
         String s = getSignature();
         return "Signature(" + s + ")";
@@ -268,7 +263,8 @@ public final class Signature extends Attribute {
     /**
      * @return deep copy of this attribute
      */
+    @Override
     public Attribute copy( ConstantPool _constant_pool ) {
-        return (Signature) clone();
+        return clone();
     }
 }

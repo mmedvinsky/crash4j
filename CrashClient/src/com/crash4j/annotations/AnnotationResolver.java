@@ -44,13 +44,16 @@ public class AnnotationResolver
     {
         try
         {
+        	System.out.println("11");
             adapter =  EngineAdapterFactory.getLocalAdapter();       
+        	System.out.println("22"+adapter);
             Behaviors cwith = klass.getAnnotation(Behaviors.class);
             //Load and resolve all behaviors
             if (cwith == null)
             {
                 return;
             }
+        	System.out.println("33");
             String[] ba = cwith.sources();
             for (String behavior : ba)
             {

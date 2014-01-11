@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,7 +25,7 @@ import com.crash4j.engine.spi.instrument.bcel.generic.InstructionHandle;
  * Note that it is 'abused' to maintain the top-level code in a
  * consistent fashion, too.
  *
- * @version $Id: Subroutine.java 371539 2006-01-23 14:08:00Z tcurdt $
+ * @version $Id: Subroutine.java 1158060 2011-08-15 23:17:19Z dbrosius $
  * @author Enver Haase
  */
 public interface Subroutine{
@@ -33,7 +34,7 @@ public interface Subroutine{
 	 * first instruction of this subroutine as their target.
 	 * <B>Must not be invoked on the 'top-level subroutine'.</B>
 	 */
-	public InstructionHandle[] getEnteringJsrInstructions();
+	InstructionHandle[] getEnteringJsrInstructions();
 	
 	/**
 	 * Returns the one and only RET that leaves the subroutine.
@@ -42,7 +43,7 @@ public interface Subroutine{
 	 *
 	 * @see com.crash4j.engine.spi.instrument.bcel.verifier.structurals.Subroutines
 	 */
-	public InstructionHandle getLeavingRET();
+	InstructionHandle getLeavingRET();
 
 	/**
 	 * Returns all instructions that together form this subroutine.
@@ -50,7 +51,7 @@ public interface Subroutine{
 	 * (the top-level code is considered to be a special subroutine) -
 	 * else it is not reachable at all (dead code).
 	 */
-	public InstructionHandle[] getInstructions();
+	InstructionHandle[] getInstructions();
 
 	/**
 	 * Returns if the given InstructionHandle refers to an instruction
@@ -60,7 +61,7 @@ public interface Subroutine{
 	 *
 	 * @see #getInstructions()
 	 */
-	public boolean contains(InstructionHandle inst);
+	boolean contains(InstructionHandle inst);
 
 	/**
 	 * Returns an int[] containing the indices of the local variable slots
@@ -70,7 +71,7 @@ public interface Subroutine{
 	 *
 	 * @see #getRecursivelyAccessedLocalsIndices()
 	 */
-	public int[] getAccessedLocalsIndices();
+	int[] getAccessedLocalsIndices();
 
 	/**
 	 * Returns an int[] containing the indices of the local variable slots
@@ -80,10 +81,10 @@ public interface Subroutine{
 	 *
 	 * @see #getAccessedLocalsIndices()
 	 */
-	public int[] getRecursivelyAccessedLocalsIndices();
+	int[] getRecursivelyAccessedLocalsIndices();
 		
 	/**
 	 * Returns the subroutines that are directly called from this subroutine.
 	 */
-	public Subroutine[] subSubs();
+	Subroutine[] subSubs();
 }

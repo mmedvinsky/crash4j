@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -31,13 +32,14 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * programatically should see <a href="../generic/ConstantPoolGen.html">
  * ConstantPoolGen</a>.
 
- * @version $Id: ConstantPool.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ConstantPool.java 1152077 2011-07-29 02:29:42Z dbrosius $
  * @see     Constant
  * @see     com.crash4j.engine.spi.instrument.bcel.generic.ConstantPoolGen
  * @author <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class ConstantPool implements Cloneable, Node, Serializable {
 
+    private static final long serialVersionUID = -9093478476423540196L;
     private int constant_pool_count;
     private Constant[] constant_pool;
 
@@ -118,16 +120,16 @@ public class ConstantPool implements Cloneable, Node, Serializable {
                 str = ((ConstantUtf8) c).getBytes();
                 break;
             case Constants.CONSTANT_Double:
-                str = "" + ((ConstantDouble) c).getBytes();
+                str = String.valueOf(((ConstantDouble) c).getBytes());
                 break;
             case Constants.CONSTANT_Float:
-                str = "" + ((ConstantFloat) c).getBytes();
+                str = String.valueOf(((ConstantFloat) c).getBytes());
                 break;
             case Constants.CONSTANT_Long:
-                str = "" + ((ConstantLong) c).getBytes();
+                str = String.valueOf(((ConstantLong) c).getBytes());
                 break;
             case Constants.CONSTANT_Integer:
-                str = "" + ((ConstantInteger) c).getBytes();
+                str = String.valueOf(((ConstantInteger) c).getBytes());
                 break;
             case Constants.CONSTANT_NameAndType:
                 str = (constantToString(((ConstantNameAndType) c).getNameIndex(),
@@ -151,7 +153,7 @@ public class ConstantPool implements Cloneable, Node, Serializable {
 
     private static final String escape( String str ) {
         int len = str.length();
-        StringBuffer buf = new StringBuffer(len + 5);
+        StringBuilder buf = new StringBuilder(len + 5);
         char[] ch = str.toCharArray();
         for (int i = 0; i < len; i++) {
             switch (ch[i]) {
@@ -325,8 +327,9 @@ public class ConstantPool implements Cloneable, Node, Serializable {
     /**
      * @return String representation.
      */
+    @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 1; i < constant_pool_count; i++) {
             buf.append(i).append(")").append(constant_pool[i]).append("\n");
         }

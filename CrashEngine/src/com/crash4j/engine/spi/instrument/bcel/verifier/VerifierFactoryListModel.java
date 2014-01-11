@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,20 +17,26 @@
  */
 package com.crash4j.engine.spi.instrument.bcel.verifier;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
 import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 /**
  * This class implements an adapter; it implements both a Swing ListModel and
  * a VerifierFactoryObserver.
  *
- * @version $Id: VerifierFactoryListModel.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: VerifierFactoryListModel.java 1532229 2013-10-15 07:07:43Z dbrosius $
  * @author Enver Haase
  */
 public class VerifierFactoryListModel implements com.crash4j.engine.spi.instrument.bcel.verifier.VerifierFactoryObserver,
         javax.swing.ListModel {
 
-    private java.util.ArrayList listeners = new java.util.ArrayList();
-    private java.util.TreeSet cache = new java.util.TreeSet();
+    private List<ListDataListener> listeners = new ArrayList<ListDataListener>();
+    private Set<String> cache = new TreeSet<String>();
 
 
     public VerifierFactoryListModel() {
@@ -49,12 +56,12 @@ public class VerifierFactoryListModel implements com.crash4j.engine.spi.instrume
         for (int i = 0; i < size; i++) {
             ListDataEvent e = new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0,
                     num_of_verifiers - 1);
-            ((javax.swing.event.ListDataListener) (listeners.get(i))).contentsChanged(e);
+            listeners.get(i).contentsChanged(e);
         }
     }
 
 
-    public synchronized void addListDataListener( javax.swing.event.ListDataListener l ) {
+    public synchronized void addListDataListener( ListDataListener l ) {
         listeners.add(l);
     }
 
@@ -69,7 +76,7 @@ public class VerifierFactoryListModel implements com.crash4j.engine.spi.instrume
     }
 
 
-    public synchronized Object getElementAt( int index ) {
-        return (cache.toArray())[index];
+    public synchronized String getElementAt( int index ) {
+        return (cache.toArray(new String[cache.size()]))[index];
     }
 }

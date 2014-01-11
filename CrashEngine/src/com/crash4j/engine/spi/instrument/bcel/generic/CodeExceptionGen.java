@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,7 +28,7 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.CodeException;
  * The end of the region is automatically mapped to be exclusive when calling
  * getCodeException(), i.e., there is no difference semantically.
  *
- * @version $Id: CodeExceptionGen.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: CodeExceptionGen.java 1532197 2013-10-15 05:52:15Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     MethodGen
  * @see     CodeException
@@ -35,6 +36,7 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.CodeException;
  */
 public final class CodeExceptionGen implements InstructionTargeter, Cloneable, java.io.Serializable {
 
+    private static final long serialVersionUID = 6548901422158960190L;
     private InstructionHandle start_pc;
     private InstructionHandle end_pc;
     private InstructionHandle handler_pc;
@@ -168,17 +170,18 @@ public final class CodeExceptionGen implements InstructionTargeter, Cloneable, j
     }
 
 
+    @Override
     public String toString() {
         return "CodeExceptionGen(" + start_pc + ", " + end_pc + ", " + handler_pc + ")";
     }
 
 
-    public Object clone() {
+    @Override
+    public CodeExceptionGen clone() {
         try {
-            return super.clone();
+            return (CodeExceptionGen) super.clone();
         } catch (CloneNotSupportedException e) {
-            System.err.println(e);
-            return null;
+            throw new Error("Clone Not Supported"); // never happens
         }
     }
 }

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -25,7 +26,7 @@ import com.crash4j.engine.spi.instrument.bcel.generic.Type;
 /**
  * A graphical user interface application demonstrating JustIce.
  *
- * @version $Id: GraphicalVerifier.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: GraphicalVerifier.java 947879 2010-05-25 00:48:30Z sebb $
  * @author Enver Haase
  */
 public class GraphicalVerifier {
@@ -36,8 +37,8 @@ public class GraphicalVerifier {
     /** Constructor. */
     public GraphicalVerifier() {
         VerifierAppFrame frame = new VerifierAppFrame();
-        //Frames überprüfen, die voreingestellte Größe haben
-        //Frames packen, die nutzbare bevorzugte Größeninformationen enthalten, z.B. aus ihrem Layout
+        //Frames ï¿½berprï¿½fen, die voreingestellte Grï¿½ï¿½e haben
+        //Frames packen, die nutzbare bevorzugte Grï¿½ï¿½eninformationen enthalten, z.B. aus ihrem Layout
         if (packFrame) {
             frame.pack();
         } else {

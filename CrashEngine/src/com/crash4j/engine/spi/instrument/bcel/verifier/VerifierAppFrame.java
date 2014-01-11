@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,6 +23,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -44,12 +46,13 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.JavaClass;
  * This class implements a machine-generated frame for use with
  * the GraphicalVerfifier.
  *
- * @version $Id: VerifierAppFrame.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: VerifierAppFrame.java 1532229 2013-10-15 07:07:43Z dbrosius $
  * @author Enver Haase
  * @see GraphicalVerifier
  */
 public class VerifierAppFrame extends JFrame {
 
+    private static final long serialVersionUID = -542458133073307640L;
     JPanel contentPane;
     JSplitPane jSplitPane1 = new JSplitPane();
     JPanel jPanel1 = new JPanel();
@@ -147,7 +150,7 @@ public class VerifierAppFrame extends JFrame {
         messagesTextPane.setEditable(false);
         newFileMenuItem.setText("New...");
         newFileMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(78,
-                java.awt.event.KeyEvent.CTRL_MASK, true));
+                InputEvent.CTRL_MASK, true));
         newFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
 
             public void actionPerformed( ActionEvent e ) {
@@ -219,6 +222,7 @@ public class VerifierAppFrame extends JFrame {
 
 
     /** Overridden to stop the application on a closing window. */
+    @Override
     protected void processWindowEvent( WindowEvent e ) {
         super.processWindowEvent(e);
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
@@ -254,10 +258,10 @@ public class VerifierAppFrame extends JFrame {
             pass2TextPane.setText("");
             pass2TextPane.setBackground(Color.yellow);
             pass3aTextPane.setText("");
-            pass3aJList.setListData(new Object[0]);
+            pass3aJList.setListData(new String[0]);
             pass3aTextPane.setBackground(Color.yellow);
             pass3bTextPane.setText("");
-            pass3bJList.setListData(new Object[0]);
+            pass3bJList.setListData(new String[0]);
             pass3bTextPane.setBackground(Color.yellow);
         } else { // Must be VERIFIED_OK, Pass 1 does not know VERIFIED_NOTYET
             pass1TextPane.setBackground(Color.green);
@@ -268,10 +272,10 @@ public class VerifierAppFrame extends JFrame {
                 pass2TextPane.setBackground(Color.red);
                 pass3aTextPane.setText("");
                 pass3aTextPane.setBackground(Color.yellow);
-                pass3aJList.setListData(new Object[0]);
+                pass3aJList.setListData(new String[0]);
                 pass3bTextPane.setText("");
                 pass3bTextPane.setBackground(Color.yellow);
-                pass3bJList.setListData(new Object[0]);
+                pass3bJList.setListData(new String[0]);
             } else { // must be Verified_OK, because Pass1 was OK (cannot be Verified_NOTYET).
                 pass2TextPane.setText(vr.getMessage());
                 pass2TextPane.setBackground(Color.green);

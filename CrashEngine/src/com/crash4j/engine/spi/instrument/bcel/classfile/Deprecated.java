@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,12 +28,13 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * deprecated method.
  * It is instantiated from the <em>Attribute.readAttribute()</em> method.
  *
- * @version $Id: Deprecated.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Deprecated.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Attribute
  */
 public final class Deprecated extends Attribute {
 
+    private static final long serialVersionUID = -2242528405240201000L;
     private byte[] bytes;
 
 
@@ -83,6 +85,7 @@ public final class Deprecated extends Attribute {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitDeprecated(this);
     }
@@ -94,6 +97,7 @@ public final class Deprecated extends Attribute {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         super.dump(file);
         if (length > 0) {
@@ -121,6 +125,7 @@ public final class Deprecated extends Attribute {
     /**
      * @return attribute name
      */
+    @Override
     public final String toString() {
         return Constants.ATTRIBUTE_NAMES[Constants.ATTR_DEPRECATED];
     }
@@ -129,6 +134,7 @@ public final class Deprecated extends Attribute {
     /**
      * @return deep copy of this attribute
      */
+    @Override
     public Attribute copy( ConstantPool _constant_pool ) {
         Deprecated c = (Deprecated) clone();
         if (bytes != null) {

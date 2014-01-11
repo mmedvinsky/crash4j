@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,14 +25,17 @@ import com.crash4j.engine.spi.instrument.bcel.util.ByteSequence;
 /** 
  * JSR_W - Jump to subroutine
  *
- * @version $Id: JSR_W.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: JSR_W.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class JSR_W extends JsrInstruction {
 
+    private static final long serialVersionUID = -7352049131416924650L;
+
+
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     JSR_W() {
     }
@@ -47,6 +51,7 @@ public class JSR_W extends JsrInstruction {
      * Dump instruction as byte code to stream out.
      * @param out Output stream
      */
+    @Override
     public void dump( DataOutputStream out ) throws IOException {
         index = getTargetOffset();
         out.writeByte(opcode);
@@ -57,6 +62,7 @@ public class JSR_W extends JsrInstruction {
     /**
      * Read needed data (e.g. index) from file.
      */
+    @Override
     protected void initFromFile( ByteSequence bytes, boolean wide ) throws IOException {
         index = bytes.readInt();
         length = 5;
@@ -71,6 +77,7 @@ public class JSR_W extends JsrInstruction {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitStackProducer(this);
         v.visitBranchInstruction(this);

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,7 +17,7 @@
  */
 package com.crash4j.engine.spi.instrument.bcel.classfile;
 
-import java.io.DataInputStream;
+import java.io.DataInput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -28,12 +29,13 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * attribute and is used only there. It contains a range in which a
  * particular exception handler is active.
  *
- * @version $Id: CodeException.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: CodeException.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Code
  */
 public final class CodeException implements Cloneable, Constants, Node, Serializable {
 
+    private static final long serialVersionUID = 2972500041254967221L;
     private int start_pc; // Range in the code the exception handler is
     private int end_pc; // active. start_pc is inclusive, end_pc exclusive
     private int handler_pc; /* Starting address of exception handler, i.e.,
@@ -58,7 +60,7 @@ public final class CodeException implements Cloneable, Constants, Node, Serializ
      * @param file Input stream
      * @throws IOException
      */
-    CodeException(DataInputStream file) throws IOException {
+    CodeException(DataInput file) throws IOException {
         this(file.readUnsignedShort(), file.readUnsignedShort(), file.readUnsignedShort(), file
                 .readUnsignedShort());
     }
@@ -176,6 +178,7 @@ public final class CodeException implements Cloneable, Constants, Node, Serializ
     /**
      * @return String representation.
      */
+    @Override
     public final String toString() {
         return "CodeException(start_pc = " + start_pc + ", end_pc = " + end_pc + ", handler_pc = "
                 + handler_pc + ", catch_type = " + catch_type + ")";

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,10 +21,13 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  * DUP_X2 - Duplicate top operand stack word and put three down
  * <PRE>Stack: ..., word3, word2, word1 -&gt; ..., word1, word3, word2, word1</PRE>
  *
- * @version $Id: DUP_X2.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: DUP_X2.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class DUP_X2 extends StackInstruction {
+
+    private static final long serialVersionUID = -8851562833314313571L;
+
 
     public DUP_X2() {
         super(com.crash4j.engine.spi.instrument.bcel.Constants.DUP_X2);
@@ -38,6 +42,7 @@ public class DUP_X2 extends StackInstruction {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitStackInstruction(this);
         v.visitDUP_X2(this);

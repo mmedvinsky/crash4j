@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -26,15 +27,16 @@ import com.crash4j.engine.spi.instrument.bcel.util.ByteSequence;
  * 
  * <p>We use our super's <code>target</code> property as the default target.
  *
- * @version $Id: Select.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Select.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see LOOKUPSWITCH
  * @see TABLESWITCH
  * @see InstructionList
  */
 public abstract class Select extends BranchInstruction implements VariableLengthInstruction,
-        StackProducer {
+        StackConsumer {
 
+    private static final long serialVersionUID = 2806771744559217250L;
     protected int[] match; // matches, i.e., case 1: ...
     protected int[] indices; // target offsets
     protected InstructionHandle[] targets; // target objects in instruction list
@@ -45,7 +47,7 @@ public abstract class Select extends BranchInstruction implements VariableLength
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     Select() {
     }
@@ -62,12 +64,12 @@ public abstract class Select extends BranchInstruction implements VariableLength
     Select(short opcode, int[] match, InstructionHandle[] targets, InstructionHandle defaultTarget) {
         super(opcode, defaultTarget);
         this.targets = targets;
-        for (int i = 0; i < targets.length; i++) {
-            notifyTarget(null, targets[i], this);
+        for (InstructionHandle target2 : targets) {
+            notifyTarget(null, target2, this);
         }
         this.match = match;
         if ((match_length = match.length) != targets.length) {
-            throw new ClassGenException("Match and target array have not the same length");
+            throw new ClassGenException("Match and target array have not the same length: Match length: " + match.length + " Target length: " + targets.length);
         }
         indices = new int[match_length];
     }
@@ -86,6 +88,7 @@ public abstract class Select extends BranchInstruction implements VariableLength
      * @param max_offset the maximum offset that may be caused by these instructions
      * @return additional offset caused by possible change of this instruction's length
      */
+    @Override
     protected int updatePosition( int offset, int max_offset ) {
         position += offset; // Additional offset caused by preceding SWITCHs, GOTOs, etc.
         short old_length = length;
@@ -101,6 +104,7 @@ public abstract class Select extends BranchInstruction implements VariableLength
      * Dump instruction as byte code to stream out.
      * @param out Output stream
      */
+    @Override
     public void dump( DataOutputStream out ) throws IOException {
         out.writeByte(opcode);
         for (int i = 0; i < padding; i++) {
@@ -114,6 +118,7 @@ public abstract class Select extends BranchInstruction implements VariableLength
     /**
      * Read needed data (e.g. index) from file.
      */
+    @Override
     protected void initFromFile( ByteSequence bytes, boolean wide ) throws IOException {
         padding = (4 - (bytes.getIndex() % 4)) % 4; // Compute number of pad bytes
         for (int i = 0; i < padding; i++) {
@@ -127,8 +132,9 @@ public abstract class Select extends BranchInstruction implements VariableLength
     /**
      * @return mnemonic for instruction
      */
+    @Override
     public String toString( boolean verbose ) {
-        StringBuffer buf = new StringBuffer(super.toString(verbose));
+        StringBuilder buf = new StringBuilder(super.toString(verbose));
         if (verbose) {
             for (int i = 0; i < match_length; i++) {
                 String s = "null";
@@ -158,6 +164,7 @@ public abstract class Select extends BranchInstruction implements VariableLength
      * @param old_ih old target
      * @param new_ih new target
      */
+    @Override
     public void updateTarget( InstructionHandle old_ih, InstructionHandle new_ih ) {
         boolean targeted = false;
         if (target == old_ih) {
@@ -179,12 +186,13 @@ public abstract class Select extends BranchInstruction implements VariableLength
     /**
      * @return true, if ih is target of this instruction
      */
+    @Override
     public boolean containsTarget( InstructionHandle ih ) {
         if (target == ih) {
             return true;
         }
-        for (int i = 0; i < targets.length; i++) {
-            if (targets[i] == ih) {
+        for (InstructionHandle target2 : targets) {
+            if (target2 == ih) {
                 return true;
             }
         }
@@ -192,11 +200,12 @@ public abstract class Select extends BranchInstruction implements VariableLength
     }
 
 
+    @Override
     protected Object clone() throws CloneNotSupportedException {
         Select copy = (Select) super.clone();
-        copy.match = (int[]) match.clone();
-        copy.indices = (int[]) indices.clone();
-        copy.targets = (InstructionHandle[]) targets.clone();
+        copy.match = match.clone();
+        copy.indices = indices.clone();
+        copy.targets = targets.clone();
         return copy;
     }
 
@@ -204,10 +213,11 @@ public abstract class Select extends BranchInstruction implements VariableLength
     /**
      * Inform targets that they're not targeted anymore.
      */
+    @Override
     void dispose() {
         super.dispose();
-        for (int i = 0; i < targets.length; i++) {
-            targets[i].removeTargeter(this);
+        for (InstructionHandle target2 : targets) {
+            target2.removeTargeter(this);
         }
     }
 

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,6 +20,7 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+
 import com.crash4j.engine.spi.instrument.bcel.Constants;
 import com.crash4j.engine.spi.instrument.bcel.ExceptionConstants;
 import com.crash4j.engine.spi.instrument.bcel.classfile.ConstantPool;
@@ -28,17 +30,18 @@ import com.crash4j.engine.spi.instrument.bcel.util.ByteSequence;
  * INVOKEINTERFACE - Invoke interface method
  * <PRE>Stack: ..., objectref, [arg1, [arg2 ...]] -&gt; ...</PRE>
  *
- * @version $Id: INVOKEINTERFACE.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: INVOKEINTERFACE.java 1554577 2013-12-31 22:06:09Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public final class INVOKEINTERFACE extends InvokeInstruction {
 
+    private static final long serialVersionUID = 8198753714085379482L;
     private int nargs; // Number of arguments on stack (number of stack slots), called "count" in vmspec2
 
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     INVOKEINTERFACE() {
     }
@@ -58,6 +61,7 @@ public final class INVOKEINTERFACE extends InvokeInstruction {
      * Dump instruction as byte code to stream out.
      * @param out Output stream
      */
+    @Override
     public void dump( DataOutputStream out ) throws IOException {
         out.writeByte(opcode);
         out.writeShort(index);
@@ -78,6 +82,7 @@ public final class INVOKEINTERFACE extends InvokeInstruction {
     /**
      * Read needed data (i.e., index) from file.
      */
+    @Override
     protected void initFromFile( ByteSequence bytes, boolean wide ) throws IOException {
         super.initFromFile(bytes, wide);
         length = 5;
@@ -89,18 +94,20 @@ public final class INVOKEINTERFACE extends InvokeInstruction {
     /**
      * @return mnemonic for instruction with symbolic references resolved
      */
+    @Override
     public String toString( ConstantPool cp ) {
         return super.toString(cp) + " " + nargs;
     }
 
 
+    @Override
     public int consumeStack( ConstantPoolGen cpg ) { // nargs is given in byte-code
         return nargs; // nargs includes this reference
     }
 
 
-    public Class[] getExceptions() {
-        Class[] cs = new Class[4 + ExceptionConstants.EXCS_INTERFACE_METHOD_RESOLUTION.length];
+    public Class<?>[] getExceptions() {
+        Class<?>[] cs = new Class[4 + ExceptionConstants.EXCS_INTERFACE_METHOD_RESOLUTION.length];
         System.arraycopy(ExceptionConstants.EXCS_INTERFACE_METHOD_RESOLUTION, 0, cs, 0,
                 ExceptionConstants.EXCS_INTERFACE_METHOD_RESOLUTION.length);
         cs[ExceptionConstants.EXCS_INTERFACE_METHOD_RESOLUTION.length + 3] = ExceptionConstants.INCOMPATIBLE_CLASS_CHANGE_ERROR;
@@ -119,6 +126,7 @@ public final class INVOKEINTERFACE extends InvokeInstruction {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitExceptionThrower(this);
         v.visitTypedInstruction(this);
@@ -126,6 +134,9 @@ public final class INVOKEINTERFACE extends InvokeInstruction {
         v.visitStackProducer(this);
         v.visitLoadClass(this);
         v.visitCPInstruction(this);
+        if (v instanceof VisitorSupportsInvokeDynamic) {
+            ((VisitorSupportsInvokeDynamic)v).visitNameSignatureInstruction(this);
+        }
         v.visitFieldOrMethod(this);
         v.visitInvokeInstruction(this);
         v.visitINVOKEINTERFACE(this);

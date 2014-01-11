@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,13 +24,14 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  * via setTarget().
  *
  * @see InstructionHandle
- * @see InstructionImpl
+ * @see Instruction
  * @see InstructionList
- * @version $Id: BranchHandle.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: BranchHandle.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public final class BranchHandle extends InstructionHandle {
 
+    private static final long serialVersionUID = -2520878285698255956L;
     private BranchInstruction bi; // An alias in fact, but saves lots of casts
 
 
@@ -56,6 +58,7 @@ public final class BranchHandle extends InstructionHandle {
 
     /** Handle adds itself to the list of resuable handles.
      */
+    @Override
     protected void addHandle() {
         next = bh_list;
         bh_list = this;
@@ -66,16 +69,19 @@ public final class BranchHandle extends InstructionHandle {
      * Through this overriding all access to the private i_position field should
      * be prevented.
      */
+    @Override
     public int getPosition() {
         return bi.position;
     }
 
 
+    @Override
     void setPosition( int pos ) {
         i_position = bi.position = pos;
     }
 
 
+    @Override
     protected int updatePosition( int offset, int max_offset ) {
         int x = bi.updatePosition(offset, max_offset);
         i_position = bi.position;
@@ -110,6 +116,7 @@ public final class BranchHandle extends InstructionHandle {
     /** 
      * Set new contents. Old instruction is disposed and may not be used anymore.
      */
+    @Override
     public void setInstruction( Instruction i ) {
         super.setInstruction(i);
         if (!(i instanceof BranchInstruction)) {

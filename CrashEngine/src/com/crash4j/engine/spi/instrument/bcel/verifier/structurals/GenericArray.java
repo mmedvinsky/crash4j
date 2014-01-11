@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,12 +23,15 @@ package com.crash4j.engine.spi.instrument.bcel.verifier.structurals;
  * has some of the properties arrays have. They implement java.lang.Cloneable
  * and java.io.Serializable and they extend java.lang.Object.
  *
- * @version $Id: GenericArray.java 371539 2006-01-23 14:08:00Z tcurdt $
+ * @version $Id: GenericArray.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author Enver Haase
  */ 
 public class GenericArray extends java.lang.Object implements java.lang.Cloneable, java.io.Serializable{
 	
-	protected Object clone() throws CloneNotSupportedException {
+	private static final long serialVersionUID = 1991183963515237894L;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
 }

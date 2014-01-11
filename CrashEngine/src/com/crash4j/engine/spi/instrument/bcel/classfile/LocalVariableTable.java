@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -26,13 +27,14 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * This class represents colection of local variables in a
  * method. This attribute is contained in the <em>Code</em> attribute.
  *
- * @version $Id: LocalVariableTable.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: LocalVariableTable.java 1152306 2011-07-29 17:22:24Z sebb $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Code
  * @see LocalVariable
  */
 public class LocalVariableTable extends Attribute {
 
+    private static final long serialVersionUID = 6780929007774637689L;
     private int local_variable_table_length; // Table of local
     private LocalVariable[] local_variable_table; // variables
 
@@ -85,6 +87,7 @@ public class LocalVariableTable extends Attribute {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitLocalVariableTable(this);
     }
@@ -96,6 +99,7 @@ public class LocalVariableTable extends Attribute {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         super.dump(file);
         file.writeShort(local_variable_table_length);
@@ -114,7 +118,6 @@ public class LocalVariableTable extends Attribute {
 
 
     /** 
-     * @return first matching variable using index
      * 
      * @param index the variable slot
      * 
@@ -123,6 +126,7 @@ public class LocalVariableTable extends Attribute {
      * @deprecated since 5.2 because multiple variables can share the
      *             same slot, use getLocalVariable(int index, int pc) instead.
      */
+    @java.lang.Deprecated
     public final LocalVariable getLocalVariable( int index ) {
         for (int i = 0; i < local_variable_table_length; i++) {
             if (local_variable_table[i].getIndex() == index) {
@@ -134,7 +138,6 @@ public class LocalVariableTable extends Attribute {
 
 
     /** 
-     * @return matching variable using index when variable is used at supplied pc
      * 
      * @param index the variable slot
      * @param pc the current pc that this variable is alive
@@ -146,7 +149,7 @@ public class LocalVariableTable extends Attribute {
             if (local_variable_table[i].getIndex() == index) {
                 int start_pc = local_variable_table[i].getStartPC();
                 int end_pc = start_pc + local_variable_table[i].getLength();
-                if ((pc >= start_pc) && (pc < end_pc)) {
+                if ((pc >= start_pc) && (pc <= end_pc)) {
                     return local_variable_table[i];
                 }
             }
@@ -166,8 +169,9 @@ public class LocalVariableTable extends Attribute {
     /**
      * @return String representation.
      */
+    @Override
     public final String toString() {
-        StringBuffer buf = new StringBuffer("");
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < local_variable_table_length; i++) {
             buf.append(local_variable_table[i].toString());
             if (i < local_variable_table_length - 1) {
@@ -181,6 +185,7 @@ public class LocalVariableTable extends Attribute {
     /**
      * @return deep copy of this attribute
      */
+    @Override
     public Attribute copy( ConstantPool _constant_pool ) {
         LocalVariableTable c = (LocalVariableTable) clone();
         c.local_variable_table = new LocalVariable[local_variable_table_length];

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,7 +21,7 @@ package com.crash4j.engine.spi.instrument.bcel.verifier.statics;
 import java.util.Hashtable;
 
 import com.crash4j.engine.spi.instrument.bcel.generic.Type;
-import com.crash4j.engine.spi.instrument.bcel.verifier.exc.LocalVariableInfoInconsistentException;
+import com.crash4j.engine.spi.instrument.verifier.exc.LocalVariableInfoInconsistentException;
 
 /**
  * A utility class holding the information about
@@ -28,15 +29,15 @@ import com.crash4j.engine.spi.instrument.bcel.verifier.exc.LocalVariableInfoInco
  * a given slot (== index). This information
  * often changes in course of byte code offsets.
  *
- * @version $Id: LocalVariableInfo.java 371539 2006-01-23 14:08:00Z tcurdt $
+ * @version $Id: LocalVariableInfo.java 1149459 2011-07-22 04:34:27Z dbrosius $
  * @author Enver Haase
  */
 public class LocalVariableInfo{
 
 	/** The types database. KEY: String representing the offset integer. */
-	private Hashtable types = new Hashtable();
+	private Hashtable<String, Type> types = new Hashtable<String, Type>();
 	/** The names database. KEY: String representing the offset integer. */
-	private Hashtable names = new Hashtable();
+	private Hashtable<String, String> names = new Hashtable<String, String>();
 
 	/**
 	 * Adds a name of a local variable and a certain slot to our 'names'
@@ -62,7 +63,7 @@ public class LocalVariableInfo{
 	 * variable slot at the given bytecode offset.
 	 */
 	public Type getType(int offset){
-		return (Type) types.get(Integer.toString(offset));
+		return types.get(Integer.toString(offset));
 	}
 	/**
 	 * Returns the name of the local variable that uses this local
@@ -73,7 +74,7 @@ public class LocalVariableInfo{
 	 * variable slot at the given bytecode offset.
 	 */
 	public String getName(int offset){
-		return (String) (names.get(Integer.toString(offset)));
+		return (names.get(Integer.toString(offset)));
 	}
 	/**
 	 * Adds some information about this local variable (slot).

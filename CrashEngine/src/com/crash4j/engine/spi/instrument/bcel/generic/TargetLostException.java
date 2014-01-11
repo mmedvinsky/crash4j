@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -44,11 +45,12 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  * @see InstructionHandle
  * @see InstructionList
  * @see InstructionTargeter
- * @version $Id: TargetLostException.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: TargetLostException.java 992350 2010-09-03 16:18:20Z markt $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public final class TargetLostException extends Exception {
 
+    private static final long serialVersionUID = -6857272667645328384L;
     private InstructionHandle[] targets;
 
 

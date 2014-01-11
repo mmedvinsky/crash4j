@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -25,12 +26,13 @@ import com.crash4j.engine.spi.instrument.bcel.util.ByteSequence;
 /**
  * Abstract super class for instructions dealing with local variables.
  *
- * @version $Id: LocalVariableInstruction.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: LocalVariableInstruction.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public abstract class LocalVariableInstruction extends Instruction implements TypedInstruction,
         IndexedInstruction {
 
+    private static final long serialVersionUID = 8322269736316122743L;
     protected int n = -1; // index of referenced variable
     private short c_tag = -1; // compact version, such as ILOAD_0
     private short canon_tag = -1; // canonical tag such as ILOAD
@@ -43,7 +45,7 @@ public abstract class LocalVariableInstruction extends Instruction implements Ty
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      * tag and length are defined in readInstruction and initFromFile, respectively.
      */
     LocalVariableInstruction(short canon_tag, short c_tag) {
@@ -55,15 +57,15 @@ public abstract class LocalVariableInstruction extends Instruction implements Ty
 
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Also used by IINC()!
+     * Instruction.readInstruction(). Also used by IINC()!
      */
     LocalVariableInstruction() {
     }
 
 
     /**
-     * @param opcode InstructionImpl opcode
-     * @param c_tag InstructionImpl number for compact version, ALOAD_0, e.g.
+     * @param opcode Instruction opcode
+     * @param c_tag Instruction number for compact version, ALOAD_0, e.g.
      * @param n local variable index (unsigned short)
      */
     protected LocalVariableInstruction(short opcode, short c_tag, int n) {
@@ -78,6 +80,7 @@ public abstract class LocalVariableInstruction extends Instruction implements Ty
      * Dump instruction as byte code to stream out.
      * @param out Output stream
      */
+    @Override
     public void dump( DataOutputStream out ) throws IOException {
         if (wide()) {
             out.writeByte(Constants.WIDE);
@@ -102,6 +105,7 @@ public abstract class LocalVariableInstruction extends Instruction implements Ty
      * @param verbose long/short format switch
      * @return mnemonic for instruction
      */
+    @Override
     public String toString( boolean verbose ) {
         if (((opcode >= Constants.ILOAD_0) && (opcode <= Constants.ALOAD_3))
                 || ((opcode >= Constants.ISTORE_0) && (opcode <= Constants.ASTORE_3))) {
@@ -116,6 +120,7 @@ public abstract class LocalVariableInstruction extends Instruction implements Ty
      * Read needed data (e.g. index) from file.
      * PRE: (ILOAD <= tag <= ALOAD_3) || (ISTORE <= tag <= ASTORE_3)
      */
+    @Override
     protected void initFromFile( ByteSequence bytes, boolean wide ) throws IOException {
         if (wide) {
             n = bytes.readUnsignedShort();

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -40,7 +41,7 @@ import com.crash4j.engine.spi.instrument.bcel.generic.Type;
  * are done with BCEL. It does not cover all features of BCEL,
  * but tries to mimic hand-written code as close as possible.
  *
- * @version $Id: BCELifier.java 394939 2006-04-18 13:23:49Z tcurdt $
+ * @version $Id: BCELifier.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A> 
  */
 public class BCELifier extends com.crash4j.engine.spi.instrument.bcel.classfile.EmptyVisitor {
@@ -71,6 +72,7 @@ public class BCELifier extends com.crash4j.engine.spi.instrument.bcel.classfile.
     }
 
 
+    @Override
     public void visitJavaClass( JavaClass clazz ) {
         String class_name = clazz.getClassName();
         String super_name = clazz.getSuperclassName();
@@ -81,9 +83,9 @@ public class BCELifier extends com.crash4j.engine.spi.instrument.bcel.classfile.
             _out.println("package " + package_name + ";");
             _out.println();
         }
-        _out.println("import com.crash4j.engine.spi.instrument.bcel.generic.*;");
-        _out.println("import com.crash4j.engine.spi.instrument.bcel.classfile.*;");
-        _out.println("import com.crash4j.engine.spi.instrument.bcel.*;");
+        _out.println("import org.apache.bcel.generic.*;");
+        _out.println("import org.apache.bcel.classfile.*;");
+        _out.println("import org.apache.bcel.*;");
         _out.println("import java.io.*;");
         _out.println();
         _out.println("public class " + class_name + "Creator implements Constants {");
@@ -107,8 +109,8 @@ public class BCELifier extends com.crash4j.engine.spi.instrument.bcel.classfile.
         if (fields.length > 0) {
             _out.println("  private void createFields() {");
             _out.println("    FieldGen field;");
-            for (int i = 0; i < fields.length; i++) {
-                fields[i].accept(this);
+            for (Field field : fields) {
+                field.accept(this);
             }
             _out.println("  }");
             _out.println();
@@ -150,6 +152,7 @@ public class BCELifier extends com.crash4j.engine.spi.instrument.bcel.classfile.
     }
 
 
+    @Override
     public void visitField( Field field ) {
         _out.println();
         _out.println("    field = new FieldGen(" + printFlags(field.getAccessFlags()) + ", "
@@ -163,6 +166,7 @@ public class BCELifier extends com.crash4j.engine.spi.instrument.bcel.classfile.
     }
 
 
+    @Override
     public void visitMethod( Method method ) {
         MethodGen mg = new MethodGen(method, _clazz.getClassName(), _cp);
         Type result_type = mg.getReturnType();
@@ -192,7 +196,7 @@ public class BCELifier extends com.crash4j.engine.spi.instrument.bcel.classfile.
         if (flags == 0) {
             return "0";
         }
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0, pow = 1; pow <= Constants.MAX_ACC_FLAG; i++) {
             if ((flags & pow) != 0) {
                 if ((pow == Constants.ACC_SYNCHRONIZED) && (reason == FLAG_FOR_CLASS)) {
@@ -218,7 +222,7 @@ public class BCELifier extends com.crash4j.engine.spi.instrument.bcel.classfile.
         if (arg_types.length == 0) {
             return "Type.NO_ARGS";
         }
-        StringBuffer args = new StringBuffer();
+        StringBuilder args = new StringBuilder();
         for (int i = 0; i < arg_types.length; i++) {
             args.append(printType(arg_types[i]));
             if (i < arg_types.length - 1) {

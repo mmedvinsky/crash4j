@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -28,12 +29,13 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * to the source file of this class.
  * It is instantiated from the <em>Attribute.readAttribute()</em> method.
  *
- * @version $Id: InnerClasses.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: InnerClasses.java 1152077 2011-07-29 02:29:42Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Attribute
  */
 public final class InnerClasses extends Attribute {
 
+    private static final long serialVersionUID = 4570147726361753700L;
     private InnerClass[] inner_classes;
     private int number_of_classes;
 
@@ -87,6 +89,7 @@ public final class InnerClasses extends Attribute {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitInnerClasses(this);
     }
@@ -98,6 +101,7 @@ public final class InnerClasses extends Attribute {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         super.dump(file);
         file.writeShort(number_of_classes);
@@ -127,8 +131,9 @@ public final class InnerClasses extends Attribute {
     /**
      * @return String representation.
      */
+    @Override
     public final String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < number_of_classes; i++) {
             buf.append(inner_classes[i].toString(constant_pool)).append("\n");
         }
@@ -139,6 +144,7 @@ public final class InnerClasses extends Attribute {
     /**
      * @return deep copy of this attribute
      */
+    @Override
     public Attribute copy( ConstantPool _constant_pool ) {
         InnerClasses c = (InnerClasses) clone();
         c.inner_classes = new InnerClass[number_of_classes];

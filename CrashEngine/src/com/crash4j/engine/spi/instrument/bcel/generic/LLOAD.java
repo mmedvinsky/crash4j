@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,14 +21,17 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  * LLOAD - Load long from local variable
  *<PRE>Stack ... -&GT; ..., result.word1, result.word2</PRE>
  *
- * @version $Id: LLOAD.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: LLOAD.java 1152072 2011-07-29 01:54:05Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class LLOAD extends LoadInstruction {
 
+    private static final long serialVersionUID = 379331602405124174L;
+
+
     /**
      * Empty constructor needed for the Class.newInstance() statement in
-     * InstructionImpl.readInstruction(). Not to be used otherwise.
+     * Instruction.readInstruction(). Not to be used otherwise.
      */
     LLOAD() {
         super(com.crash4j.engine.spi.instrument.bcel.Constants.LLOAD, com.crash4j.engine.spi.instrument.bcel.Constants.LLOAD_0);
@@ -47,6 +51,7 @@ public class LLOAD extends LoadInstruction {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         super.accept(v);
         v.visitLLOAD(this);

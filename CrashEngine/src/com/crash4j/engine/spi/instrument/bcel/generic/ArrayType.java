@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,11 +22,12 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
 /** 
  * Denotes array type, such as int[][]
  *
- * @version $Id: ArrayType.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ArrayType.java 1481383 2013-05-11 17:34:32Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public final class ArrayType extends ReferenceType {
 
+    private static final long serialVersionUID = 7587687059797903734L;
     private int dimensions;
     private Type basic_type;
 
@@ -46,7 +48,7 @@ public final class ArrayType extends ReferenceType {
      * @param class_name complete name of class (java.lang.String, e.g.)
      */
     public ArrayType(String class_name, int dimensions) {
-        this(new ObjectType(class_name), dimensions);
+        this(ObjectType.getInstance(class_name), dimensions);
     }
 
 
@@ -73,7 +75,7 @@ public final class ArrayType extends ReferenceType {
                 basic_type = type;
                 break;
         }
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < this.dimensions; i++) {
             buf.append('[');
         }
@@ -110,6 +112,7 @@ public final class ArrayType extends ReferenceType {
 
     /** @return a hash code value for the object.
      */
+    @Override
     public int hashCode() {
         return basic_type.hashCode() ^ dimensions;
     }
@@ -117,6 +120,7 @@ public final class ArrayType extends ReferenceType {
 
     /** @return true if both type objects refer to the same array type.
      */
+    @Override
     public boolean equals( Object _type ) {
         if (_type instanceof ArrayType) {
             ArrayType array = (ArrayType) _type;

@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -26,7 +27,7 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.LocalVariable;
  * with getLocalVariable which needs the instruction list and the constant
  * pool as parameters.
  *
- * @version $Id: LocalVariableGen.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: LocalVariableGen.java 1532197 2013-10-15 05:52:15Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     LocalVariable
  * @see     MethodGen
@@ -34,6 +35,7 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.LocalVariable;
 public class LocalVariableGen implements InstructionTargeter, NamedAndTyped, Cloneable,
         java.io.Serializable {
 
+    private static final long serialVersionUID = -3810966319065955534L;
     private int index;
     private String name;
     private Type type;
@@ -80,7 +82,7 @@ public class LocalVariableGen implements InstructionTargeter, NamedAndTyped, Clo
     public LocalVariable getLocalVariable( ConstantPoolGen cp ) {
         int start_pc = start.getPosition();
         int length = end.getPosition() - start_pc;
-        if (length > 0) {
+        if (end.getNext() == null) {
             length += end.getInstruction().getLength();
         }
         int name_index = cp.addUtf8(name);
@@ -173,6 +175,7 @@ public class LocalVariableGen implements InstructionTargeter, NamedAndTyped, Clo
 
     /** @return a hash code value for the object.
      */
+    @Override
     public int hashCode() {
         //If the user changes the name or type, problems with the targeter hashmap will occur
         int hc = index ^ name.hashCode() ^ type.hashCode();
@@ -184,6 +187,7 @@ public class LocalVariableGen implements InstructionTargeter, NamedAndTyped, Clo
      * We consider to local variables to be equal, if the use the same index and
      * are valid in the same range.
      */
+    @Override
     public boolean equals( Object o ) {
         if (!(o instanceof LocalVariableGen)) {
             return false;
@@ -193,17 +197,18 @@ public class LocalVariableGen implements InstructionTargeter, NamedAndTyped, Clo
     }
 
 
+    @Override
     public String toString() {
         return "LocalVariableGen(" + name + ", " + type + ", " + start + ", " + end + ")";
     }
 
 
-    public Object clone() {
+    @Override
+    public LocalVariableGen clone() {
         try {
-            return super.clone();
+            return (LocalVariableGen) super.clone();
         } catch (CloneNotSupportedException e) {
-            System.err.println(e);
-            return null;
+            throw new Error("Clone Not Supported"); // never happens
         }
     }
 }

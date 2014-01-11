@@ -19,8 +19,8 @@ public class Monitor
 {
     protected static int rollingWindow = 10;
     
-    protected double max = Long.MIN_VALUE;
-    protected double min = Long.MAX_VALUE;
+    protected double max = Double.MIN_VALUE;
+    protected double min = 0;
     protected long count = 0;
     protected long rcount = 0;
     protected long lut = 0;
@@ -120,7 +120,7 @@ public class Monitor
             {
                 double sl = UnitTypes.convert(UnitTypes.NANOSECONDS, utype, sample);
                 double rate = 0;
-                if (items != 0)
+                if (items != 0 && sl > 0)
                 {
                     rate = items/sl;
                 }

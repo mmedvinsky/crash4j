@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,10 +21,10 @@ package com.crash4j.engine.spi.instrument.bcel.generic;
  * Implement this interface if you're interested in changes to a ClassGen object
  * and register yourself with addObserver().
  *
- * @version $Id: ClassObserver.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ClassObserver.java 1158060 2011-08-15 23:17:19Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public interface ClassObserver {
 
-    public void notify( ClassGen clazz );
+    void notify( ClassGen clazz );
 }

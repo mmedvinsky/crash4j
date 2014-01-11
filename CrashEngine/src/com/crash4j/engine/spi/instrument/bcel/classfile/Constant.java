@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,6 +22,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 
+
 import com.crash4j.engine.spi.instrument.bcel.Constants;
 import com.crash4j.engine.spi.instrument.bcel.util.BCELComparator;
 
@@ -29,11 +31,12 @@ import com.crash4j.engine.spi.instrument.bcel.util.BCELComparator;
  * in the constant pool of a class file. The classes keep closely to
  * the JVM specification.
  *
- * @version $Id: Constant.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Constant.java 1532197 2013-10-15 05:52:15Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public abstract class Constant implements Cloneable, Node, Serializable {
 
+    private static final long serialVersionUID = 5739037344085356353L;
     private static BCELComparator _cmp = new BCELComparator() {
 
         public boolean equals( Object o1, Object o2 ) {
@@ -89,6 +92,7 @@ public abstract class Constant implements Cloneable, Node, Serializable {
     /**
      * @return String representation.
      */
+    @Override
     public String toString() {
         return Constants.CONSTANT_NAMES[tag] + "[" + tag + "]";
     }
@@ -106,8 +110,13 @@ public abstract class Constant implements Cloneable, Node, Serializable {
     }
 
 
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    @Override
+    public Constant clone() {
+        try {
+            return (Constant) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new Error("Clone Not Supported"); // never happens
+        }
     }
 
 
@@ -142,7 +151,13 @@ public abstract class Constant implements Cloneable, Node, Serializable {
             case Constants.CONSTANT_NameAndType:
                 return new ConstantNameAndType(file);
             case Constants.CONSTANT_Utf8:
-                return new ConstantUtf8(file);
+                return ConstantUtf8.getInstance(file);
+            case Constants.CONSTANT_MethodHandle:
+                return new ConstantMethodHandle(file);
+            case Constants.CONSTANT_MethodType:
+                return new ConstantMethodType(file);
+            case Constants.CONSTANT_InvokeDynamic:
+                return new ConstantInvokeDynamic(file);
             default:
                 throw new ClassFormatException("Invalid byte tag in constant pool: " + b);
         }
@@ -172,6 +187,7 @@ public abstract class Constant implements Cloneable, Node, Serializable {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals( Object obj ) {
         return _cmp.equals(this, obj);
     }
@@ -183,6 +199,7 @@ public abstract class Constant implements Cloneable, Node, Serializable {
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return _cmp.hashCode(this);
     }

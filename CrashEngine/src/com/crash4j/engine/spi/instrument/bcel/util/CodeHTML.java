@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -37,14 +38,14 @@ import com.crash4j.engine.spi.instrument.bcel.classfile.Utility;
 /**
  * Convert code into HTML file.
  *
- * @version $Id: CodeHTML.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: CodeHTML.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * 
  */
 final class CodeHTML implements com.crash4j.engine.spi.instrument.bcel.Constants {
 
     private String class_name; // name of current class
-    private Method[] methods; // Methods to print
+//    private Method[] methods; // Methods to print
     private PrintWriter file; // file to write to
     private BitSet goto_set;
     private ConstantPool constant_pool;
@@ -55,7 +56,7 @@ final class CodeHTML implements com.crash4j.engine.spi.instrument.bcel.Constants
     CodeHTML(String dir, String class_name, Method[] methods, ConstantPool constant_pool,
             ConstantHTML constant_html) throws IOException {
         this.class_name = class_name;
-        this.methods = methods;
+//        this.methods = methods;
         this.constant_pool = constant_pool;
         this.constant_html = constant_html;
         file = new PrintWriter(new FileOutputStream(dir + class_name + "_code.html"));
@@ -77,13 +78,13 @@ final class CodeHTML implements com.crash4j.engine.spi.instrument.bcel.Constants
      */
     private final String codeToHTML( ByteSequence bytes, int method_number ) throws IOException {
         short opcode = (short) bytes.readUnsignedByte();
-        StringBuffer buf;
+        StringBuilder buf;
         String name, signature;
         int default_offset = 0, low, high;
         int index, class_index, vindex, constant;
         int[] jump_table;
         int no_pad_bytes = 0, offset;
-        buf = new StringBuffer(256);
+        buf = new StringBuilder(256);
         buf.append("<TT>").append(OPCODE_NAMES[opcode]).append("</TT></TD><TD>");
         /* Special case: Skip (0-3) padding bytes, i.e., the
          * following bytes are 4-byte-aligned
@@ -112,10 +113,10 @@ final class CodeHTML implements com.crash4j.engine.spi.instrument.bcel.Constants
                 }
                 buf.append("<TH>default</TH></TR>\n<TR>");
                 // Print target and default indices in second row
-                for (int i = 0; i < jump_table.length; i++) {
-                    buf.append("<TD><A HREF=\"#code").append(method_number).append("@").append(
-                            jump_table[i]).append("\">").append(jump_table[i]).append("</A></TD>");
-                }
+            for (int element : jump_table) {
+                buf.append("<TD><A HREF=\"#code").append(method_number).append("@").append(
+                        element).append("\">").append(element).append("</A></TD>");
+            }
                 buf.append("<TD><A HREF=\"#code").append(method_number).append("@").append(
                         default_offset).append("\">").append(default_offset).append(
                         "</A></TD></TR>\n</TABLE>\n");
@@ -165,7 +166,7 @@ final class CodeHTML implements com.crash4j.engine.spi.instrument.bcel.Constants
             case IF_ICMPLT:
             case IF_ICMPNE:
             case JSR:
-                index = (int) (bytes.getIndex() + bytes.readShort() - 1);
+                index = (bytes.getIndex() + bytes.readShort() - 1);
                 buf.append("<A HREF=\"#code").append(method_number).append("@").append(index)
                         .append("\">").append(index).append("</A>");
                 break;
@@ -253,8 +254,10 @@ final class CodeHTML implements com.crash4j.engine.spi.instrument.bcel.Constants
                 int m_index = bytes.readShort();
                 String str;
                 if (opcode == INVOKEINTERFACE) { // Special treatment needed
-                    int nargs = bytes.readUnsignedByte(); // Redundant
-                    int reserved = bytes.readUnsignedByte(); // Reserved
+                    bytes.readUnsignedByte(); // Redundant
+                    bytes.readUnsignedByte(); // Reserved
+//                    int nargs = bytes.readUnsignedByte(); // Redundant
+//                    int reserved = bytes.readUnsignedByte(); // Reserved
                     ConstantInterfaceMethodref c = (ConstantInterfaceMethodref) constant_pool
                             .getConstant(m_index, CONSTANT_InterfaceMethodref);
                     class_index = c.getClassIndex();
@@ -363,7 +366,7 @@ final class CodeHTML implements com.crash4j.engine.spi.instrument.bcel.Constants
      * Find all target addresses in code, so that they can be marked
      * with &lt;A NAME = ...&gt;. Target addresses are kept in an BitSet object.
      */
-    private final void findGotos( ByteSequence bytes, Method method, Code code ) throws IOException {
+    private final void findGotos( ByteSequence bytes, Code code ) throws IOException {
         int index;
         goto_set = new BitSet(bytes.available());
         int opcode;
@@ -380,13 +383,13 @@ final class CodeHTML implements com.crash4j.engine.spi.instrument.bcel.Constants
             }
             // Look for local variables and their range
             Attribute[] attributes = code.getAttributes();
-            for (int i = 0; i < attributes.length; i++) {
-                if (attributes[i].getTag() == ATTR_LOCAL_VARIABLE_TABLE) {
-                    LocalVariable[] vars = ((LocalVariableTable) attributes[i])
+            for (Attribute attribute : attributes) {
+                if (attribute.getTag() == ATTR_LOCAL_VARIABLE_TABLE) {
+                    LocalVariable[] vars = ((LocalVariableTable) attribute)
                             .getLocalVariableTable();
-                    for (int j = 0; j < vars.length; j++) {
-                        int start = vars[j].getStartPC();
-                        int end = (int) (start + vars[j].getLength());
+                    for (LocalVariable var : vars) {
+                        int start = var.getStartPC();
+                        int end = (start + var.getLength());
                         goto_set.set(start);
                         goto_set.set(end);
                     }
@@ -427,7 +430,8 @@ final class CodeHTML implements com.crash4j.engine.spi.instrument.bcel.Constants
                         default_offset += offset;
                         goto_set.set(default_offset);
                         for (int j = 0; j < npairs; j++) {
-                            int match = bytes.readInt();
+//                            int match = bytes.readInt();
+                            bytes.readInt();
                             index = offset + bytes.readInt();
                             goto_set.set(index);
                         }
@@ -532,10 +536,10 @@ final class CodeHTML implements com.crash4j.engine.spi.instrument.bcel.Constants
             // Print the byte code
             ByteSequence stream = new ByteSequence(code);
             stream.mark(stream.available());
-            findGotos(stream, method, c);
+            findGotos(stream, c);
             stream.reset();
             file.println("<TABLE BORDER=0><TR><TH ALIGN=LEFT>Byte<BR>offset</TH>"
-                    + "<TH ALIGN=LEFT>InstructionImpl</TH><TH ALIGN=LEFT>Argument</TH>");
+                    + "<TH ALIGN=LEFT>Instruction</TH><TH ALIGN=LEFT>Argument</TH>");
             for (int i = 0; stream.available() > 0; i++) {
                 int offset = stream.getIndex();
                 String str = codeToHTML(stream, method_number);

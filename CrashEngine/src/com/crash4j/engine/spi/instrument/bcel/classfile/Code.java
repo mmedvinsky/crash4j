@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -34,7 +35,7 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  * is used for debugging purposes and <em>LocalVariableTable</em> which 
  * contains information about the local variables.
  *
- * @version $Id: Code.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: Code.java 1152077 2011-07-29 02:29:42Z dbrosius $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Attribute
  * @see     CodeException
@@ -43,6 +44,7 @@ import com.crash4j.engine.spi.instrument.bcel.Constants;
  */
 public final class Code extends Attribute {
 
+    private static final long serialVersionUID = -432884354459701506L;
     private int max_stack; // Maximum size of stack used by this method
     private int max_locals; // Number of local variables
     private int code_length; // Length of code in bytes
@@ -129,6 +131,7 @@ public final class Code extends Attribute {
      *
      * @param v Visitor object
      */
+    @Override
     public void accept( Visitor v ) {
         v.visitCode(this);
     }
@@ -140,6 +143,7 @@ public final class Code extends Attribute {
      * @param file Output file stream
      * @throws IOException
      */
+    @Override
     public final void dump( DataOutputStream file ) throws IOException {
         super.dump(file);
         file.writeShort(max_stack);
@@ -267,6 +271,7 @@ public final class Code extends Attribute {
     public final void setCode( byte[] code ) {
         this.code = code;
         code_length = (code == null) ? 0 : code.length;
+        length = calculateLength(); // Adjust length
     }
 
 
@@ -276,6 +281,7 @@ public final class Code extends Attribute {
     public final void setExceptionTable( CodeException[] exception_table ) {
         this.exception_table = exception_table;
         exception_table_length = (exception_table == null) ? 0 : exception_table.length;
+        length = calculateLength(); // Adjust length
     }
 
 
@@ -299,8 +305,7 @@ public final class Code extends Attribute {
      * @return String representation of code chunk.
      */
     public final String toString( boolean verbose ) {
-        StringBuffer buf;
-        buf = new StringBuffer(100);
+        StringBuilder buf = new StringBuilder(100);
         buf.append("Code(max_stack = ").append(max_stack).append(", max_locals = ").append(
                 max_locals).append(", code_length = ").append(code_length).append(")\n").append(
                 Utility.codeToString(code, constant_pool, 0, -1, verbose));
@@ -323,6 +328,7 @@ public final class Code extends Attribute {
     /**
      * @return String representation of code chunk.
      */
+    @Override
     public final String toString() {
         return toString(true);
     }
@@ -333,6 +339,7 @@ public final class Code extends Attribute {
      * 
      * @param _constant_pool the constant pool to duplicate
      */
+    @Override
     public Attribute copy( ConstantPool _constant_pool ) {
         Code c = (Code) clone();
         if (code != null) {

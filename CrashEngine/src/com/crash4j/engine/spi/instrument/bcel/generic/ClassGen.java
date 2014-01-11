@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,17 +18,22 @@
 package com.crash4j.engine.spi.instrument.bcel.generic;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+
 
 import com.crash4j.engine.spi.instrument.bcel.Constants;
 import com.crash4j.engine.spi.instrument.bcel.classfile.AccessFlags;
+import com.crash4j.engine.spi.instrument.bcel.classfile.AnnotationEntry;
+import com.crash4j.engine.spi.instrument.bcel.classfile.Annotations;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Attribute;
 import com.crash4j.engine.spi.instrument.bcel.classfile.ConstantPool;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Field;
 import com.crash4j.engine.spi.instrument.bcel.classfile.JavaClass;
 import com.crash4j.engine.spi.instrument.bcel.classfile.Method;
+import com.crash4j.engine.spi.instrument.bcel.classfile.RuntimeInvisibleAnnotations;
+import com.crash4j.engine.spi.instrument.bcel.classfile.RuntimeVisibleAnnotations;
 import com.crash4j.engine.spi.instrument.bcel.classfile.SourceFile;
+import com.crash4j.engine.spi.instrument.bcel.classfile.Utility;
 import com.crash4j.engine.spi.instrument.bcel.util.BCELComparator;
 
 /** 
@@ -35,11 +41,12 @@ import com.crash4j.engine.spi.instrument.bcel.util.BCELComparator;
  * existing java class (file).
  *
  * @see JavaClass
- * @version $Id: ClassGen.java 386056 2006-03-15 11:31:56Z tcurdt $
+ * @version $Id: ClassGen.java 1554576 2013-12-31 22:05:01Z ggregory $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class ClassGen extends AccessFlags implements Cloneable {
 
+    private static final long serialVersionUID = 6880879387392827211L;
     /* Corresponds to the fields found in a JavaClass object.
      */
     private String class_name, super_class_name, file_name;
@@ -47,10 +54,12 @@ public class ClassGen extends AccessFlags implements Cloneable {
     private int major = Constants.MAJOR_1_1, minor = Constants.MINOR_1_1;
     private ConstantPoolGen cp; // Template for building up constant pool
     // ArrayLists instead of arrays to gather fields, methods, etc.
-    private List field_vec = new ArrayList();
-    private List method_vec = new ArrayList();
-    private List attribute_vec = new ArrayList();
-    private List interface_vec = new ArrayList();
+    private List<Field> field_vec = new ArrayList<Field>();
+    private List<Method> method_vec = new ArrayList<Method>();
+    private List<Attribute> attribute_vec = new ArrayList<Attribute>();
+    private List<String> interface_vec = new ArrayList<String>();
+    private List<AnnotationEntryGen> annotation_vec = new ArrayList<AnnotationEntryGen>();
+	
     private static BCELComparator _cmp = new BCELComparator() {
 
         public boolean equals( Object o1, Object o2 ) {
@@ -91,8 +100,8 @@ public class ClassGen extends AccessFlags implements Cloneable {
         class_name_index = cp.addClass(class_name);
         superclass_name_index = cp.addClass(super_class_name);
         if (interfaces != null) {
-            for (int i = 0; i < interfaces.length; i++) {
-                addInterface(interfaces[i]);
+            for (String interface1 : interfaces) {
+                addInterface(interface1);
             }
         }
     }
@@ -128,22 +137,59 @@ public class ClassGen extends AccessFlags implements Cloneable {
         major = clazz.getMajor();
         minor = clazz.getMinor();
         Attribute[] attributes = clazz.getAttributes();
+        // J5TODO: Could make unpacking lazy, done on first reference
+        AnnotationEntryGen[] annotations = unpackAnnotations(attributes);
         Method[] methods = clazz.getMethods();
         Field[] fields = clazz.getFields();
         String[] interfaces = clazz.getInterfaceNames();
-        for (int i = 0; i < interfaces.length; i++) {
-            addInterface(interfaces[i]);
+        for (String interface1 : interfaces) {
+            addInterface(interface1);
         }
         for (int i = 0; i < attributes.length; i++) {
-            addAttribute(attributes[i]);
+        	if (!(attributes[i] instanceof Annotations)) {
+        		addAttribute(attributes[i]);
+        	}
         }
-        for (int i = 0; i < methods.length; i++) {
-            addMethod(methods[i]);
+        for (AnnotationEntryGen annotation : annotations) {
+            addAnnotationEntry(annotation);
         }
-        for (int i = 0; i < fields.length; i++) {
-            addField(fields[i]);
+        for (Method method : methods) {
+            addMethod(method);
+        }
+        for (Field field : fields) {
+            addField(field);
         }
     }
+    
+    /**
+	 * Look for attributes representing annotations and unpack them.
+	 */
+	private AnnotationEntryGen[] unpackAnnotations(Attribute[] attrs)
+	{
+		List<AnnotationEntryGen> annotationGenObjs = new ArrayList<AnnotationEntryGen>();
+		for (Attribute attr : attrs) {
+			if (attr instanceof RuntimeVisibleAnnotations)
+			{
+				RuntimeVisibleAnnotations rva = (RuntimeVisibleAnnotations) attr;
+				AnnotationEntry[] annos = rva.getAnnotationEntries();
+				for (AnnotationEntry a : annos) {
+					annotationGenObjs.add(new AnnotationEntryGen(a,
+							getConstantPool(), false));
+				}
+			}
+			else
+				if (attr instanceof RuntimeInvisibleAnnotations)
+				{
+					RuntimeInvisibleAnnotations ria = (RuntimeInvisibleAnnotations) attr;
+					AnnotationEntry[] annos = ria.getAnnotationEntries();
+					for (AnnotationEntry a : annos) {
+						annotationGenObjs.add(new AnnotationEntryGen(a,
+								getConstantPool(), false));
+					}
+				}
+		}
+		return annotationGenObjs.toArray(new AnnotationEntryGen[annotationGenObjs.size()]);
+	}
 
 
     /**
@@ -153,7 +199,16 @@ public class ClassGen extends AccessFlags implements Cloneable {
         int[] interfaces = getInterfaces();
         Field[] fields = getFields();
         Method[] methods = getMethods();
-        Attribute[] attributes = getAttributes();
+        Attribute[] attributes = null;
+        if (annotation_vec.isEmpty()) {
+        	attributes = getAttributes();
+        } else {
+        	// TODO: Sometime later, trash any attributes called 'RuntimeVisibleAnnotations' or 'RuntimeInvisibleAnnotations'
+            Attribute[] annAttributes  = Utility.getAnnotationAttributes(cp,annotation_vec);
+            attributes = new Attribute[attribute_vec.size()+annAttributes.length];
+            attribute_vec.toArray(attributes);
+            System.arraycopy(annAttributes,0,attributes,attribute_vec.size(),annAttributes.length);       
+        }
         // Must be last since the above calls may still add something to it
         ConstantPool _cp = this.cp.getFinalConstantPool();
         return new JavaClass(class_name_index, superclass_name_index, file_name, major, minor,
@@ -218,6 +273,10 @@ public class ClassGen extends AccessFlags implements Cloneable {
     public void addAttribute( Attribute a ) {
         attribute_vec.add(a);
     }
+    
+    public void addAnnotationEntry(AnnotationEntryGen a) { 
+    	annotation_vec.add(a); 
+    }
 
 
     /**
@@ -264,8 +323,7 @@ public class ClassGen extends AccessFlags implements Cloneable {
     /** @return field object with given name, or null
      */
     public Field containsField( String name ) {
-        for (Iterator e = field_vec.iterator(); e.hasNext();) {
-            Field f = (Field) e.next();
+        for (Field f : field_vec) {
             if (f.getName().equals(name)) {
                 return f;
             }
@@ -277,8 +335,7 @@ public class ClassGen extends AccessFlags implements Cloneable {
     /** @return method object with given name and signature, or null
      */
     public Method containsMethod( String name, String signature ) {
-        for (Iterator e = method_vec.iterator(); e.hasNext();) {
-            Method m = (Method) e.next();
+        for (Method m : method_vec) {
             if (m.getName().equals(name) && m.getSignature().equals(signature)) {
                 return m;
             }
@@ -374,14 +431,14 @@ public class ClassGen extends AccessFlags implements Cloneable {
 
 
     public Method[] getMethods() {
-        return (Method[]) method_vec.toArray(new Method[method_vec.size()]);
+        return method_vec.toArray(new Method[method_vec.size()]);
     }
 
 
     public void setMethods( Method[] methods ) {
         method_vec.clear();
-        for (int m = 0; m < methods.length; m++) {
-            addMethod(methods[m]);
+        for (Method method : methods) {
+            addMethod(method);
         }
     }
 
@@ -392,7 +449,7 @@ public class ClassGen extends AccessFlags implements Cloneable {
 
 
     public Method getMethodAt( int pos ) {
-        return (Method) method_vec.get(pos);
+        return method_vec.get(pos);
     }
 
 
@@ -408,19 +465,24 @@ public class ClassGen extends AccessFlags implements Cloneable {
         int size = interface_vec.size();
         int[] interfaces = new int[size];
         for (int i = 0; i < size; i++) {
-            interfaces[i] = cp.addClass((String) interface_vec.get(i));
+            interfaces[i] = cp.addClass(interface_vec.get(i));
         }
         return interfaces;
     }
 
 
     public Field[] getFields() {
-        return (Field[]) field_vec.toArray(new Field[field_vec.size()]);
+        return field_vec.toArray(new Field[field_vec.size()]);
     }
 
 
     public Attribute[] getAttributes() {
-        return (Attribute[]) attribute_vec.toArray(new Attribute[attribute_vec.size()]);
+        return attribute_vec.toArray(new Attribute[attribute_vec.size()]);
+    }
+    
+    //  J5TODO: Should we make calling unpackAnnotations() lazy and put it in here?
+    public AnnotationEntryGen[] getAnnotationEntries() {
+    	return annotation_vec.toArray(new AnnotationEntryGen[annotation_vec.size()]);
     }
 
 
@@ -457,14 +519,14 @@ public class ClassGen extends AccessFlags implements Cloneable {
         return class_name_index;
     }
 
-    private ArrayList observers;
+    private List<ClassObserver> observers;
 
 
     /** Add observer for this object.
      */
     public void addObserver( ClassObserver o ) {
         if (observers == null) {
-            observers = new ArrayList();
+            observers = new ArrayList<ClassObserver>();
         }
         observers.add(o);
     }
@@ -485,19 +547,19 @@ public class ClassGen extends AccessFlags implements Cloneable {
      */
     public void update() {
         if (observers != null) {
-            for (Iterator e = observers.iterator(); e.hasNext();) {
-                ((ClassObserver) e.next()).notify(this);
+            for (ClassObserver observer : observers) {
+                observer.notify(this);
             }
         }
     }
 
 
-    public Object clone() {
+    @Override
+    public ClassGen clone() {
         try {
-            return super.clone();
+            return (ClassGen) super.clone();
         } catch (CloneNotSupportedException e) {
-            System.err.println(e);
-            return null;
+            throw new Error("Clone Not Supported"); // never happens
         }
     }
 
@@ -525,6 +587,7 @@ public class ClassGen extends AccessFlags implements Cloneable {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals( Object obj ) {
         return _cmp.equals(this, obj);
     }
@@ -536,6 +599,7 @@ public class ClassGen extends AccessFlags implements Cloneable {
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return _cmp.hashCode(this);
     }

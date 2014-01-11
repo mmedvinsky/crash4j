@@ -1,9 +1,10 @@
 /*
- * Copyright  2000-2004 The Apache Software Foundation
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,13 +24,14 @@ import com.crash4j.engine.spi.instrument.bcel.generic.Type;
 
 /**
  * This class represents the upper half of a LONG variable.
- * @version $Id: LONG_Upper.java 371539 2006-01-23 14:08:00Z tcurdt $
+ * @version $Id: LONG_Upper.java 992350 2010-09-03 16:18:20Z markt $
  * @author Enver Haase
  */
 public final class LONG_Upper extends Type{
 
-	/** The one and only instance of this class. */
-	private static LONG_Upper singleInstance = new LONG_Upper();
+	private static final long serialVersionUID = 3650377550491597107L;
+    /** The one and only instance of this class. */
+	private static final LONG_Upper singleInstance = new LONG_Upper();
 
 	/** The constructor; this class must not be instantiated from the outside. */
 	private LONG_Upper(){
