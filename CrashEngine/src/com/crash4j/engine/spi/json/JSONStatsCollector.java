@@ -10,7 +10,9 @@ import com.crash4j.engine.Resource;
 import com.crash4j.engine.StatsCollector;
 import com.crash4j.engine.spi.log.Log;
 import com.crash4j.engine.spi.log.LogFactory;
+import com.crash4j.engine.spi.resources.impl.JDBCResourceSpiImpl;
 import com.crash4j.engine.spi.util.Utils;
+import com.crash4j.engine.types.ResourceTypes;
 import com.crash4j.engine.types.StatTypes;
 import com.crash4j.engine.types.UnitTypes;
 
@@ -100,8 +102,12 @@ public class JSONStatsCollector implements StatsCollector
                 st = new JSONObject();
                 this.stats.put(action.toString(), st);
             }
-            
-            
+            /*
+    		if (stype.equals(ResourceTypes.DB))
+    		{
+    			System.out.println(resource);
+    		}
+            */
             JSONObject styp = new JSONObject();
             st.put(stype.toString().toString(), styp);
             styp.put("count", count);

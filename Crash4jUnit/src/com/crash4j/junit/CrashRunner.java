@@ -99,7 +99,21 @@ public class CrashRunner extends BlockJUnit4ClassRunner
                 long tm = resolver.getTimeout(jklass, method.getMethod());
                 final long tLevel = resolver.getToleranceLevel(jklass, method.getMethod());
 
+                
+                //2. Prepare concurrency runtime.
+                String reportName = method.getName();
+                HashMap<String, Object> map = new HashMap<String, Object>();
+                map.put("outputDir", CrashRunner.this.reportLoc.getAbsolutePath());
+                map.put("output", reportName);
+                
+                String moniker = null;
                                 
+                if (resolver.isCollectStats())
+                {
+                	moniker = resolver.getAdapter().registerCollector("com.crash4j.engine.spi.json.StatsJSONFileCollector", 
+                			map, resolver.getCollectionPeriod(), TimeUnit.MILLISECONDS);
+                }
+                
                 // setup baseline stat collector
                 try
                 {
@@ -120,27 +134,14 @@ public class CrashRunner extends BlockJUnit4ClassRunner
                 {
                 }
                 
-                System.out.println("Before Plan");
+                //System.out.println("Before Plan");
                 //If there is no plan then just exit.
                 if (!resolver.hasPlan(jklass, method.getMethod()))
                 {
                 	return;
                 }
-                
-                //2. Prepare concurrency runtime.
-                String reportName = method.getName();
-                HashMap<String, Object> map = new HashMap<String, Object>();
-                map.put("outputDir", CrashRunner.this.reportLoc.getAbsolutePath());
-                map.put("output", reportName);
-                
-                String moniker = null;
-                if (resolver.isCollectStats())
-                {
-                	moniker = resolver.getAdapter().registerCollector("com.crash4j.engine.spi.json.StatsJSONFileCollector", 
-                			map, resolver.getCollectionPeriod(), TimeUnit.MILLISECONDS);
-                }
-                
-                System.out.println("After Plan");
+
+                //System.out.println("After Plan");
                 
                 ExecutorService executor = Executors.newFixedThreadPool(concrrency);
 

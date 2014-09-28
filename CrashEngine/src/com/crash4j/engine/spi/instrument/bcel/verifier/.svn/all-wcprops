@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier
+END
+VerifierFactoryListModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/repos/asf/!svn/ver/1532229/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/VerifierFactoryListModel.java
+END
+VerificationResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/VerificationResult.java
+END
+NativeVerifier.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/NativeVerifier.java
+END
+PassVerifier.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/PassVerifier.java
+END
+VerifierFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/repos/asf/!svn/ver/1151716/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/VerifierFactory.java
+END
+VerifyDialog.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/VerifyDialog.java
+END
+GraphicalVerifier.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/GraphicalVerifier.java
+END
+VerifierAppFrame.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/repos/asf/!svn/ver/1532229/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/VerifierAppFrame.java
+END
+Verifier.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/Verifier.java
+END
+VerifierFactoryObserver.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/repos/asf/!svn/ver/1158060/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/VerifierFactoryObserver.java
+END
+TransitiveHull.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/TransitiveHull.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/verifier/package.html
+END

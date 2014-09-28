@@ -1,0 +1,437 @@
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repos/asf/!svn/ver/1554578/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile
+END
+SimpleElementValue.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/repos/asf/!svn/ver/1554577/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/SimpleElementValue.java
+END
+ElementValuePair.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ElementValuePair.java
+END
+Attribute.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/repos/asf/!svn/ver/1532197/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Attribute.java
+END
+Utility.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/repos/asf/!svn/ver/1554577/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Utility.java
+END
+StackMapType.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/StackMapType.java
+END
+ConstantMethodHandle.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/repos/asf/!svn/ver/1377530/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantMethodHandle.java
+END
+RuntimeInvisibleParameterAnnotations.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/RuntimeInvisibleParameterAnnotations.java
+END
+Synthetic.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Synthetic.java
+END
+ConstantCP.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantCP.java
+END
+ConstantFloat.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantFloat.java
+END
+AnnotationDefault.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/AnnotationDefault.java
+END
+RuntimeVisibleParameterAnnotations.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/RuntimeVisibleParameterAnnotations.java
+END
+Method.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/repos/asf/!svn/ver/1312005/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Method.java
+END
+EnclosingMethod.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/repos/asf/!svn/ver/1554577/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/EnclosingMethod.java
+END
+ClassParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ClassParser.java
+END
+Field.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Field.java
+END
+FieldOrMethod.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/repos/asf/!svn/ver/1554577/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/FieldOrMethod.java
+END
+ElementValue.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/repos/asf/!svn/ver/1152075/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ElementValue.java
+END
+ConstantValue.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantValue.java
+END
+ParameterAnnotationEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/repos/asf/!svn/ver/1312005/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ParameterAnnotationEntry.java
+END
+ParameterAnnotations.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ParameterAnnotations.java
+END
+ConstantUtf8.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/repos/asf/!svn/ver/1554578/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantUtf8.java
+END
+JavaClass.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/repos/asf/!svn/ver/1554577/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/JavaClass.java
+END
+ConstantInterfaceMethodref.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantInterfaceMethodref.java
+END
+ConstantInvokeDynamic.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/repos/asf/!svn/ver/1377530/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantInvokeDynamic.java
+END
+LocalVariableTypeTable.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/repos/asf/!svn/ver/1554577/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/LocalVariableTypeTable.java
+END
+StackMapTable.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/StackMapTable.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/package.html
+END
+ConstantNameAndType.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantNameAndType.java
+END
+RuntimeVisibleAnnotations.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/RuntimeVisibleAnnotations.java
+END
+ConstantObject.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/repos/asf/!svn/ver/1158060/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantObject.java
+END
+ConstantString.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantString.java
+END
+ConstantPool.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantPool.java
+END
+StackMapEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/StackMapEntry.java
+END
+Constant.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/repos/asf/!svn/ver/1532197/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Constant.java
+END
+InnerClasses.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/InnerClasses.java
+END
+CodeException.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/CodeException.java
+END
+ConstantFieldref.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantFieldref.java
+END
+ClassFormatException.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ClassFormatException.java
+END
+SourceFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/repos/asf/!svn/ver/1532221/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/SourceFile.java
+END
+Deprecated.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Deprecated.java
+END
+InnerClass.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/InnerClass.java
+END
+RuntimeInvisibleAnnotations.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/RuntimeInvisibleAnnotations.java
+END
+ExceptionTable.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ExceptionTable.java
+END
+ConstantInteger.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantInteger.java
+END
+LineNumberTable.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/LineNumberTable.java
+END
+LocalVariableTable.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/repos/asf/!svn/ver/1152306/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/LocalVariableTable.java
+END
+ConstantLong.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantLong.java
+END
+Code.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Code.java
+END
+EnumElementValue.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/repos/asf/!svn/ver/1554577/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/EnumElementValue.java
+END
+EmptyVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/EmptyVisitor.java
+END
+ConstantClass.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantClass.java
+END
+AnnotationElementValue.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/repos/asf/!svn/ver/1554577/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/AnnotationElementValue.java
+END
+DescendingVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/DescendingVisitor.java
+END
+ConstantDouble.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantDouble.java
+END
+Node.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/repos/asf/!svn/ver/1158060/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Node.java
+END
+ArrayElementValue.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/repos/asf/!svn/ver/1554577/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ArrayElementValue.java
+END
+ConstantMethodref.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantMethodref.java
+END
+ConstantMethodType.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/repos/asf/!svn/ver/1377530/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ConstantMethodType.java
+END
+Unknown.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Unknown.java
+END
+Visitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/repos/asf/!svn/ver/1158060/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Visitor.java
+END
+LocalVariable.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/LocalVariable.java
+END
+LineNumber.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/repos/asf/!svn/ver/1481383/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/LineNumber.java
+END
+Signature.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/repos/asf/!svn/ver/1532221/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Signature.java
+END
+StackMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/StackMap.java
+END
+PMGClass.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/repos/asf/!svn/ver/1532221/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/PMGClass.java
+END
+ClassElementValue.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/ClassElementValue.java
+END
+AccessFlags.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/AccessFlags.java
+END
+AttributeReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/repos/asf/!svn/ver/1158060/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/AttributeReader.java
+END
+AnnotationEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/AnnotationEntry.java
+END
+StackMapTableEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/StackMapTableEntry.java
+END
+Annotations.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/classfile/Annotations.java
+END

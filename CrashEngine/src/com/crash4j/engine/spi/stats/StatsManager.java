@@ -13,13 +13,11 @@ import java.util.concurrent.TimeUnit;
 
 import com.crash4j.engine.Action;
 import com.crash4j.engine.StatsCollector;
-import com.crash4j.engine.spi.actions.sql.SQLActionImpl;
 import com.crash4j.engine.spi.log.Log;
 import com.crash4j.engine.spi.log.LogFactory;
 import com.crash4j.engine.spi.resources.ResourceSpi;
+import com.crash4j.engine.spi.resources.impl.JDBCResourceSpiImpl;
 import com.crash4j.engine.spi.resources.impl.NetworkResourceSpiImpl;
-import com.crash4j.engine.spi.util.Utils;
-import com.crash4j.engine.types.ActionClasses;
 import com.crash4j.engine.types.ResourceTypes;
 import com.crash4j.engine.types.StatTypes;
 import com.crash4j.engine.types.UnitTypes;
@@ -240,13 +238,10 @@ public class StatsManager implements Runnable
 		
 		//MM
 		/*
-		if (spi.getResourceType().equals(ResourceTypes.NET))
+		if (spi.getResourceType().equals(ResourceTypes.DB))
 		{
-			NetworkResourceSpiImpl ni = (NetworkResourceSpiImpl)spi;
-			if (ni.getPort() == 6553)
-			{
-				System.out.println("here 6553");
-			}
+			JDBCResourceSpiImpl ni = (JDBCResourceSpiImpl)spi;
+			System.out.println(ni);
 		}
 		*/
 		_stat_record st = this.recycled.pollFirst();
@@ -322,6 +317,12 @@ public class StatsManager implements Runnable
 				}
 				if (collector.getLastAccessTime() <= rk.spi.getLastAccess())
 				{
+					/*
+		    		if (rk.spi.getResourceType().equals(ResourceTypes.DB))
+		    		{
+		    			System.out.println(rk.spi);
+		    		}
+		    		*/
 					if (rk.spi.isComplete())
 					{
 						collector.enterResource(rk.spi);

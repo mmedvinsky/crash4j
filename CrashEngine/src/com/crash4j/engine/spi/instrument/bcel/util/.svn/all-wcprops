@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repos/asf/!svn/ver/1554577/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util
+END
+CodeHTML.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/CodeHTML.java
+END
+MethodHTML.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/MethodHTML.java
+END
+InstructionFinder.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/InstructionFinder.java
+END
+ClassQueue.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/ClassQueue.java
+END
+SyntheticRepository.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/repos/asf/!svn/ver/1532202/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/SyntheticRepository.java
+END
+Class2HTML.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/Class2HTML.java
+END
+ConstantHTML.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/repos/asf/!svn/ver/1152077/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/ConstantHTML.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/package.html
+END
+Repository.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/repos/asf/!svn/ver/1158060/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/Repository.java
+END
+ClassSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/ClassSet.java
+END
+ClassPath.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/repos/asf/!svn/ver/1554577/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/ClassPath.java
+END
+JavaWrapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/JavaWrapper.java
+END
+BCELifier.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/BCELifier.java
+END
+ClassVector.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/repos/asf/!svn/ver/1152072/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/ClassVector.java
+END
+AttributeHTML.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/AttributeHTML.java
+END
+ClassStack.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/ClassStack.java
+END
+ClassLoaderRepository.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/repos/asf/!svn/ver/1532202/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/ClassLoaderRepository.java
+END
+ClassLoader.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/ClassLoader.java
+END
+ByteSequence.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/repos/asf/!svn/ver/1149512/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/ByteSequence.java
+END
+BCELFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/repos/asf/!svn/ver/1554576/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/BCELFactory.java
+END
+BCELComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/repos/asf/!svn/ver/1158060/commons/proper/bcel/trunk/src/main/java/org/apache/bcel/util/BCELComparator.java
+END

@@ -92,7 +92,8 @@ public class ThreadContext
         
         if (r == null || r.frames.isEmpty())
         {
-        	throw new RuntimeException("Stack frame is out of order!");
+        	return;
+        	//throw new RuntimeException("Stack frame is out of order!");
         }
         r.frames.pop();
     }
