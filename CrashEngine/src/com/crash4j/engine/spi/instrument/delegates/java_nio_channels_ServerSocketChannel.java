@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.net.ServerSocket;
+import java.net.SocketAddress;
+import java.net.SocketOption;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.AbstractSelectableChannel;
+import java.util.Set;
 
 import com.crash4j.engine.spi.ResourceManagerSpi;
 import com.crash4j.engine.spi.ResourceSpec;
@@ -227,5 +230,37 @@ public class java_nio_channels_ServerSocketChannel extends ServerSocketChannel i
     {
         __res_ = res;
     }
+
+	@Override
+	public SocketAddress getLocalAddress() throws IOException 
+	{
+		return sc.getLocalAddress();
+	}
+
+	@Override
+	public <T> T getOption(SocketOption<T> name) throws IOException 
+	{
+		return sc.getOption(name);
+	}
+
+	@Override
+	public Set<SocketOption<?>> supportedOptions() 
+	{
+		return sc.supportedOptions();
+	}
+
+	@Override
+	public ServerSocketChannel bind(SocketAddress local, int backlog)
+			throws IOException 
+	{
+		return sc.bind(local);
+	}
+
+	@Override
+	public <T> ServerSocketChannel setOption(SocketOption<T> name, T value)
+			throws IOException 
+	{
+		return sc.setOption(name, value);
+	}
 
 }

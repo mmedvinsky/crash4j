@@ -50,7 +50,7 @@ public class MethodInjector implements ClassFileTransformer
             return bytes;
         }
 
-        log.logError("Processing "+className);
+        //log.logError("Processing "+className);
         
         ThreadContext.beginIgnore();
 		try 

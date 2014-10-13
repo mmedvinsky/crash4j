@@ -22,7 +22,8 @@ import com.crash4j.engine.spi.util.Utils;
 public class SystemAdapterMAC implements SystemAdapter
 {
     //
-    protected Pattern dfp = Pattern.compile("([^    ]+)[ ]+([^ ]+)[ ]+([^ ]+)[ ]+([^ ]+)[ ]+([^ ]+)[ ]+([/].*)");
+    //protected Pattern dfp = Pattern.compile("([^ ]+)[ ]+([^ ]+)[ ]+([^ ]+)[ ]+([^ ]+)[ ]+([^ ]+)[ ]+([/].*)");
+    protected Pattern dfp = Pattern.compile("([^ ]+)[^/]*([/].*)");
     protected Pattern trp = Pattern.compile("[(]([^)]+)[)]");
     protected Pattern pp = Pattern.compile("[ ]*([0-9]+).*?time[=]([0-9]+[.][0-9]*).*");
     
@@ -55,9 +56,9 @@ public class SystemAdapterMAC implements SystemAdapter
             if (mch.matches())
             {
                 Filesystem fs = new Filesystem(mch.group(1), 
-                        new Long(mch.group(3)), 
-                        new Long(mch.group(4)), 
-                        mch.group(6));
+                        0, 
+                        0, 
+                        mch.group(2));
                 fss.add(fs);
             }            
         }

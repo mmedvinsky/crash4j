@@ -3,7 +3,6 @@
  */
 package com.crash4j.engine.spi.inf;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -15,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.crash4j.engine.spi.inf.os.mac.SystemAdapterMAC;
+import com.crash4j.engine.spi.inf.os.mac.GeneralSystemAdapter;
 
 /**
  */
@@ -218,11 +217,7 @@ public class Infrastructure implements Runnable
      */
     protected void init()
     {
-        if (isMac())
-        {
-            adapter =  new SystemAdapterMAC();
-        }
-        
+        adapter =  new GeneralSystemAdapter();
         try
         {
             this.fsys = adapter.getFilesystems();

@@ -8,9 +8,11 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketOption;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.AbstractSelectableChannel;
+import java.util.Set;
 
 import com.crash4j.engine.spi.ResourceManagerSpi;
 import com.crash4j.engine.spi.ResourceSpec;
@@ -520,5 +522,54 @@ java.nio.channels.SocketChannel#write([Ljava/nio/ByteBuffer;)J
         __res_ = res;
         
     }
+
+	@Override
+	public SocketAddress getLocalAddress() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T getOption(SocketOption<T> name) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<SocketOption<?>> supportedOptions() 
+	{
+		return sc.supportedOptions();
+	}
+
+	@Override
+	public SocketChannel bind(SocketAddress local) throws IOException 
+	{
+		return sc.bind(local);
+	}
+
+	@Override
+	public <T> SocketChannel setOption(SocketOption<T> name, T value)
+			throws IOException 
+	{
+		return sc.setOption(name, value);
+	}
+
+	@Override
+	public SocketChannel shutdownInput() throws IOException 
+	{
+		return sc.shutdownInput();
+	}
+
+	@Override
+	public SocketChannel shutdownOutput() throws IOException 
+	{
+		return sc.shutdownOutput();
+	}
+
+	@Override
+	public SocketAddress getRemoteAddress() throws IOException 
+	{
+		return sc.getRemoteAddress();
+	}
 
 }

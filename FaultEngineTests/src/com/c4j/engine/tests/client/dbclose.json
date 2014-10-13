@@ -1,0 +1,16 @@
+{
+	"name"  : "Close SQLTestBehavior",
+	"id"    : "com.crash4j.behaviors.sql.close",
+	"itype" : "c", 
+	"btype" : "wa", 
+	"actions" : ["sql:delete"],
+	"mode"    : "rotate",
+	"instructions" : [
+		[0, 0.2, 0],
+		[0, 0.1, 0],
+		[1, 0.3, 0],
+		[2, 0.4, 0],
+		[3, 0.7, 0],
+		[4, 0.3, 0]
+	]
+}

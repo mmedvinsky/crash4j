@@ -1,0 +1,12 @@
+{
+	"name"  : "SQL Erros",
+	"id"    : "com.crash4j.behaviors.sql.test.errors",
+	"itype" : "e",
+	"btype" : "wa", 
+	"actions" : ["sql:select"],
+	"mode"    : "rotate",
+	"instructions" : [
+		[0, 0.3, "java.sql.SQLException"],
+		[1, 0.1, "java.io.IOException"],
+	]
+}

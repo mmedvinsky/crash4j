@@ -156,7 +156,7 @@ public class JDBCResourceSpiImpl extends ResourceSpiImpl
             Hashtable<String, String> details = new Hashtable<String, String>();
             details.put("driver", this.driverName);
             details.put("vendor", this.dbname);
-            details.put("url", this.url.replace(":", "@"));
+            details.put("url", this.url.replace(':', '@').replace('=', '@'));
             if (this.getParent() != null)
             {
             	details.put("parent", this.getParent().getETag());

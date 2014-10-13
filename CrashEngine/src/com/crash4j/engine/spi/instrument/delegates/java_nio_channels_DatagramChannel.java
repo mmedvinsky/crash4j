@@ -7,12 +7,17 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.SocketAddress;
 import java.net.SocketException;
+import java.net.SocketOption;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.nio.channels.MembershipKey;
 import java.nio.channels.spi.AbstractSelectableChannel;
 import java.nio.channels.spi.SelectorProvider;
+import java.util.Set;
 
 import com.crash4j.engine.spi.ResourceManagerSpi;
 import com.crash4j.engine.spi.ResourceSpec;
@@ -567,5 +572,56 @@ public class java_nio_channels_DatagramChannel extends DatagramChannel implement
             log.logError("Failed to call implCloseSelectableChannel", e);            
         }
     }
+
+	@Override
+	public MembershipKey join(InetAddress group, NetworkInterface interf)
+			throws IOException 
+	{
+		return channel.join(group, interf);
+	}
+
+	@Override
+	public MembershipKey join(InetAddress group, NetworkInterface interf,
+			InetAddress source) throws IOException 
+	{
+		return channel.join(group, interf, source);
+	}
+
+	@Override
+	public SocketAddress getLocalAddress() throws IOException 
+	{
+		return channel.getLocalAddress();
+	}
+
+	@Override
+	public <T> T getOption(SocketOption<T> name) throws IOException 
+	{
+		return channel.getOption(name);
+	}
+
+	@Override
+	public Set<SocketOption<?>> supportedOptions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DatagramChannel bind(SocketAddress local) throws IOException 
+	{
+		return channel.bind(local);
+	}
+
+	@Override
+	public <T> DatagramChannel setOption(SocketOption<T> name, T value)
+			throws IOException 
+	{
+		return channel.setOption(name, value);
+	}
+
+	@Override
+	public SocketAddress getRemoteAddress() throws IOException 
+	{
+		return channel.getRemoteAddress();
+	}
 
 }
