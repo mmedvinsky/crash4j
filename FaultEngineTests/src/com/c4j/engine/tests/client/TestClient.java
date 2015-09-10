@@ -87,7 +87,7 @@ public class TestClient
                                     oss.write(c);
                                 }
                             } 
-                            catch (IOException e)
+                            catch (Exception e)
                             {
                             	e.printStackTrace();
                                try
@@ -104,7 +104,7 @@ public class TestClient
                 }
                 sock.close();
             } 
-            catch (IOException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -140,14 +140,14 @@ public class TestClient
     @Test
     @CrashPlan
     (
-        iterations=200, 
-        concurrency=5,
+        iterations=10, 
+        concurrency=2,
         simulations= 
         { 
             @Simulation (id="3", name="netsim1", mappings={"net:host=*,port=6553,server=false"}, 
                     behaviors = { 
-            		@Behavior ( id="com.crash4j.behaviors.test1" )
-            		//@Behavior ( id="com.crash4j.behaviors.errors" ) 
+            		//@Behavior ( id="com.crash4j.behaviors.test1" )
+            		@Behavior ( id="com.crash4j.behaviors.errors" ) 
                     } )
         }
     )
@@ -168,7 +168,7 @@ public class TestClient
 	        }
 	        s.close();
 		} 
-    	catch (InterruptedException e1) {
+    	catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}

@@ -38,18 +38,16 @@ public class TestJDBC
 	@Test
     @CrashPlan
     (
-    		/*
         iterations=40, 
         concurrency=1,
         simulations= 
         { 
             @Simulation (id="100", name="dbclosecrush", mappings={"db:url=*,driver=*,vendor=*"}, 
                     behaviors = { 
-            		@Behavior ( id="com.crash4j.behaviors.sql.test.errors" ),
+            		//@Behavior ( id="com.crash4j.behaviors.sql.test.errors" )
             		//@Behavior ( id="com.crash4j.behaviors.sql.close" )
                     } )
         }
-    */
     )
 	public void testSimpleStatement() 
 	{
