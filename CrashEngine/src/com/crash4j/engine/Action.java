@@ -1,5 +1,5 @@
 /**
- * @copyright
+ * @copyright Mike
  */
 package com.crash4j.engine;
 
